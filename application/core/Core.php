@@ -9,7 +9,7 @@ class Core
     private $_secure; // Объект класса Secure   
     private $_grammatical; // Объект класса Grammatical   
     private $_request; // Объект класса Request    
-    private $_route; // Объект класса Route    fdgfdgfdgd
+    private $_route; // Объект класса Route    tttttttttttttttttttttt
 
     private function __construct()
     {
