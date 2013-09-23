@@ -1,5 +1,5 @@
 <?php
-//ff 444
+
 $config = array(
     'db' => array(
         'db_type' => 'mysql',
