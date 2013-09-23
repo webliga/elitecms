@@ -33,11 +33,16 @@ class Request
 	 */
     public function runParseUrl($url)
     {
+        $congiUrl = Core::app()->getConfig()->getConfigItem('default_module');
+        
+        
+        Core::app()->echoPre($congiUrl);
+        
         $this->_url = $url;
         $this->_lang = 'ru';
-        $this->_module = 'main';
-        $this->_controller = 'main';
-        $this->_action = 'index';
+        $this->_module = $congiUrl['name'];
+        $this->_controller = $congiUrl['controller'];
+        $this->_action = $congiUrl['action'];;
        
        $routes = explode('/', $url);
 

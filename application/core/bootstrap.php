@@ -11,7 +11,7 @@ define('NAME_FOLDER_MODULES_MODELS','models');
 define('NAME_FOLDER_MODULES_CONTROLLERS','controller');
 define('PREFIX_CONTROLLER','C_');
 define('PREFIX_MODEL','M_');
-
+define('PREFIX_CONFIG','config_');
 
 require_once PATH_TO_CORE.'/Grammatical.php';
 require_once PATH_TO_CORE.'/Base.php';

@@ -7,7 +7,8 @@ $config = array(
     ),
     'default_module' => array(
         'name' => 'main',
-        'action' => 'main',
+        'controller' => 'main',       
+        'action' => 'index',
     ),
     'default_classes' => array(
         'user' => array(
