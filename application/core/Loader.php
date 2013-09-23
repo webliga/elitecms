@@ -1,6 +1,7 @@
 <?php
 // тут мы подгружаем данные из файла конфига. Эти данные можно будет перекрыть из настроек в БД
-
+Core::app()->getConfig()->loadConfig('db');
+Core::app()->getConfig()->loadConfig('default');
 class Loader
 {
 
@@ -16,8 +17,6 @@ class Loader
 
     public function start()
     {
-        Core::app()->getConfig()->loadConfig('config_db');
-        Core::app()->getConfig()->loadConfig('config_default');
         
         Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
         
