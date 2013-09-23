@@ -29,7 +29,7 @@ class Request
 	{
 	}
 	/**
-	 * Обязательно переделать этот метод
+	 * Обязательно переделать этот метод, нет нормального разбора урл
 	 */
     public function runParseUrl($url)
     {
@@ -37,7 +37,7 @@ class Request
         $congiDefaultLang = Core::app()->getConfig()->getConfigItem('default_lang');        
         
         Core::app()->echoPre($congiDefaultUrl);
-        
+        // Ставим путь по умолчанию
         $this->_url = $url;
         $this->_lang = $congiDefaultLang['name'];
         $this->_module = $congiDefaultUrl['name'];
@@ -46,7 +46,7 @@ class Request
        
        $routes = explode('/', $url);
 
-
+       // lang
        if(isset($routes[1])  && strlen($routes[1]) < 3 && count($routes) >= 4)
        {
             $this->_lang = $routes[1];
@@ -56,24 +56,24 @@ class Request
             //Core::app()->getError()->errorPage404('5');
             return;
        }
-       
+       // module
        if(isset($routes[2]))
        {
             $this->_module = $routes[2];
        }       
-       
+       // controller
        if(isset($routes[3]))
        {
             $this->_controller = $routes[3];
        }
-              
+       // action       
        if(isset($routes[4]) && strlen($routes[4]) > 0)
        {
             $this->_action = $routes[4];
        }
        else
        {
-            $this->_action = 'index';
+            $this->_action = DEFAULT_ACTION;
        }      
     }
 

@@ -6,9 +6,12 @@ define('PATH_TO_LANG','application/lang');
 define('PATH_TO_CONFIG','application/config');
 define('PATH_TO_LIB','application/lib');
 define('PATH_SITE_ROOT',$_SERVER['DOCUMENT_ROOT']);
+
 define('SEPARATOR','/');
+define('DEFAULT_ACTION','index');
 define('NAME_FOLDER_MODULES_MODELS','models');
 define('NAME_FOLDER_MODULES_CONTROLLERS','controller');
+
 define('PREFIX_CONTROLLER','C_');
 define('PREFIX_MODEL','M_');
 define('PREFIX_CONFIG','config_');

@@ -17,7 +17,8 @@ class Config
 
     public function loadConfig($fileName)
     {
-        $path_to_config = PATH_SITE_ROOT .
+        $path_to_config = 
+                PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_CONFIG .
                 SEPARATOR .

@@ -18,8 +18,6 @@ class Loader
     {
         Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'db');
         Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'default');
-        
-        Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
 
         Core::app()->getRoute()->run();
     }
