@@ -34,7 +34,7 @@ class Request
         $configDefaultUrl = Core::app()->getConfig()->getConfigItem('default_module');
         $configDefaultLang = Core::app()->getConfig()->getConfigItem('default_lang');
 
-        Core::app()->echoPre($configDefaultUrl);
+        //Core::app()->echoPre($configDefaultUrl);
         // Ставим путь по умолчанию
         $this->_url = $url;
         $this->_lang = $configDefaultLang['name'];

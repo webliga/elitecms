@@ -11,6 +11,7 @@ define('SEPARATOR','/');
 define('DEFAULT_ACTION','index');
 define('NAME_FOLDER_MODULES_MODELS','models');
 define('NAME_FOLDER_MODULES_CONTROLLERS','controller');
+define('NAME_FOLDER_MODULES_CONFIG','config');
 
 define('PREFIX_CONTROLLER','C_');
 define('PREFIX_MODEL','M_');

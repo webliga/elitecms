@@ -35,8 +35,6 @@ class Config
 
         if (is_array($this->_data) && is_array($config))
         {
-            echo $fileName;
-            
             foreach ($config as $key => $value)
             {
                 $this->_data[$key] = $value;

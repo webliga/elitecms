@@ -38,7 +38,7 @@ class Route
         $request->runParseUrl($url);
 
         //путь к запускаемому контроллеру
-        $path_controller = 
+        $path_controller =
                 PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_MODULES .
@@ -59,7 +59,7 @@ class Route
 
         if (file_exists($path_controller))
         {
-            Core::app()->getLoader()->loadClass($path_controller);           
+            Core::app()->getLoader()->loadClass($path_controller);
 
             $controllerClass = PREFIX_CONTROLLER . $request->getController();
 
@@ -75,7 +75,34 @@ class Route
             {
                 // вызываем действие контроллера и включаем язык
                 // проверяем доступ пользователя к екшену
-                if (Core::app()->getUser()->checkUserAccess())
+
+                $arrAccessAction = array(
+                        'module' => $request->getModule(),
+                        'controller' => $request->getController(),
+                        'action' => $request->getAction(),
+                    );
+
+                $path_module_config = 
+                        PATH_SITE_ROOT .
+                        SEPARATOR . 
+                        PATH_TO_MODULES . 
+                        SEPARATOR . 
+                        $request->getModule() .
+                        SEPARATOR .
+                        NAME_FOLDER_MODULES_CONFIG . 
+                        SEPARATOR .
+                        PREFIX_CONFIG . 'main.php';
+                                               
+                // Получаем настройки модуля (разрешения екшенов)        
+                $config = Core::app()->getLoader()->loadClass($path_module_config, true);
+                //Core::app()->echoPre(Core::app()->getConfig()->getConfigItem('default_role'));
+                //Core::app()->echoPre($config);
+                
+                $arrAccessAction['access'] = $config['controller'][$request->getController()]['action'][$request->getAction()];
+                
+                
+                
+                if (Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {
                     if (!file_exists($path_lang))
                     {

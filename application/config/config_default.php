@@ -48,12 +48,9 @@ $config = array(
         ),
     ),
     'default_role' => array(
-        'group' => 'guest',
-        'access' => array(
-            'r' => true,
-            'w' => false,
-            'e' => false,
-        ),
+        'user_group' => 'moderator',
+        'access' => '',
+        'path' => array('*'),
     ),
 );
 ?>

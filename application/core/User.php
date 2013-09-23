@@ -4,7 +4,7 @@ class User extends Base
 {
 
     private $_access;
-    private $_role;
+    private $_userRoleAcces;
 
     function __construct()
     {
@@ -17,9 +17,9 @@ class User extends Base
         parent::__destruct();
     }
 
-    public function checkUserAccess()
+    public function checkUserAccess($arrAccessAction)
     {
-        if ($this->_access->checkAccess($this->_role))
+        if ($this->_access->checkAccess($this->_userRoleAcces, $arrAccessAction))
         {
             return true;
         }
@@ -36,7 +36,7 @@ class User extends Base
             $this->_access = new $accessClass;
         }
         
-        $this->_role = Core::app()->getConfig()->getConfigItem('default_role');
+        $this->_userRoleAcces = Core::app()->getConfig()->getConfigItem('default_role');
     }
 
 }
