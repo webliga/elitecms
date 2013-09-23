@@ -100,10 +100,12 @@ class Access
                                 {
 
                                     if (
+                                            (isset($arrAccessAction['access']['d']) && $arrAccessAction['access']['d'] && $value_action_arr[$key_action]['d']) ||
                                             (isset($arrAccessAction['access']['e']) && $arrAccessAction['access']['e'] && $value_action_arr[$key_action]['e']) ||
                                             (isset($arrAccessAction['access']['w']) && $arrAccessAction['access']['w'] && $value_action_arr[$key_action]['w']) ||
                                             (isset($arrAccessAction['access']['c']) && $arrAccessAction['access']['c'] && $value_action_arr[$key_action]['c']) ||
-                                            (isset($arrAccessAction['access']['r']) && $arrAccessAction['access']['r'] && $value_action_arr[$key_action]['r'])
+                                            (isset($arrAccessAction['access']['r']) && $arrAccessAction['access']['r'] && $value_action_arr[$key_action]['r']) 
+                                            
                                     )
                                     {
                                        $bool = true;
