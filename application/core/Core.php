@@ -9,7 +9,8 @@ class Core
     private $_secure; // Объект класса Secure   
     private $_grammatical; // Объект класса Grammatical   
     private $_request; // Объект класса Request    
-    private $_route; // Объект класса Route    1
+    private $_route; // Объект класса Route    
+    private $_user;
 
     private function __construct()
     {
@@ -88,6 +89,15 @@ class Core
             self::app()->_route = new Route;
         }
         return self::app()->_route;
+    }
+
+    public function getUser()
+    {
+        if (is_null(self::app()->_user))
+        {
+            self::app()->_user = new User;
+        }
+        return self::app()->_user;
     }
 
     // Доступ к главному класу (сделан как singleton))
