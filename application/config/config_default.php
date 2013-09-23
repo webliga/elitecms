@@ -10,6 +10,9 @@ $config = array(
         'controller' => 'main',       
         'action' => 'index',
     ),
+    'default_lang' => array(
+        'name' => 'ru',
+    ),
     'default_classes' => array(
         'user' => array(
             'name' => 'User',
