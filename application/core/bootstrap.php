@@ -14,7 +14,6 @@ define('PREFIX_MODEL','M_');
 
 
 require_once PATH_TO_CORE.'/Grammatical.php';
-require_once PATH_TO_CONFIG.'/index.php';
 require_once PATH_TO_CORE.'/Base.php';
 
 require_once PATH_TO_CORE.'/Controller.php';

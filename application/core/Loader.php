@@ -1,7 +1,7 @@
 <?php
 // тут мы подгружаем данные из файла конфига. Эти данные можно будет перекрыть из настроек в БД
-Core::app()->getConfig()->setConfigItem('site', $config);
-
+Core::app()->getConfig()->loadConfig('db');
+Core::app()->getConfig()->loadConfig('default');
 class Loader
 {
 

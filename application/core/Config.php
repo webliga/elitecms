@@ -3,7 +3,7 @@
 class Config
 {
 
-    private $_data = array();
+    private $_data;
 
     public function __construct()
     {
@@ -27,10 +27,19 @@ class Config
         {
             require_once $path_to_config;
         }
-
-        if (is_array($this->_data))
+        else
         {
-            array_push($this->_data, $config);
+            return false;
+        }
+
+        if (is_array($this->_data) && is_array($config))
+        {
+            echo $fileName;
+            
+            foreach ($config as $key => $value)
+            {
+                $this->_data[$key] = $value;
+            }           
         }
         else
         {
