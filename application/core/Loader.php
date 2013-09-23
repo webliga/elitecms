@@ -1,21 +1,30 @@
 <?php
-
-Core::app()->getConfig()->setConfigItem('site',$config); 
+// тут мы подгружаем данные из файла конфига. Эти данные можно будет перекрыть из настроек в БД
+Core::app()->getConfig()->setConfigItem('site', $config);
 
 class Loader
-{    
-	function __construct()
-	{
+{
+
+    function __construct()
+    {
         
-	}
+    }
 
-	function __destruct()
-	{
-	}
+    function __destruct()
+    {
+        
+    }
 
-	public function start()
-	{
-       Core::app()->getRoute()->run();
-	}
+    public function start()
+    {
+        
+        Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+        
+        
+        Core::app()->appExit();
+        Core::app()->getRoute()->run();
+    }
+
 }
+
 ?>
