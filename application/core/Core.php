@@ -11,6 +11,7 @@ class Core
     private $_request; // Объект класса Request    
     private $_route; // Объект класса Route    
     private $_user;
+    private $_loader;
 
     private function __construct()
     {
@@ -41,7 +42,8 @@ class Core
     {
         if (is_null(self::app()->_error))
         {
-            self::app()->_error = new Error;
+            $class = self::app()->getClassNameForCreate('error');
+            self::app()->_error = new $class;
         }
         return self::app()->_error;
     }
@@ -50,7 +52,8 @@ class Core
     {
         if (is_null(self::app()->_secure))
         {
-            self::app()->_secure = new Secure;
+            $class = self::app()->getClassNameForCreate('secure');
+            self::app()->_secure = new $class;
         }
         return self::app()->_secure;
     }
@@ -68,7 +71,8 @@ class Core
     {
         if (is_null(self::app()->_grammatical))
         {
-            self::app()->_grammatical = new Grammatical;
+            $class = self::app()->getClassNameForCreate('grammatical');
+            self::app()->_grammatical = new $class;
         }
         return self::app()->_grammatical;
     }
@@ -77,7 +81,8 @@ class Core
     {
         if (is_null(self::app()->_request))
         {
-            self::app()->_request = new Request;
+            $class = self::app()->getClassNameForCreate('request');
+            self::app()->_request = new $class;
         }
         return self::app()->_request;
     }
@@ -86,7 +91,8 @@ class Core
     {
         if (is_null(self::app()->_route))
         {
-            self::app()->_route = new Route;
+            $class = self::app()->getClassNameForCreate('route');
+            self::app()->_route = new $class;
         }
         return self::app()->_route;
     }
@@ -94,10 +100,43 @@ class Core
     public function getUser()
     {
         if (is_null(self::app()->_user))
-        {
-            self::app()->_user = new User;
+        {      
+            $class = self::app()->getClassNameForCreate('user');
+
+            self::app()->_user = new $class;
         }
+
         return self::app()->_user;
+    }
+
+    public function getLoader()
+    {
+        if (is_null(self::app()->_loader))
+        {
+            self::app()->_loader = new Loader;
+        }
+
+        return self::app()->_loader;
+    }
+    
+// Вытягиваем класс из дефолтных настроек 
+// (Дефолтный класс можно переопределить                                                           
+// в любом модуле и прописать путь к нему) 
+    public function getClassNameForCreate($class)
+    {
+        $configClassUser = self::app()->getConfig()->getConfigItem('default_classes');
+        $className = $configClassUser[$class]['name'];
+
+        $pathToClassUser =
+                PATH_SITE_ROOT . 
+                SEPARATOR . 
+                $configClassUser[$class]['path'] .
+                SEPARATOR .
+                $className . '.php';
+
+        self::app()->getLoader()->loadClass($pathToClassUser);
+
+        return $className;
     }
 
     // Доступ к главному класу (сделан как singleton))

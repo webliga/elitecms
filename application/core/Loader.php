@@ -1,4 +1,5 @@
 <?php
+
 // тут мы подгружаем данные из файла конфига. Эти данные можно будет перекрыть из настроек в БД
 
 class Loader
@@ -14,12 +15,16 @@ class Loader
         
     }
 
-    public function start()
+    public function loadClass($path)
     {
-        Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'db');
-        Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'default');
-
-        Core::app()->getRoute()->run();
+        if (file_exists($path))
+        {
+            require_once $path;
+        }
+        else
+        {
+            Core::app()->getError()->errorFileNotExist('Файл ' . $path . ' не существует!');
+        }
     }
 
 }

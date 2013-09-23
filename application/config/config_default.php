@@ -7,7 +7,7 @@ $config = array(
     ),
     'default_module' => array(
         'name' => 'main',
-        'controller' => 'main',       
+        'controller' => 'main',
         'action' => 'index',
     ),
     'default_lang' => array(
@@ -22,6 +22,30 @@ $config = array(
             'name' => 'Auth',
             'path' => 'application/core'
         ),
+        'access' => array(
+            'name' => 'Access',
+            'path' => 'application/core'
+        ),
+        'route' => array(
+            'name' => 'Route',
+            'path' => 'application/core'
+        ),
+        'request' => array(
+            'name' => 'Request',
+            'path' => 'application/core'
+        ),   
+        'grammatical' => array(
+            'name' => 'Grammatical',
+            'path' => 'application/core'
+        ), 
+        'secure' => array(
+            'name' => 'Secure',
+            'path' => 'application/core'
+        ),  
+        'error' => array(
+            'name' => 'Error',
+            'path' => 'application/core'
+        ),        
     ),
 );
 ?>

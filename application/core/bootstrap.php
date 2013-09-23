@@ -16,17 +16,13 @@ define('PREFIX_CONTROLLER','C_');
 define('PREFIX_MODEL','M_');
 define('PREFIX_CONFIG','config_');
 
-require_once PATH_TO_CORE.'/Grammatical.php';
 require_once PATH_TO_CORE.'/Base.php';
 
+require_once PATH_TO_CORE.'/Access.php';
 require_once PATH_TO_CORE.'/Controller.php';
 require_once PATH_TO_CORE.'/Model.php'; 
-require_once PATH_TO_CORE.'/Secure.php'; 
-require_once PATH_TO_CORE.'/Error.php'; 
 require_once PATH_TO_CORE.'/Config.php';
 
-require_once PATH_TO_CORE.'/Route.php';
-require_once PATH_TO_CORE.'/Request.php';
 require_once PATH_TO_CORE.'/Template.php';
 require_once PATH_TO_CORE.'/Core.php';
 require_once PATH_TO_CORE.'/Loader.php';

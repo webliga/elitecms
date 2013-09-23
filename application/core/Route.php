@@ -38,7 +38,8 @@ class Route
         $request->runParseUrl($url);
 
         //путь к запускаемому контроллеру
-        $path_controller = PATH_SITE_ROOT .
+        $path_controller = 
+                PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_MODULES .
                 SEPARATOR .
@@ -58,7 +59,7 @@ class Route
 
         if (file_exists($path_controller))
         {
-            require_once $path_controller;
+            Core::app()->getLoader()->loadClass($path_controller);           
 
             $controllerClass = PREFIX_CONTROLLER . $request->getController();
 
@@ -73,25 +74,32 @@ class Route
             if (method_exists($module_controller, $request->getAction()))
             {
                 // вызываем действие контроллера и включаем язык
-
-                if (!file_exists($path_lang))
+                // проверяем доступ пользователя к екшену
+                if (Core::app()->getUser()->checkUserAccess())
                 {
-                    $path_lang = PATH_SITE_ROOT .
-                            SEPARATOR .
-                            PATH_TO_LANG .
-                            SEPARATOR .
-                            $request->getLang('ru') .
-                            SEPARATOR .
-                            $request->getLang('ru') . '.php';
+                    if (!file_exists($path_lang))
+                    {
+                        $path_lang = PATH_SITE_ROOT .
+                                SEPARATOR .
+                                PATH_TO_LANG .
+                                SEPARATOR .
+                                $request->getLang('ru') .
+                                SEPARATOR .
+                                $request->getLang('ru') . '.php';
+                    }
+
+                    require_once $path_lang;
+
+                    Core::app()->getConfig()->setConfigItem('lang', $lang);
+
+                    $action = $request->getAction();
+
+                    $module_controller->$action();
                 }
-
-                require_once $path_lang;
-
-                Core::app()->getConfig()->setConfigItem('lang', $lang);
-
-                $action = $request->getAction();
-
-                $module_controller->$action();
+                else
+                {
+                    Core::app()->getError()->errorAccessDenied('Нет доступа');
+                }
             }
             else
             {

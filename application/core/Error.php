@@ -8,27 +8,46 @@
  */
 class Error
 {
-	function __construct()
-	{
-	}
 
-	function __destruct()
-	{
-	}
-    
-	/**
-	 * Выводит ошибку 404
-	 */
-	public function errorPage404($err)
-	{
-	   Core::app()->echoEcho('errorPage404 '.$err);
-	    /*         
-		$host = 'http://'.$_SERVER['HTTP_HOST'].'/';
-        header('HTTP/1.1 404 Not Found');
-        header("Status: 404 Not Found");
-        header('Location:'.$host.'404');*/
+    function __construct()
+    {
+        
+    }
+
+    function __destruct()
+    {
+        
+    }
+
+    /**
+     * Выводит ошибку 404
+     */
+    public function errorPage404($err)
+    {
+        Core::app()->echoEcho('errorPage404 ' . $err);
+        /*
+          $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
+          header('HTTP/1.1 404 Not Found');
+          header("Status: 404 Not Found");
+          header('Location:'.$host.'404'); */
         Core::app()->appExit();
-	}
+    }
 
+    public function errorAccessDenied($err)
+    {
+        Core::app()->echoEcho('errorAccessDenied ' . $err);
+        /*
+          $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
+          header('HTTP/1.1 404 Not Found');
+          header("Status: 404 Not Found");
+          header('Location:'.$host.'404'); */
+        Core::app()->appExit();
+    }
+
+    public function errorFileNotExist($err)
+    {
+        Core::app()->echoEcho('errorFileNotExist ' . $err);
+    }
 }
+
 ?>
