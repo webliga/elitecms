@@ -17,12 +17,15 @@ class Access
         
     }
 
-    public function checkAccess()
+    public function checkAccess($role = null)
     {
-        
-        
-        
-        
+        if(!is_null($role) && is_array($role))
+        {
+            if($role['access']['r'])
+            {
+                return true;
+            }
+        }
         return false;
     }
 }

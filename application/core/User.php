@@ -4,6 +4,7 @@ class User extends Base
 {
 
     private $_access;
+    private $_role;
 
     function __construct()
     {
@@ -18,7 +19,7 @@ class User extends Base
 
     public function checkUserAccess()
     {
-        if ($this->_access->checkAccess())
+        if ($this->_access->checkAccess($this->_role))
         {
             return true;
         }
@@ -34,6 +35,8 @@ class User extends Base
 
             $this->_access = new $accessClass;
         }
+        
+        $this->_role = Core::app()->getConfig()->getConfigItem('default_role');
     }
 
 }

@@ -33,19 +33,27 @@ $config = array(
         'request' => array(
             'name' => 'Request',
             'path' => 'application/core'
-        ),   
+        ),
         'grammatical' => array(
             'name' => 'Grammatical',
             'path' => 'application/core'
-        ), 
+        ),
         'secure' => array(
             'name' => 'Secure',
             'path' => 'application/core'
-        ),  
+        ),
         'error' => array(
             'name' => 'Error',
             'path' => 'application/core'
-        ),        
+        ),
+    ),
+    'default_role' => array(
+        'group' => 'guest',
+        'access' => array(
+            'r' => true,
+            'w' => false,
+            'e' => false,
+        ),
     ),
 );
 ?>
