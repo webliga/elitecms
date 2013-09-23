@@ -51,9 +51,10 @@ class Access
 
         // Получаем все группы пользователей
         $groups = Core::app()->getConfig()->getConfigItem('groups');
+        
         //Параметры  группы пользователя
         $access_user_group = $groups[$userRoleAcces['user_group']];
-        //Core::app()->echoPre($access_user_group);
+
         // Если есть родительская группа, копируем ее разрешения/доступы
         if ($access_user_group['parent_group'] != null)
         {// Получаем масив настроек родителей, что б унаследовать доступы
@@ -65,7 +66,9 @@ class Access
                 foreach ($value_module_arr as $key_controller => $value_controller_arr)
                 {
                     foreach ($value_controller_arr as $key_action => $value_action_arr)
-                    {// Если екшена у даной группы не существует то унаследуемся от родителя, иначе не допускаем перезапись. Настройки остаются, внезависимости как настроен родитель
+                    {// Если екшена у даной группы не существует то унаследуемся от родителя, 
+                     //иначе не допускаем перезапись: 
+                     //настройки остаются, внезависимости как настроен родитель
                         if (!isset($access_user_group['actions'][$key_module][$key_controller][$key_action]))
                         {
                             $access_user_group['actions'][$key_module][$key_controller][$key_action] = $value_action_arr;
@@ -109,6 +112,8 @@ class Access
                                     )
                                     {
                                        $bool = true;
+                                       
+                                       return $bool;
                                     }
                                 }
                             }

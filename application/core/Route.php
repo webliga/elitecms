@@ -100,7 +100,7 @@ class Route
                 
                 $arrAccessAction['access'] = $config['controller'][$request->getController()]['action'][$request->getAction()];
                 
-                
+                //Core::app()->echoPre($arrAccessAction);
                 
                 if (Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {
