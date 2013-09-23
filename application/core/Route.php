@@ -97,7 +97,7 @@ class Route
                 $config = Core::app()->getLoader()->loadClass($path_module_config, true);
                 //Core::app()->echoPre(Core::app()->getConfig()->getConfigItem('default_role'));
                 //Core::app()->echoPre($config);
-                
+                // Доступ екшена
                 $arrAccessAction['access'] = $config['controller'][$request->getController()]['action'][$request->getAction()];
                 
                 //Core::app()->echoPre($arrAccessAction);

@@ -51,7 +51,7 @@ class Access
 
         // Получаем все группы пользователей
         $groups = Core::app()->getConfig()->getConfigItem('groups');
-        
+
         //Параметры  группы пользователя
         $access_user_group = $groups[$userRoleAcces['user_group']];
 
@@ -67,8 +67,8 @@ class Access
                 {
                     foreach ($value_controller_arr as $key_action => $value_action_arr)
                     {// Если екшена у даной группы не существует то унаследуемся от родителя, 
-                     //иначе не допускаем перезапись: 
-                     //настройки остаются, внезависимости как настроен родитель
+                        //иначе не допускаем перезапись: 
+                        //настройки остаются, внезависимости как настроен родитель
                         if (!isset($access_user_group['actions'][$key_module][$key_controller][$key_action]))
                         {
                             $access_user_group['actions'][$key_module][$key_controller][$key_action] = $value_action_arr;
@@ -107,13 +107,12 @@ class Access
                                             (isset($arrAccessAction['access']['e']) && $arrAccessAction['access']['e'] && $value_action_arr[$key_action]['e']) ||
                                             (isset($arrAccessAction['access']['w']) && $arrAccessAction['access']['w'] && $value_action_arr[$key_action]['w']) ||
                                             (isset($arrAccessAction['access']['c']) && $arrAccessAction['access']['c'] && $value_action_arr[$key_action]['c']) ||
-                                            (isset($arrAccessAction['access']['r']) && $arrAccessAction['access']['r'] && $value_action_arr[$key_action]['r']) 
-                                            
+                                            (isset($arrAccessAction['access']['r']) && $arrAccessAction['access']['r'] && $value_action_arr[$key_action]['r'])
                                     )
                                     {
-                                       $bool = true;
-                                       
-                                       return $bool;
+                                        $bool = true;
+
+                                        return $bool;
                                     }
                                 }
                             }
