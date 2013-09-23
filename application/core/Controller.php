@@ -4,7 +4,7 @@
 	 * Главный класс для всех контроллеров
 	 * @author Веталь
 	 * @version 1.0
-	 * @updated 17-Вер-2013 23:02:27
+	 * @updated 17-Вер-2013 23:02:27 
 	 */
 abstract class Controller extends Base
 {
