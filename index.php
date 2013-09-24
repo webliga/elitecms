@@ -9,5 +9,16 @@ Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'role_group');
 
 //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
 
+$time_start = microtime(true);
+
+
+
+
+
+
 Core::app()->getRoute()->run();
+
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+echo $time;
 ?>

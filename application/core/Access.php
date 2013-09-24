@@ -101,7 +101,9 @@ class Access
                                 // Если это наш екшн
                                 if ($key_action == $arrAccessAction['action'] || $key_action == '*')
                                 {
-
+                                    // Реализовать проверку доступа  конкретного пользователя
+                                    // Например, редактор только тот, кто создал статью и модератор
+                                    // Скорее всего проверка на id пользователя и id статьи или в базе булево значение прописать 
                                     if (
                                             (isset($arrAccessAction['access']['d']) && $arrAccessAction['access']['d'] && $value_action_arr[$key_action]['d']) ||
                                             (isset($arrAccessAction['access']['e']) && $arrAccessAction['access']['e'] && $value_action_arr[$key_action]['e']) ||

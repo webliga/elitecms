@@ -115,8 +115,11 @@ class Route
                                 $request->getLang('ru') . '.php';
                     }
 
-                    require_once $path_lang;
+                    //require_once $path_lang;
 
+                    Core::app()->getLoader()->loadClass($path_lang);
+                    
+                    
                     Core::app()->getConfig()->setConfigItem('lang', $lang);
 
                     $action = $request->getAction();

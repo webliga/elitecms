@@ -12,7 +12,7 @@ $config = array(
                             'c' => false,
                             'w' => false,
                             'e' => false,
-                            'd' => true,
+                            'd' => false,
                         ),
                     ),
                 ),
