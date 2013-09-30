@@ -126,11 +126,13 @@ class Core
     {
         $configClassUser = self::app()->getConfig()->getConfigItem('default_classes');
         $className = $configClassUser[$class]['name'];
-
+        $pathToClass = $configClassUser[$class]['path'];
+        
+        
         $pathToClassUser =
                 PATH_SITE_ROOT . 
                 SEPARATOR . 
-                $configClassUser[$class]['path'] .
+                $pathToClass .
                 SEPARATOR .
                 $className . '.php';
 

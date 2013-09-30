@@ -15,13 +15,13 @@ class Loader
         
     }
 
-    public function loadClass($path, $return = false)
+    public function loadClass($path, $returnConfig = false)
     {
         if (file_exists($path))
         {
             require_once $path;
                       
-            if($return)
+            if($returnConfig)
             {
                 return $config;
             }
