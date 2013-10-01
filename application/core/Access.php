@@ -60,7 +60,7 @@ class Access
         {// Получаем масив настроек родителей, что б унаследовать доступы
             $arr_actions = $this->getParentAccess($access_user_group['parent_group'], $access_user_group['actions']);
 
-            // наследуем от родителя доступы (если екшен совпадает с родителем, то родительский доступ тогда не наследуем)
+            // наследуем от родителя доступы (если екшен совпадает с родителем, то родительский доступ тогда не наследуем, перезаписываем)
             foreach ($arr_actions as $key_module => $value_module_arr)
             {
                 foreach ($value_module_arr as $key_controller => $value_controller_arr)

@@ -41,7 +41,7 @@ class Request
         $this->_module = $configDefaultUrl['name'];
         $this->_controller = $configDefaultUrl['controller'];
         $this->_action = $configDefaultUrl['action'];
-        ;
+        
 
         $routes = explode('/', $url);
 
