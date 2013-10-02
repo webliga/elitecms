@@ -45,7 +45,7 @@ class Access
         return $arr_actions;
     }
 
-    public function checkAccess($userRoleAcces, $arrAccessAction)
+    public function checkByUserGroupAccess($userRoleAcces, $arrAccessAction)
     {
         $bool = false;
 
@@ -105,6 +105,7 @@ class Access
                                     // Например, редактор только тот, кто создал статью и модератор
                                     // Скорее всего проверка на id пользователя и id статьи или в базе булево значение прописать 
                                     if (
+                                            // Если доступ групы позволяет доступ екшена (доступ пользователя здесь не проверяется)
                                             (isset($arrAccessAction['access']['d']) && $arrAccessAction['access']['d'] && $value_action_arr[$key_action]['d']) ||
                                             (isset($arrAccessAction['access']['e']) && $arrAccessAction['access']['e'] && $value_action_arr[$key_action]['e']) ||
                                             (isset($arrAccessAction['access']['w']) && $arrAccessAction['access']['w'] && $value_action_arr[$key_action]['w']) ||
@@ -113,6 +114,9 @@ class Access
                                     )
                                     {
                                         $bool = true;
+                                        
+                                        
+                                        
 
                                         return $bool;
                                     }

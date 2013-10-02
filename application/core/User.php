@@ -19,8 +19,13 @@ class User extends Base
 
     public function checkUserAccess($arrAccessAction)
     {
-        if ($this->_access->checkAccess($this->_userRoleAcces, $arrAccessAction))
+        if ($this->_access->checkByUserGroupAccess($this->_userRoleAcces, $arrAccessAction))
         {
+            
+            
+            
+            
+            
             return true;
         }
 
