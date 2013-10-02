@@ -9,6 +9,9 @@
 class Template extends Base
 {
 
+    public $_data;
+    private $_nameTemplate = '';
+            
     function __construct()
     {
         parent::__construct();
@@ -21,7 +24,25 @@ class Template extends Base
 
     public function setVar($nameVar, $dataVar)
     {
-        $this->$nameVar = $dataVar;
+        $this->_data[$nameVar] = $dataVar;
+    }
+
+    public function getRenderedHtml($pathToTemplate, $data)
+    {
+        $content = '';
+        
+        return $content;
+    }
+
+    public function show()
+    {
+ 
+        Core::app()->getLoader()->loadTemplate();
+    }
+
+    public function showBlock($nameBlock)
+    {
+        Core::app()->getLoader()->loadTemplateBlock($nameBlock);
     }
 }
 

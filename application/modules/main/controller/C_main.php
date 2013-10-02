@@ -26,12 +26,16 @@ class C_main extends Controller
     {
         $this->loadModel('M_main', $this->getNameModule());
         $this->loadModel('M_shop', $this->getNameModule());
-
+        
         Core::app()->echoEcho('Какая либо новость. Отображается как для простого пользователя');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_main->_name_model);
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
-
+        
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+        
+        
+        Core::app()->getTemplate()->setVar('nameModel',$this->mainM_main->_name_model);
+        //Core::app()->echoEcho(Core::app()->getTemplate()->nameModel);
     }
 
     public function create()

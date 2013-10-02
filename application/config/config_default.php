@@ -3,7 +3,7 @@
 $config = array(
     'default_template' => array(
         'name' => 'default',
-        'path' => 'template',
+        'path' => 'templates',
     ),
     'default_module' => array(
         'name' => 'main',

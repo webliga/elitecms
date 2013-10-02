@@ -125,6 +125,9 @@ class Route
                     $action = $request->getAction();
 
                     $module_controller->$action();
+                    
+                    Core::app()->getTemplate()->show();
+                                        
                 }
                 else
                 {
