@@ -6,12 +6,13 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_main extends Controller
+class C_main_main extends Controller
 {
 
     function __construct()
     {
         parent::__construct();
+        
     }
 
     function __destruct()
@@ -24,18 +25,15 @@ class C_main extends Controller
      */
     public function index()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
+        $this->loadModel('M_main_main', $this->getNameModule());
+        $this->loadModel('M_main_shop', $this->getNameModule());
         
-        Core::app()->echoEcho('Какая либо новость. Отображается как для простого пользователя');
-        //Core::app()->echoEcho('_name_model = ' . $this->mainM_main->_name_model);
-        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
+        Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
         
-        //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
-        
-        
-        Core::app()->getTemplate()->setVar('nameModel',$this->mainM_main->_name_model);
-        //Core::app()->echoEcho(Core::app()->getTemplate()->nameModel);
+        Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
+            контроллером с адресной строки. Сейчас находимся в main/main
+            
+');
     }
 
     public function create()
@@ -43,10 +41,7 @@ class C_main extends Controller
         $this->loadModel('M_main', $this->getNameModule());
         $this->loadModel('M_shop', $this->getNameModule());
 
-        Core::app()->echoEcho('Страница создания новости. Отображается форма редактирования');
-        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
-
-        //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+        Core::app()->getTemplate()->setVar('title_page','Страница создания новости. Отображается форма редактирования');
     }
 
     public function write()

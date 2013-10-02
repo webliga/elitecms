@@ -1,7 +1,11 @@
+<div class="footer">
+
+
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+Core::app()->getTemplate()->getModulesByPosition('footer_top');
+
+Core::app()->getTemplate()->getModulesByPosition('footer_bottom');
 ?>
+    
+</div>

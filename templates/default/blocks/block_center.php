@@ -1,7 +1,13 @@
-<?php
+<div class="center">
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
+22
+
+    <?php
+    Core::app()->getTemplate()->getModulesByPosition('center_top');
+
+    echo $content;
+
+    Core::app()->getTemplate()->getModulesByPosition('center_bottom');
+    ?>
+
+</div>

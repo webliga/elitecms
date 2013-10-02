@@ -47,8 +47,9 @@ class Route
                 SEPARATOR .
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SEPARATOR .
-                PREFIX_CONTROLLER . $request->getController() . '.php';
-        // Получаем язык отображения                  
+                PREFIX_CONTROLLER . $request->getModule() . '_' . $request->getController() . '.php';
+
+// Получаем язык отображения                  
         $path_lang = PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_LANG .
@@ -61,7 +62,7 @@ class Route
         {
             Core::app()->getLoader()->loadClass($path_controller);
 
-            $controllerClass = PREFIX_CONTROLLER . $request->getController();
+            $controllerClass = PREFIX_CONTROLLER . $request->getModule() . '_' . $request->getController();
 
             if (!class_exists($controllerClass))
             {
@@ -77,36 +78,37 @@ class Route
                 // проверяем доступ пользователя к екшену
 
                 $arrAccessAction = array(
-                        'module' => $request->getModule(),
-                        'controller' => $request->getController(),
-                        'action' => $request->getAction(),
-                    );
+                    'module' => $request->getModule(),
+                    'controller' => $request->getController(),
+                    'action' => $request->getAction(),
+                );
 
-                $path_module_config = 
+                $path_module_config =
                         PATH_SITE_ROOT .
-                        SEPARATOR . 
-                        PATH_TO_MODULES . 
-                        SEPARATOR . 
+                        SEPARATOR .
+                        PATH_TO_MODULES .
+                        SEPARATOR .
                         $request->getModule() .
                         SEPARATOR .
-                        NAME_FOLDER_MODULES_CONFIG . 
+                        NAME_FOLDER_MODULES_CONFIG .
                         SEPARATOR .
                         PREFIX_CONFIG . 'main.php';
-                                               
+
                 // Получаем настройки модуля (разрешения екшенов)        
                 $config = Core::app()->getLoader()->loadClass($path_module_config, true);
                 //Core::app()->echoPre(Core::app()->getConfig()->getConfigItem('default_role'));
                 //Core::app()->echoPre($config);
                 // Доступ екшена
                 $arrAccessAction['access'] = $config[$request->getController()][$request->getAction()];
-                
-                Core::app()->echoPre($arrAccessAction);
-                
+
+                //Core::app()->echoPre($arrAccessAction);
+
                 if (Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {
                     if (!file_exists($path_lang))
                     {
-                        $path_lang = PATH_SITE_ROOT .
+                        $path_lang =
+                                PATH_SITE_ROOT .
                                 SEPARATOR .
                                 PATH_TO_LANG .
                                 SEPARATOR .
@@ -117,17 +119,15 @@ class Route
 
                     //require_once $path_lang;
 
-                    Core::app()->getLoader()->loadClass($path_lang);
-                    
-                    
+                    $lang = Core::app()->getLoader()->loadClass($path_lang, true);
+
                     Core::app()->getConfig()->setConfigItem('lang', $lang);
 
                     $action = $request->getAction();
 
                     $module_controller->$action();
-                    
+
                     Core::app()->getTemplate()->show();
-                                        
                 }
                 else
                 {

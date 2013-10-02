@@ -42,12 +42,12 @@ abstract class Controller extends Base
         {
             require_once $model_path;
 
-            $nameModel = $module_name . $model;
+            $nameModel = $model;
             $this->$nameModel = new $model;
         }
         else
         {
-            Core::app()->echoEcho('!file_exists in Controller');
+            Core::app()->echoPre('!file_exists in Controller = ' . $model_path);
         }
     }
 

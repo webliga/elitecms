@@ -78,7 +78,7 @@ class Access
             }
         }
 
-        Core::app()->echoPre($access_user_group);
+       // Core::app()->echoPre($access_user_group);
 
         if (!is_null($userRoleAcces) && is_array($userRoleAcces))
         {
@@ -124,13 +124,15 @@ class Access
                             }
                         }
                     }
-                }
+                }/*
                 else
-                {
+                { 
                     Core::app()->echoPre('333');
+                    Core::app()->echoPre($key_module);    
+                    Core::app()->echoPre($arrAccessAction['module']);                    
                     Core::app()->echoPre($access_user_group['actions'][$key_module]);
                     Core::app()->echoPre($arrAccessAction['module']);
-                }
+                }*/
             }
         }
 

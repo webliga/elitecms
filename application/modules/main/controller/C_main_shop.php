@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_shop extends Controller
+class C_main_shop extends Controller
 {
 
     function __construct()
@@ -24,13 +24,14 @@ class C_shop extends Controller
      */
     public function index()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
-        $this->loadModel('M_user', $this->getNameModule('user'));
+        $this->loadModel('M_main_main', $this->getNameModule());
+        $this->loadModel('M_main_shop', $this->getNameModule());
+        $this->loadModel('M_user_user', $this->getNameModule('user'));
 
-        Core::app()->echoEcho($this->mainM_main->_name_model);
-        Core::app()->echoEcho($this->mainM_shop->_name_model);
-        Core::app()->echoEcho($this->userM_user->_name_model);
+        Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
+            контроллером с адресной строки. Сейчас находимся в main/shop
+            
+');
     }
 
     public function create()

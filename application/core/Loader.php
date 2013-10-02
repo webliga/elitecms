@@ -34,11 +34,8 @@ class Loader
 
     public function loadTemplateBlock($nameBlock)
     {
-        
-        
         $template = Core::app()->getConfig()->getConfigItem('default_template');
-
-
+        
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -49,7 +46,6 @@ class Loader
                 'blocks' .
                 SEPARATOR .
                 'block_' . $nameBlock . '.php';
-
 
         if (file_exists($path))
         {

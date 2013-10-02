@@ -1,0 +1,36 @@
+.main
+{
+    width: 1000px;
+    text-align: left;
+    border: 1px solid red;
+}
+
+.header
+{
+    width: 100%;
+    float: left;
+    background-color: #FFFFCC;
+}
+
+.center
+{
+    width: 100%;
+    float: left;
+    background-color: #99CC33;
+}
+
+.footer
+{
+    width: 100%;
+    float: left;
+    background-color: #FFCC66;
+}
+
+
+
+
+
+
+
+
+

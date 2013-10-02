@@ -6,7 +6,7 @@
 	 * @version 1.0
 	 * @updated 17-Вер-2013 20:15:13
 	 */
-class M_shop extends Model
+class M_main_shop extends Model
 {
 
     public $_name_model;

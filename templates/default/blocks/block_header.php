@@ -1,6 +1,7 @@
 <div class='header'>
-    <?php 
-    echo $nameModel;
+
+    <?php
+    Core::app()->getTemplate()->getModulesByPosition('header_top');
     ?>
 </div>
 
