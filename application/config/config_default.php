@@ -48,7 +48,7 @@ $config = array(
         ),
     ),
     'default_role' => array(
-        'user_group' => 'moderator',
+        'user_group' => 'admin',
         'access' => '',
         'path' => array('*'),
     ),

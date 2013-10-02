@@ -29,8 +29,10 @@
  * 
  * 
  */
+//Права доступа к модулю main
 $config = array(
     'main' => array(//Контроллер
+        // Действия
         'index' =>  array('r' => true,  'c' => false, 'w' => false, 'e' => false, 'd' => false),
         'create' => array('r' => false, 'c' => true,  'w' => false, 'e' => false, 'd' => false),
         'write' =>  array('r' => false, 'c' => false, 'w' => true,  'e' => false, 'd' => false),

@@ -26,11 +26,11 @@ class Access
 
         if ($access_user_group['parent_group'] != null)
         {
-            $arr_actions = $this->getParentAccess($access_user_group['parent_group'], $access_user_group['actions']);
+            $arr_actions = $this->getParentAccess($access_user_group['parent_group'], $access_user_group['access']);
         }
         //Core::app()->echoPre($arr_actions);
 
-        foreach ($access_user_group['actions'] as $key_module => $value_module_arr)
+        foreach ($access_user_group['access'] as $key_module => $value_module_arr)
         {
             foreach ($value_module_arr as $key_controller => $value_controller_arr)
             {
@@ -58,7 +58,7 @@ class Access
         // Если есть родительская группа, копируем ее разрешения/доступы
         if ($access_user_group['parent_group'] != null)
         {// Получаем масив настроек родителей, что б унаследовать доступы
-            $arr_actions = $this->getParentAccess($access_user_group['parent_group'], $access_user_group['actions']);
+            $arr_actions = $this->getParentAccess($access_user_group['parent_group'], $access_user_group['access']);
 
             // наследуем от родителя доступы (если екшен совпадает с родителем, то родительский доступ тогда не наследуем, перезаписываем)
             foreach ($arr_actions as $key_module => $value_module_arr)
@@ -69,9 +69,9 @@ class Access
                     {// Если екшена у даной группы не существует то унаследуемся от родителя, 
                         //иначе не допускаем перезапись: 
                         //настройки остаются, внезависимости как настроен родитель
-                        if (!isset($access_user_group['actions'][$key_module][$key_controller][$key_action]))
+                        if (!isset($access_user_group['access'][$key_module][$key_controller][$key_action]))
                         {
-                            $access_user_group['actions'][$key_module][$key_controller][$key_action] = $value_action_arr;
+                            $access_user_group['access'][$key_module][$key_controller][$key_action] = $value_action_arr;
                         }
                     }
                 }
@@ -85,7 +85,7 @@ class Access
             //$groups = Core::app()->getConfig()->getConfigItem('groups');
             //$access_user_group = $groups[$userRoleAcces['user_group']];
             // Ищем именно наш екшн
-            foreach ($access_user_group['actions'] as $key_module => $value_controllers_arr)
+            foreach ($access_user_group['access'] as $key_module => $value_controllers_arr)
             {
                 // Если это наш модуль
                 if ($key_module == $arrAccessAction['module'] || $key_module == '*')
