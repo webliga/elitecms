@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Нужно переписать примерно так:
+ * Нужно подумать  переписать ли примерно так?
  * $config = array(
  * 'r' => array(
  *      'main' => array('index'),
@@ -30,51 +30,15 @@
  * 
  */
 $config = array(
-    'main' => array(
-        'index' => array(
-            'r' => true, // read
-            'c' => false, // create
-            'w' => false, // write
-            'e' => false, // edite
-            'd' => false, // delete
-        ),
-        'create' => array(
-            'r' => false,
-            'c' => true,
-            'w' => false,
-            'e' => false,
-            'd' => false,
-        ),
-        'write' => array(
-            'r' => false,
-            'c' => false,
-            'w' => true,
-            'e' => false,
-            'd' => false,
-        ),
-        'edite' => array(
-            'r' => false,
-            'c' => false,
-            'w' => false,
-            'e' => true,
-            'd' => false,
-        ),
+    'main' => array(//Контроллер
+        'index' =>  array('r' => true,  'c' => false, 'w' => false, 'e' => false, 'd' => false),
+        'create' => array('r' => false, 'c' => true,  'w' => false, 'e' => false, 'd' => false),
+        'write' =>  array('r' => false, 'c' => false, 'w' => true,  'e' => false, 'd' => false),
+        'edite' =>  array('r' => false, 'c' => false, 'w' => false, 'e' => true,  'd' => false),
     ),
     'shop' => array(
-        'index' => array(
-            'r' => true,
-            'c' => false,
-            'w' => false,
-            'e' => false,
-            'd' => false,
-        ),
-        'create' => array(
-            'r' => false,
-            'c' => true,
-            'w' => false,
-            'e' => false,
-            'd' => false,
-        ),
+        'index' =>  array('r' => true,  'c' => false, 'w' => false, 'e' => false, 'd' => false),
+        'create' => array('r' => false, 'c' => true,  'w' => false, 'e' => false, 'd' => false),
     ),
 );
 ?>
