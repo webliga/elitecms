@@ -29,7 +29,7 @@ class C_main extends Controller
 
         Core::app()->echoEcho('Какая либо новость. Отображается как для простого пользователя');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_main->_name_model);
-        ///Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
+        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
 
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
     }

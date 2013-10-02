@@ -46,6 +46,10 @@ $config = array(
             'name' => 'Error',
             'path' => 'application/core'
         ),
+        'template' => array(
+            'name' => 'Template',
+            'path' => 'application/core'
+        ),        
     ),
     'default_role' => array(
         'user_group' => 'admin',

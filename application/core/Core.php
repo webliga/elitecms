@@ -12,7 +12,8 @@ class Core
     private $_route; // Объект класса Route    
     private $_user;
     private $_loader;
-
+    private $_template;
+    
     private function __construct()
     {
         
@@ -118,7 +119,19 @@ class Core
 
         return self::app()->_loader;
     }
-    
+
+    public function getTemplate()
+    {
+        if (is_null(self::app()->_template))
+        {
+            $class = self::app()->getClassNameForCreate('template');
+
+            self::app()->_template = new $class;
+        }
+
+        return self::app()->_template;
+    }
+        
 // Вытягиваем класс из дефолтных настроек 
 // (Дефолтный класс можно переопределить                                                           
 // в любом модуле и прописать путь к нему) 
