@@ -65,6 +65,16 @@ class Template extends Base
                         'template_file' => 'mod_menu_footer_bottom.php',
                         'data' => array('id_menu' => 1),
                     ),
+                    1 => array(
+                        'name' => 'menu',
+                        'template_file' => 'mod_menu_center_top.php',
+                        'data' => array('id_menu' => 2),
+                    ),
+                    2 => array(
+                        'name' => 'menu',
+                        'template_file' => 'mod_menu_header.php',
+                        'data' => array('id_menu' => 0),
+                    ),
                 ),
             ),
             'center_top' => array(
@@ -88,11 +98,6 @@ class Template extends Base
                 }
             }
         }
-
-
-
-        //echo '<br>' . $nameModulePosition . '<br>';
-        //Core::app()->echoPre($this->_data['positions'][$nameModulePosition]);
     }
 
     public function getModuleContent($nameModule, $pathContentView, $data)
@@ -139,8 +144,8 @@ class Template extends Base
             if (file_exists($path))
             {
                 extract($arrData);
-                
-                require_once $path;
+                // Передаем данные в шаблон вывода
+                require $path;
             }
         }
         else

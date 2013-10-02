@@ -30,13 +30,13 @@ class M_menu_main extends Model
                 'menu_items' => array(
                     0 => array(
                         'id' => 1,
-                        'name' => 'Каталог',
-                        'link' => '/catalog/main'
+                        'name' => 'Главная',
+                        'link' => '/'
                     ),
                     1 => array(
                         'id' => 2,
-                        'name' => 'Новости',
-                        'link' => '/news/main'
+                        'name' => 'Пользователи',
+                        'link' => '/ru/user/profile'
                     ),
                     2 => array(
                         'id' => 3,
