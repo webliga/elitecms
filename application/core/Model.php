@@ -9,46 +9,28 @@
 class Model extends Base
 {
 
-    private $_db = '1';
-    private $_conn;
-    private $_stats;
-    private $_emode;
-    private $_exname;
-    private $_configDb = array();
-
-    const RESULT_ASSOC = MYSQLI_ASSOC;
-    const RESULT_NUM = MYSQLI_NUM;
+    private $_db ;
 
     function __construct($optionals = null)
     {
         parent::__construct();
 
         if ($optionals == null || !is_array($optionals))
-        {
+        {// Подключаемся к дефолтным настройкам
             $optionals = Core::app()->getConfig()->getConfigItem('db');
+
+            $nameClass = 'SafeMySQL';
+            $path =
+                    PATH_SITE_ROOT .
+                    SEPARATOR .
+                    PATH_TO_LIB .
+                    SEPARATOR .
+                    $nameClass .
+                    '.php';
+
+            Core::app()->getLoader()->loadClass($path);
+            $this->_db = new $nameClass($optionals);
         }
-
-        $optionals = array_merge($this->_configDb, $optionals);
-
-        //$this->emode = $optionals['errmode'];
-        //$this->exname = $optionals['exception'];
-
-        if ($optionals['db_pconnect'])
-        {
-            $optionals['db_host'] = "p:" . $optionals['db_host'];
-        }
-
-        @$this->conn = mysqli_connect($optionals['db_host'], $optionals['db_user'], $optionals['db_pass'], $optionals['db_name'], $optionals['db_port'], $optionals['db_socket']);
-        if (!$this->conn)
-        {
-            Core::app()->getError()->errorDbConnect(mysqli_connect_errno() . " " . mysqli_connect_error());
-        }
-        else
-        {
-            mysqli_set_charset($this->conn, $optionals['db_charset']) or Core::app()->getError()->errorDbConnect(mysqli_error($this->conn));
-        }
-
-        unset($optionals); // I am paranoid
     }
 
     function __destruct()
@@ -71,14 +53,15 @@ class Model extends Base
         return 'test name from parent Model';
     }
 
-    public function insert()
+    public function insert($sql)
     {
         
     }
 
-    public function select()
+    public function select($nameTable)
     {
-        
+        $data = $this->_db->getAll("SELECT * FROM ?n ",$nameTable);
+        return $data;
     }
 
     public function update()

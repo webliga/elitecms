@@ -29,10 +29,9 @@ class C_menu_main extends Controller
             //Core::app()->echoPre($this->getNameModule());
             $this->loadModel('M_menu_main', $this->getNameModule());
 
-            //Core::app()->echoPre($this->M_menu_main->getMenuById($data['id_menu']));
-            
-            //Core::app()->echoEcho($this->getNameModule() . '------ ' . $this->M_menu_main->_name_model);
-            
+            $this->loadModel('M_main_main', 'main');
+            Core::app()->echoPre($this->M_main_main->getAllUsersArr());
+
             return $this->M_menu_main->getMenuById($data['id_menu']);
         }
     }

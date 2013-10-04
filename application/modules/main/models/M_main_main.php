@@ -23,6 +23,10 @@ class M_main_main extends Model
         
     }
 
+    function getAllUsersArr()
+    {
+        return $this->select('users');
+    }
 }
 
 ?>
