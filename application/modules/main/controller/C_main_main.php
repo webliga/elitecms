@@ -26,6 +26,17 @@ class C_main_main extends Controller
     {
         $this->loadModel('M_main_main', $this->getNameModule());
         $this->loadModel('M_main_shop', $this->getNameModule());
+        Core::app()->echoPre($this->M_main_main->getDb());
+        Core::app()->echoPre($this->M_main_shop->getDb());
+
+        $this->M_main_main->connectToDb('M_main_main');
+
+
+        $this->M_main_shop->connectToDb('M_main_shop');
+
+        Core::app()->echoPre($this->M_main_main->getDb());
+        Core::app()->echoPre($this->M_main_shop->getDb());
+        Core::app()->echoPre($this->M_main_main->getDb());
 
         Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
 

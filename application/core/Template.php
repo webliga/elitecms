@@ -70,13 +70,17 @@ class Template extends Base
                         'template_file' => 'mod_menu_center_top.php',
                         'data' => array('id_menu' => 2),
                     ),
-                    2 => array(
+                ),
+            ),
+            'footer_top' => array(
+                'modules' => array(
+                    0 => array(
                         'name' => 'menu',
                         'template_file' => 'mod_menu_header.php',
                         'data' => array('id_menu' => 0),
                     ),
                 ),
-            ),
+            ),            
             'center_top' => array(
                 'modules' => array(
                     0 => array(

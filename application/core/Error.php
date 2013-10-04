@@ -48,6 +48,11 @@ class Error
     {
         Core::app()->echoEcho('errorFileNotExist ' . $err);
     }
+    
+    public function errorDbConnect($err)
+    {
+        Core::app()->echoEcho('errorDbConnect ' . $err);
+    }
 }
 
 ?>
