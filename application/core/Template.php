@@ -105,7 +105,7 @@ class Template extends Base
     }
 
     public function getModuleContent($nameModule, $pathContentView, $data)
-    {
+    {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
 
         $path =
                 PATH_SITE_ROOT .
