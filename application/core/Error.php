@@ -22,9 +22,17 @@ class Error
     /**
      * Выводит ошибку 404
      */
-    public function errorPage404($err)
+    public function errorPage404($msg)
     {
-        Core::app()->echoEcho('errorPage404 ' . $err);
+        $err['error'] = 'errorPage404 ' . $msg;
+        Core::app()->getTemplate()->showDanger($err);
+    }
+
+    public function errorAccessDenied($msg)
+    {
+        $err['error'] = 'errorAccessDenied ' . $msg;
+        Core::app()->getTemplate()->showDanger($err);
+
         /*
           $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
           header('HTTP/1.1 404 Not Found');
@@ -33,26 +41,18 @@ class Error
         Core::app()->appExit();
     }
 
-    public function errorAccessDenied($err)
+    public function errorFileNotExist($msg)
     {
-        Core::app()->echoEcho('errorAccessDenied ' . $err);
-        /*
-          $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
-          header('HTTP/1.1 404 Not Found');
-          header("Status: 404 Not Found");
-          header('Location:'.$host.'404'); */
-        Core::app()->appExit();
+        $err['error'] = 'errorFileNotExist ' . $msg;
+        Core::app()->getTemplate()->showDanger($err);
     }
 
-    public function errorFileNotExist($err)
+    public function errorDbConnect($msg)
     {
-        Core::app()->echoEcho('errorFileNotExist ' . $err);
+        $err['error'] = 'errorDbConnect ' . $msg;
+        Core::app()->getTemplate()->showDanger($err);
     }
-    
-    public function errorDbConnect($err)
-    {
-        Core::app()->echoEcho('errorDbConnect ' . $err);
-    }
+
 }
 
 ?>

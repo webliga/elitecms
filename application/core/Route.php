@@ -30,10 +30,15 @@ class Route
 
         $this->_started = true;
 
-
         // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
-        // Для удобства получаем ссылку на обрабтчик запроса
+        
+// Проверяем ЧПУ (если в бд уже есть урл, то формируем $path_controller)
+        // Заодно вытягиваем
+
+        Core::app()->getConfig()->selectSystemConfig($url);
+
+// Для удобства получаем ссылку на обрабтчик запроса
         $request = Core::app()->getRequest();
         $request->runParseUrl($url);
 

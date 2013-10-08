@@ -93,6 +93,16 @@ class Config
         return $this->_data;
     }
 
+    public function selectSystemConfig($url)
+    {
+        $model = new Model();
+        
+        $arr = $model->selectConfig();
+        
+        
+        $this->setConfigItem('modules', $arr);
+        
+    }
 }
 
 ?>

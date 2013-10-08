@@ -9,7 +9,7 @@
 class Model extends Base
 {
 
-    private $_db ;
+    protected $_db ;
 
     function __construct($optionals = null)
     {
@@ -94,6 +94,25 @@ class Model extends Base
         
     }
 
+    public function selectConfig()
+    {
+        $query = "SELECT 
+                  modules.id as module_id, 
+                  modules.name as name,                 
+                  modules.name_system as name_system,
+                  modules.template_file as template_file,                  
+                  position.name as position_name,
+                  position.name_system as position_name_system,
+                  position_modules.priority as position_priority
+            FROM modules 
+                  LEFT JOIN  position_modules   ON modules.id = position_modules.module_id
+                  LEFT JOIN  position  ON position_modules.position_id = position.id
+                ";
+        
+        $data = $this->_db->getAll($query);
+        return $data;
+        
+    }
 }
 
 ?>

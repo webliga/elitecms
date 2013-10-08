@@ -22,6 +22,31 @@ class Template extends Base
         
     }
 
+    public function showDanger($err)
+    {
+        $template = Core::app()->getConfig()->getConfigItem('default_template');
+
+            $path =
+                    PATH_SITE_ROOT .
+                    SEPARATOR .
+                    $template['path'] .
+                    SEPARATOR .
+                    $template['name'] .
+                    SEPARATOR .
+                    'error' .
+                    SEPARATOR .
+                    'danger.php';
+            
+            if (file_exists($path))
+            {
+                extract($err);
+                // Передаем данные в шаблон вывода
+                require $path;
+            }
+            
+            
+    }
+
     public function setVar($nameVar, $dataVar)
     {
         $this->_data[$nameVar] = $dataVar;
@@ -48,65 +73,24 @@ class Template extends Base
 //Вставляет результат работы модулей, привязанных к данной позиции.
     public function getModulesByPosition($nameModulePosition)
     {
-        $positions = array(// Это тестовый масив. Такой же масив будет передаваться с БД
-            'header_top' => array(
-                'modules' => array(
-                    0 => array(
-                        'name' => 'menu',
-                        'template_file' => 'mod_menu_header.php',
-                        'data' => array('id_menu' => 0),
-                    ),
-                ),
-            ),
-            'footer_bottom' => array(
-                'modules' => array(
-                    0 => array(
-                        'name' => 'menu',
-                        'template_file' => 'mod_menu_footer_bottom.php',
-                        'data' => array('id_menu' => 1),
-                    ),
-                    1 => array(
-                        'name' => 'menu',
-                        'template_file' => 'mod_menu_center_top.php',
-                        'data' => array('id_menu' => 2),
-                    ),
-                ),
-            ),
-            'footer_top' => array(
-                'modules' => array(
-                    0 => array(
-                        'name' => 'menu',
-                        'template_file' => 'mod_menu_header.php',
-                        'data' => array('id_menu' => 0),
-                    ),
-                ),
-            ),            
-            'center_top' => array(
-                'modules' => array(
-                    0 => array(
-                        'name' => 'menu',
-                        'template_file' => 'mod_menu_center_top.php',
-                        'data' => array('id_menu' => 2),
-                    ),
-                ),
-            ),
-        );
+        //Core::app()->echoPre(Core::app()->getConfig()->getConfigItem('modules'));
 
-        foreach ($positions as $key_position_name => $value)
+        $modules = Core::app()->getConfig()->getConfigItem('modules');
+
+        for ($i = 0; $i < count($modules); $i++)
         {
-            if ($key_position_name == $nameModulePosition)
+            if ($modules[$i]['position_name_system'] == $nameModulePosition)
             {
-                for ($i = 0; $i < count($value['modules']); $i++)
-                {
-                    $this->getModuleContent($value['modules'][$i]['name'], $value['modules'][$i]['template_file'], $value['modules'][$i]['data']);
-                }
+                $data = array('id_menu' => $modules[$i]['module_id']);
+
+
+                $this->getModuleContent($modules[$i]['name_system'], $modules[$i]['template_file'], $data);
             }
         }
     }
 
     public function getModuleContent($nameModule, $pathContentView, $data)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
-
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -144,10 +128,13 @@ class Template extends Base
                     $nameModule .
                     SEPARATOR .
                     $pathContentView;
-            
+
+            $menu_items['menu_items'] = $arrData;
+
+
             if (file_exists($path))
             {
-                extract($arrData);
+                extract($menu_items);
                 // Передаем данные в шаблон вывода
                 require $path;
             }

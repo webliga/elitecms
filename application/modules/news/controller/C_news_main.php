@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_menu_main extends Controller
+class C_news_main extends Controller
 {
 
     function __construct()
@@ -26,7 +26,7 @@ class C_menu_main extends Controller
     {
         if ($data != null)
         {
-            $this->loadModel('M_menu_main', $this->getNameModule());
+            $this->loadModel('M_menu_main', 'menu');
 
             $this->loadModel('M_main_main', 'main');
 

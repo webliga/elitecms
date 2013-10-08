@@ -47,7 +47,8 @@ abstract class Controller extends Base
         }
         else
         {
-            Core::app()->echoPre('!file_exists in Controller = ' . $model_path);
+            $err['error'] = '!file_exists in Controller =  ' . $model_path;
+            Core::app()->getTemplate()->showDanger($err);
         }
     }
 

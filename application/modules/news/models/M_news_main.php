@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class M_menu_main extends Model
+class M_news_main extends Model
 {
 
     public $_name_model;
