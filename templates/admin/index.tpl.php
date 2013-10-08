@@ -7,7 +7,7 @@
     <body>
         <div align="center">
             <div class="main">
-                <h1>Hello, world!</h1>
+                
                 <?php
                 Core::app()->getTemplate()->showBlock('header');
                 ?>

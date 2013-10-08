@@ -26,12 +26,6 @@ class C_admin_main extends Controller
     {
         $this->loadModel('M_admin_main', $this->getNameModule());
 
-        //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
-        //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
-
-
-
-
         Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
 
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 

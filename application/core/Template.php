@@ -81,16 +81,15 @@ class Template extends Base
         {
             if ($modules[$i]['position_name_system'] == $nameModulePosition)
             {
-                $data = array('id_menu' => $modules[$i]['module_id']);
-
-
-                $this->getModuleContent($modules[$i]['name_system'], $modules[$i]['template_file'], $data);
+                $this->getModuleContent($modules[$i]['name_system'], $modules[$i]['template_file'], $modules[$i]);
             }
         }
     }
 
     public function getModuleContent($nameModule, $pathContentView, $data)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
+        
+        
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -102,7 +101,7 @@ class Template extends Base
                 SEPARATOR .
                 PREFIX_CONTROLLER .
                 $nameModule . '_main.php';
-
+//Core::app()->echoPre($path);
         if (file_exists($path))
         {
             require_once $path;
@@ -129,14 +128,15 @@ class Template extends Base
                     SEPARATOR .
                     $pathContentView;
 
-            $menu_items['menu_items'] = $arrData;
-
-
             if (file_exists($path))
             {
-                extract($menu_items);
+                extract($arrData);
                 // Передаем данные в шаблон вывода
                 require $path;
+            }
+            else
+            {
+                Core::app()->getError()->errorFileNotExist('Шаблона для модуля  ' . $path . ' не существует!');
             }
         }
         else

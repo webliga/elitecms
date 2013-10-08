@@ -31,7 +31,7 @@ class M_menu_main extends Model
             FROM menu_items 
             WHERE module_id = ' . $id . 
                 ' AND is_active = ' . $is_active;
-        
+
         $data = $this->_db->getAll($query);
           
         return  $data;
