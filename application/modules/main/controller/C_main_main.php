@@ -29,7 +29,7 @@ class C_main_main extends Controller
         
         //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
         
-        Core::app()->echoPre($this->M_main_main->getAllUsersArr());
+        //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
 
 
 

@@ -2,7 +2,7 @@
 
 $config = array(
     'default_template' => array(
-        'name' => 'default',
+        'name' => 'admin',
         'path' => 'templates',
     ),
     'default_module' => array(

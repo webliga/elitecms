@@ -66,7 +66,7 @@ class Route
 
             if (!class_exists($controllerClass))
             {
-                Core::app()->getError()->errorPage404('3');
+                Core::app()->getError()->errorPage404('3 Класс '.$controllerClass.' не существует');
             }
 
             $module_controller = new $controllerClass;

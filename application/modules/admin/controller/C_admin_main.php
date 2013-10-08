@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_menu_main extends Controller
+class C_admin_main extends Controller
 {
 
     function __construct()
@@ -20,26 +20,26 @@ class C_menu_main extends Controller
     }
 
     /**
-     * Получаем стартовые данные для формирования меню
+     * Действие по умолчанию
      */
-    public function index($data = null)
+    public function index()
     {
-        if ($data != null)
-        {
-            //Core::app()->echoPre($this->getNameModule());
-            $this->loadModel('M_menu_main', $this->getNameModule());
+        $this->loadModel('M_admin_main', $this->getNameModule());
 
-            $this->loadModel('M_main_main', 'main');
-            //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
+        //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
+        //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
 
-            return $this->M_menu_main->getMenuById($data['id_menu']);
-        }
+
+
+
+        Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
+
+        Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
+            контроллером с адресной строки. Сейчас находимся в админке');
     }
 
     public function create()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
     }

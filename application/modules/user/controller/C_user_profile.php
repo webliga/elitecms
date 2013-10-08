@@ -32,10 +32,24 @@ class C_user_profile extends Controller
             
 ');
         
-        
+    }
+    
+    public function create()
+    {
         
     }
 
+        
+    public function update()
+    {
+        
+    }
+    
+        
+    public function delete()
+    {
+        
+    }
 }
 
 ?>
