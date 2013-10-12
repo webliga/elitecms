@@ -17,7 +17,7 @@
     width: 100%;
     float: left;
     background-color: none;
-    margin-top: 100px;
+    margin-top: 80px;
 }
 
 .footer
@@ -30,6 +30,7 @@
 .mod_create
 {
     width: 500px;
+    margin: 0px 20px 20px 20px;
 }
 
 

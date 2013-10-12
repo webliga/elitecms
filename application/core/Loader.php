@@ -67,6 +67,8 @@ class Loader extends Base
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
 
+        Core::app()->getTemplate()->setMainTemplateName($template['name']);
+        
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .

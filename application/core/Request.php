@@ -17,10 +17,11 @@ class Request extends Base
     private $_url;
     private $_post;
     private $_get;
+    private $_host;
 
     function __construct()
     {
-        
+        $this->_host = 'http://' . $_SERVER['HTTP_HOST'];
     }
 
     function __destruct()
@@ -148,6 +149,15 @@ class Request extends Base
     public function getUrl()
     {
         return $this->_url;
+    }
+
+    public function redirect($url, $terminate = true, $statusCode = 302)
+    {
+        $url = $this->_host . $url;
+        
+        header('Location: ' . $url, true, $statusCode);
+        if ($terminate)
+            Core::app()->appExit();
     }
 
 }

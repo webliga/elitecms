@@ -17,11 +17,20 @@ abstract class Controller extends Base
     function __construct()
     {
         parent::__construct();
+        
+        
     }
 
     function __destruct()
     {
         
+    }
+
+    protected function init()
+    {
+        Core::app()->getTemplate()->setVar('createPath', '');
+        Core::app()->getTemplate()->setVar('content', '');
+        Core::app()->getTemplate()->setVar('title_page', '');
     }
 
 //создание модели

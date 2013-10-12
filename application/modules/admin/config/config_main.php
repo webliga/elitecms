@@ -46,5 +46,13 @@ $config = array(
         'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
         'setting' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
     ),
+    'menuitems' => array(//Контроллер
+        // Действия
+        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
+        'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
+        'update' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
+        'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
+        'setting' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
+    ),    
 );
 ?>

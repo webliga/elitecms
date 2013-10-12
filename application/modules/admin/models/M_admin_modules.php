@@ -29,7 +29,7 @@ class M_admin_modules extends Model
     }
     
     function getAllModules()
-    {
+    {       
         return $this->selectAllFromTable('modules');
     }
      

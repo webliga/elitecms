@@ -8,8 +8,7 @@
  */
 class Template extends Base
 {
-
-    public $_data;
+    public  $_data;
     private $_nameTemplate = '';
 
     function __construct()
@@ -22,6 +21,19 @@ class Template extends Base
         
     }
 
+    public function getTemplatePath()
+    {
+        $path = '/templates/' . $this->_nameTemplate . '/';
+        
+        return $path;
+    }
+    
+ 
+    public function setMainTemplateName($nameTemplate)
+    {
+        $this->_nameTemplate = $nameTemplate;
+    }  
+    
     public function showDanger($err)
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -105,6 +117,7 @@ class Template extends Base
             }
         }
     }
+
 // Получаем данные модуля
     public function getModuleContent($nameModule, $fileContentView, $data)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
@@ -138,6 +151,7 @@ class Template extends Base
             Core::app()->getError()->errorFileNotExist('Блок ' . $path . ' не существует!');
         }
     }
+
 // Выводит результат работы модуля или возвращает в переменной результат работы
     public function moduleContentView($path, $nameModule, $dataArr, $fileContentView, $return = false)
     {

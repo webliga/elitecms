@@ -29,7 +29,7 @@ class M_menu_main extends Model
         
         $query = 'SELECT *
             FROM menu_items 
-            WHERE module_id = ' . $id . 
+            WHERE id_module = ' . $id . 
                 ' AND is_active = ' . $is_active;
 
         $data = $this->_db->getAll($query);

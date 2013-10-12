@@ -1,7 +1,9 @@
 <table class="table table-striped table-bordered table-hover">
-    <caption><?php echo $dataArr['thead'];
-unset($dataArr['thead']);
-?></caption>
+    <caption><?php
+        $form_action = $dataArr['form_action'];
+
+        unset($dataArr['form_action']);
+        ?></caption>
     <tbody>
         <?php
         for ($i = 0; $i < count($dataArr); $i++)
@@ -14,9 +16,9 @@ unset($dataArr['thead']);
                 {
                     echo '<th>' . $key . '</th>';
                 }
-                
+
                 echo '<th>actions</th>';
-                
+
                 echo '</tr>';
             }
 
@@ -28,7 +30,7 @@ unset($dataArr['thead']);
             }
 
             echo
-'<td><form action="' . Core::app()->getHtml()->createUrl('admin/modules/edite/') . '" method ="post">
+            '<td><form action="' . Core::app()->getHtml()->createUrl($form_action) . '" method ="post">
   <fieldset>
     <input type="hidden" name="id_module" value="' . $dataArr[$i]['id'] . '">
     <button type="submit" class="btn btn-primary">Настройки</button>

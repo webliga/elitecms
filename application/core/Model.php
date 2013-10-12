@@ -58,30 +58,49 @@ class Model extends Base
         
     }
 
-    public function selectAllFromTable($nameTable)
+    public function selectAllFromTable($nameTable, $fildsSelect = null, $join = null)
     {
-        $data = $this->_db->getAll('SELECT * FROM ?n ',$nameTable);
+        if($this->isEmpty($fildsSelect) || is_null($fildsSelect))
+        {
+            $fildsSelect = '*';
+        }
+        
+        $sql = $this->_db->parse('SELECT ' . $fildsSelect . '  FROM ?n ?p',$nameTable, $join);
+        
+        
+        $data = $this->_db->getAll($sql);
+        
         return $data;
     }
 
-    public function selectAllByIdFromTable($nameTable, $id)
+    public function selectAllByIdFromTable($nameTable, $id, $fildsSelect = null, $join = null)
     {
-        $data = $this->_db->getRow('SELECT * FROM ' . $nameTable . ' WHERE id=?i', $id);
+        if($this->isEmpty($fildsSelect) || is_null($fildsSelect))
+        {
+            $fildsSelect = '*';
+        }
+        
+        $sql = $this->_db->parse('SELECT ' . $fildsSelect . ' FROM ?n ?p WHERE ?n.id=?i',$nameTable, $join,$nameTable , $id);
+
+        $data = $this->_db->getRow($sql);
         
         return $data;
     }
 
     public function updateTableRowById($nameTable, $id, $dataArr)
-    {
-        foreach ($dataArr as $key => $value)
-        {
-            $sql = $this->_db->parse();
-        }
+    {        
+        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE id = ?i"  ,$nameTable , $dataArr, $id);
         
-        $data = $this->_db->getRow('SELECT * FROM ' . $nameTable . ' WHERE id=?i', $id);
-        
-        return $data;
+        $this->_db->query($sql);
     }    
+    
+
+    public function insertTableRow($nameTable, $dataArr)
+    {        
+        $sql = $this->_db->parse("INSERT INTO ?n SET ?u "  ,$nameTable , $dataArr);
+
+        $this->_db->query($sql);
+    }     
     
     public function update()
     {
