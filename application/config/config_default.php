@@ -49,7 +49,11 @@ $config = array(
         'template' => array(
             'name' => 'Template',
             'path' => 'application/core'
-        ),        
+        ),  
+        'html' => array(
+            'name' => 'Html',
+            'path' => 'application/core'
+        ),          
     ),
     'default_role' => array(
         'user_group' => 'admin',

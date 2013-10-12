@@ -2,7 +2,7 @@
 
 // тут мы подгружаем данные из файла конфига. Эти данные можно будет перекрыть из настроек в БД
 
-class Loader
+class Loader extends Base
 {
 
     function __construct()

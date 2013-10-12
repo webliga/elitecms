@@ -1,6 +1,6 @@
 <?php
 
-class Config
+class Config extends Base
 {
 
     private $_data;

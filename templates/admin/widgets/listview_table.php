@@ -28,7 +28,7 @@ unset($dataArr['thead']);
             }
 
             echo
-'<td><form action="' . Core::app()->createUrl('admin/modules/setting/') . '" method ="post">
+'<td><form action="' . Core::app()->getHtml()->createUrl('admin/modules/edite/') . '" method ="post">
   <fieldset>
     <input type="hidden" name="id_module" value="' . $dataArr[$i]['id'] . '">
     <button type="submit" class="btn btn-primary">Настройки</button>

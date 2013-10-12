@@ -70,6 +70,19 @@ class Model extends Base
         
         return $data;
     }
+
+    public function updateTableRowById($nameTable, $id, $dataArr)
+    {
+        foreach ($dataArr as $key => $value)
+        {
+            $sql = $this->_db->parse();
+        }
+        
+        $data = $this->_db->getRow('SELECT * FROM ' . $nameTable . ' WHERE id=?i', $id);
+        
+        return $data;
+    }    
+    
     public function update()
     {
         

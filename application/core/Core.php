@@ -1,6 +1,6 @@
 <?php
 
-class Core
+class Core extends Base
 {
 
     private static $_instance = null;
@@ -13,8 +13,10 @@ class Core
     private $_user;
     private $_loader;
     private $_template;
-    
-    private function __construct()
+    private $_html;
+
+
+    public function __construct()
     {
         
     }
@@ -131,6 +133,19 @@ class Core
 
         return self::app()->_template;
     }
+ 
+    public function getHtml()
+    {
+        if (is_null(self::app()->_html))
+        {
+            $class = self::app()->getClassNameForCreate('html');
+
+            self::app()->_html = new $class;
+        }
+
+        return self::app()->_html;
+    }   
+    
         
 // Вытягиваем класс из дефолтных настроек 
 // (Дефолтный класс можно переопределить                                                           
@@ -152,13 +167,6 @@ class Core
         self::app()->getLoader()->loadClass($pathToClassUser);
 
         return $className;
-    }
-
-    public function createUrl($url)
-    {
-        $url = '/ru/' . $url;
-        
-        return $url;
     }
 
 

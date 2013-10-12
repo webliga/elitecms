@@ -5,7 +5,7 @@
 	/**
 	 * Класс обертка для работы со строками(кодировка, проверка грамматики и прочее).
 	 */
-class Grammatical
+class Grammatical extends Base
 {
 	function __construct()
 	{

@@ -10,7 +10,7 @@
  *
  * @author Веталь
  */
-class Access
+class Access extends Base
 {
 
     public function __construct()

@@ -37,6 +37,11 @@ class M_admin_modules extends Model
     {
         return $this->selectAllByIdFromTable('modules', $id);
     }   
+     
+    function updateModuleById($id, $dataArr)
+    {
+        return $this->updateTableRowById('modules', $id, $dataArr);
+    }       
     
 }
 

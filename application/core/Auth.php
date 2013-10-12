@@ -10,7 +10,7 @@
  *
  * @author Веталь
  */
-class Auth
+class Auth extends Base
 {
     //put your code here
 }

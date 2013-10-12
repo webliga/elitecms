@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class Route
+class Route extends Base
 {
 
     private $_started;

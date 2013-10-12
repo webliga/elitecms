@@ -6,7 +6,7 @@
  * @version 1.0
  * @created 17-Вер-2013 20:21:07
  */
-class Error
+class Error extends Base
 {
 
     function __construct()

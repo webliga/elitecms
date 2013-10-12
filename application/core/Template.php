@@ -105,7 +105,7 @@ class Template extends Base
             }
         }
     }
-
+// Получаем данные модуля
     public function getModuleContent($nameModule, $fileContentView, $data)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
         $path =
@@ -119,7 +119,7 @@ class Template extends Base
                 SEPARATOR .
                 PREFIX_CONTROLLER .
                 $nameModule . '_main.php';
-//Core::app()->echoPre($path);
+
         if (file_exists($path))
         {
             require_once $path;
@@ -131,14 +131,14 @@ class Template extends Base
             $action = DEFAULT_ACTION;
             $dataArr = $mod->$action($data);
 
-            $this->moduleContentView(null, $nameModule, $dataArr, $fileContentView);
+            $this->moduleContentView(null, $nameModule, $dataArr, $fileContentView, false);
         }
         else
         {
             Core::app()->getError()->errorFileNotExist('Блок ' . $path . ' не существует!');
         }
     }
-
+// Выводит результат работы модуля или возвращает в переменной результат работы
     public function moduleContentView($path, $nameModule, $dataArr, $fileContentView, $return = false)
     {
         if ($this->isEmpty($path))
@@ -182,7 +182,7 @@ class Template extends Base
     {//$dataArr обработка этого масива идет в подключенном файле
         $content = '';
 
-        if ($path == null || $path == '' || $path == ' ')
+        if ($this->isEmpty($path))
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
 
