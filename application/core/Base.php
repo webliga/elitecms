@@ -24,6 +24,18 @@ abstract class Base
 	public function getClassName()
 	{
 	   return get_class($this);
-	}		
+	}	
+        
+        public function isEmpty($var)
+        {
+            $empty = true;
+            
+            if(isset($var) && $var != null && $var != '' && $var != ' ')
+            {
+                $empty = false;
+            }
+            
+            return $empty;
+        }
 }
 ?>

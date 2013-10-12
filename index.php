@@ -11,6 +11,8 @@ Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'role_group');
 
 $time_start = microtime(true);
 
+
+
 Core::app()->getRoute()->run();
 
 $time_end = microtime(true);

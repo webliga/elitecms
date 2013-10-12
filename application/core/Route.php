@@ -41,7 +41,8 @@ class Route
 // Для удобства получаем ссылку на обрабтчик запроса
         $request = Core::app()->getRequest();
         $request->runParseUrl($url);
-
+        $request->setPostGet();// Получаем get post данные (глобальные обнулятся)
+        
         //путь к запускаемому контроллеру
         $path_controller =
                 PATH_SITE_ROOT .
@@ -139,7 +140,7 @@ class Route
             }
             else
             {
-                Core::app()->getError()->errorPage404('2');
+                Core::app()->getError()->errorPage404('method_exists($module_controller, $request->getAction() = ' . $request->getAction());
             }
         }
         else

@@ -35,7 +35,7 @@ class Loader
     public function loadTemplateBlock($nameBlock)
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
-        
+
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -50,11 +50,11 @@ class Loader
         if (file_exists($path))
         {
             $arrData = Core::app()->getTemplate()->_data;
-            if(is_array($arrData))
+            if (is_array($arrData))
             {
                 extract($arrData);
             }
-   
+
             require_once $path;
         }
         else
@@ -62,7 +62,7 @@ class Loader
             Core::app()->getError()->errorFileNotExist('Блок ' . $nameBlock . ' не существует!');
         }
     }
-    
+
     public function loadTemplate()
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -79,13 +79,13 @@ class Loader
         if (file_exists($path))
         {
             require_once $path;
-            
         }
         else
         {
             Core::app()->getError()->errorFileNotExist('Блок ' . $nameBlock . ' не существует!');
         }
     }
+
 
 }
 

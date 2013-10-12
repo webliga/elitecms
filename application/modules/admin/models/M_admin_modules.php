@@ -27,6 +27,17 @@ class M_admin_modules extends Model
     {
         return $this->select('users');
     }
+    
+    function getAllModules()
+    {
+        return $this->selectAllFromTable('modules');
+    }
+     
+    function getModuleById($id)
+    {
+        return $this->selectAllByIdFromTable('modules', $id);
+    }   
+    
 }
 
 ?>

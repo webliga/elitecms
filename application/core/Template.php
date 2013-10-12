@@ -26,25 +26,23 @@ class Template extends Base
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
 
-            $path =
-                    PATH_SITE_ROOT .
-                    SEPARATOR .
-                    $template['path'] .
-                    SEPARATOR .
-                    $template['name'] .
-                    SEPARATOR .
-                    'error' .
-                    SEPARATOR .
-                    'danger.php';
-            
-            if (file_exists($path))
-            {
-                extract($err);
-                // Передаем данные в шаблон вывода
-                require $path;
-            }
-            
-            
+        $path =
+                PATH_SITE_ROOT .
+                SEPARATOR .
+                $template['path'] .
+                SEPARATOR .
+                $template['name'] .
+                SEPARATOR .
+                'error' .
+                SEPARATOR .
+                'danger.php';
+
+        if (file_exists($path))
+        {
+            extract($err);
+            // Передаем данные в шаблон вывода
+            require $path;
+        }
     }
 
     public function setVar($nameVar, $dataVar)
@@ -52,9 +50,31 @@ class Template extends Base
         $this->_data[$nameVar] = $dataVar;
     }
 
-    public function getRenderedHtml($pathToTemplate, $data)
+    public function getRenderedHtml($path, $dataArr, $once = false)
     {
         $content = '';
+
+        if (file_exists($path))
+        {
+            ob_start();
+
+            if ($once)
+            {
+                require_once $path;
+            }
+            else
+            {
+                require $path;
+            }
+
+            $content = ob_get_contents();
+
+            ob_end_clean();
+        }
+        else
+        {
+            Core::app()->getError()->errorFileNotExist('getRenderedHtml.  не существует $path = ' . $path);
+        }
 
         return $content;
     }
@@ -86,10 +106,8 @@ class Template extends Base
         }
     }
 
-    public function getModuleContent($nameModule, $pathContentView, $data)
+    public function getModuleContent($nameModule, $fileContentView, $data)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
-        
-        
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -111,8 +129,20 @@ class Template extends Base
             $mod->setNameModule($nameModule);
 
             $action = DEFAULT_ACTION;
-            $arrData = $mod->$action($data);
+            $dataArr = $mod->$action($data);
 
+            $this->moduleContentView(null, $nameModule, $dataArr, $fileContentView);
+        }
+        else
+        {
+            Core::app()->getError()->errorFileNotExist('Блок ' . $path . ' не существует!');
+        }
+    }
+
+    public function moduleContentView($path, $nameModule, $dataArr, $fileContentView, $return = false)
+    {
+        if ($this->isEmpty($path))
+        {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
 
             $path =
@@ -126,23 +156,51 @@ class Template extends Base
                     SEPARATOR .
                     $nameModule .
                     SEPARATOR .
-                    $pathContentView;
+                    $fileContentView;
+        }
 
-            if (file_exists($path))
-            {
-                extract($arrData);
-                // Передаем данные в шаблон вывода
-                require $path;
-            }
-            else
-            {
-                Core::app()->getError()->errorFileNotExist('Шаблона для модуля  ' . $path . ' не существует!');
-            }
+        if ($return)
+        {
+            $content = $this->getRenderedHtml($path, $dataArr, false);
+
+            return $content;
+        }
+
+        if (file_exists($path))
+        {
+            extract($dataArr);
+            // Передаем данные в шаблон вывода
+            require $path;
         }
         else
         {
-            Core::app()->getError()->errorFileNotExist('Блок ' . $path . ' не существует!');
+            Core::app()->getError()->errorFileNotExist('Шаблона для модуля  ' . $path . ' не существует!');
         }
+    }
+
+    public function getWidget($nameWidget, $dataArr, $path = null)
+    {//$dataArr обработка этого масива идет в подключенном файле
+        $content = '';
+
+        if ($path == null || $path == '' || $path == ' ')
+        {
+            $template = Core::app()->getConfig()->getConfigItem('default_template');
+
+            $path =
+                    PATH_SITE_ROOT .
+                    SEPARATOR .
+                    $template['path'] .
+                    SEPARATOR .
+                    $template['name'] .
+                    SEPARATOR .
+                    'widgets' .
+                    SEPARATOR .
+                    $nameWidget . '.php';
+        }
+
+        $content = $this->getRenderedHtml($path, $dataArr, false);
+
+        return $content;
     }
 
 }

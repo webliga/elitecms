@@ -58,12 +58,18 @@ class Model extends Base
         
     }
 
-    public function select($nameTable)
+    public function selectAllFromTable($nameTable)
     {
-        $data = $this->_db->getAll("SELECT * FROM ?n ",$nameTable);
+        $data = $this->_db->getAll('SELECT * FROM ?n ',$nameTable);
         return $data;
     }
 
+    public function selectAllByIdFromTable($nameTable, $id)
+    {
+        $data = $this->_db->getRow('SELECT * FROM ' . $nameTable . ' WHERE id=?i', $id);
+        
+        return $data;
+    }
     public function update()
     {
         

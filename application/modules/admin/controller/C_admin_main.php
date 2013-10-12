@@ -24,6 +24,7 @@ class C_admin_main extends Controller
      */
     public function index()
     {
+        
         $this->loadModel('M_admin_main', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Главная страница');

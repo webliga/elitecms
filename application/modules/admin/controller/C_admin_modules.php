@@ -24,14 +24,45 @@ class C_admin_modules extends Controller
      */
     public function index()
     {
-        $this->loadModel('M_admin_modules', $this->getNameModule());
+        //Core::app()->echoPre(Core::app()->getRequest()->getPost());
+        $post = Core::app()->getRequest()->getPost();
 
-        Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
+        if (!$this->isEmpty($post))
+        {
+            echo 'good';
+        }
+        else
+        {
+            $this->loadModel('M_admin_modules', $this->getNameModule());
 
-        Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
-            контроллером с адресной строки. Сейчас находимся в админке modules');
+            Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
+
+            $dataArr = $this->M_admin_modules->getAllModules();
+            $dataArr['thead'] = 'Список модулей';
+
+            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+
+            Core::app()->getTemplate()->setVar('content', $content);
+        }
     }
 
+    public function setting()
+    {
+        $post = Core::app()->getRequest()->getPost();
+        
+        if (!$this->isEmpty($post))
+        {
+            $this->loadModel('M_admin_modules', $this->getNameModule());
+
+            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
+            //Core::app()->echoPre($dataArr);
+//moduleContentView($path, $nameModule, $dataArr, $fileContentView)
+            $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
+
+            Core::app()->getTemplate()->setVar('content', $content);
+        }
+    }
+    
     public function create()
     {
 

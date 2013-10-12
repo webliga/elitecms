@@ -15,6 +15,8 @@ class Request
     private $_action;
     private $_params;
     private $_url;
+    private $_post;
+    private $_get;
 
     function __construct()
     {
@@ -24,6 +26,41 @@ class Request
     function __destruct()
     {
         
+    }
+
+    public function getPost($key = null)
+    {
+        if ($key != null && is_array($_post))
+        {
+            return $this->_post[$key];
+        }
+
+        return $this->_post;
+    }
+
+    public function getGet($key = null)
+    {
+        if ($key != null && is_array($_get))
+        {
+            return $this->_get[$key];
+        }
+
+        return $this->_get;
+    }
+
+    public function setPostGet()
+    {
+        if (isset($_POST))
+        {// Можно проверку сделать
+            $this->_post = $_POST;
+            $_POST = null;
+        }
+
+        if (isset($_GET))
+        {// Можно проверку сделать
+            $this->_get = $_GET;
+            $_GET = null;
+        }
     }
 
     /**
@@ -41,7 +78,7 @@ class Request
         $this->_module = $configDefaultUrl['name'];
         $this->_controller = $configDefaultUrl['controller'];
         $this->_action = $configDefaultUrl['action'];
-        
+
 
         $routes = explode('/', $url);
 

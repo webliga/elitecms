@@ -154,6 +154,16 @@ class Core
         return $className;
     }
 
+    public function createUrl($url)
+    {
+        $url = '/ru/' . $url;
+        
+        return $url;
+    }
+
+
+
+
     // Доступ к главному класу (сделан как singleton))
     public static function app()
     {
