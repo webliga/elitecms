@@ -30,9 +30,12 @@
 .mod_create
 {
     width: 500px;
-    margin: 0px 20px 20px 20px;
 }
 
+.admin_form
+{
+    margin: 0px 20px 20px 20px;
+}
 
 
 

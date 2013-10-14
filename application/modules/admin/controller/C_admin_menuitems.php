@@ -86,7 +86,9 @@ class C_admin_menuitems extends Controller
             
             
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
+            $dataArr['content'] = $content;
 
+            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
             Core::app()->getTemplate()->setVar('title_page', 'Создание пункта меню');
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -145,6 +147,9 @@ class C_admin_menuitems extends Controller
             
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
 
+            $dataArr['content'] = $content;
+
+            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }

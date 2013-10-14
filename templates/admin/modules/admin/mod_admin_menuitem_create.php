@@ -1,5 +1,4 @@
 <div class="mod_create">
-    <form class="form-horizontal" action="<?php echo Core::app()->getHtml()->createUrl($dataArr['form_action']); ?>" method="post">
         <div class="control-group">
             <label class="control-label" for="inputEmail">Текст пункта меню:</label>
             <div class="controls">
@@ -54,14 +53,4 @@
                 ?>> Активное
             </label>
         </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
-
-                </label>
-                <button type="submit" class="btn btn-default">Обновить</button>
-            </div>
-        </div>
-    </form>
 </div>
