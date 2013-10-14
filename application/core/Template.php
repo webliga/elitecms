@@ -49,7 +49,7 @@ class Template extends Base
                 SEPARATOR .
                 'danger.php';
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             extract($err);
             // Передаем данные в шаблон вывода
@@ -66,7 +66,7 @@ class Template extends Base
     {
         $content = '';
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             ob_start();
 
@@ -133,7 +133,7 @@ class Template extends Base
                 PREFIX_CONTROLLER .
                 $nameModule . '_main.php';
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             require_once $path;
 
@@ -180,7 +180,7 @@ class Template extends Base
             return $content;
         }
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             extract($dataArr);
             // Передаем данные в шаблон вывода

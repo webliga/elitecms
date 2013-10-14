@@ -82,7 +82,7 @@ class C_admin_menuitems extends Controller
             
             $dataArr = array();
             $dataArr['form_action'] = 'admin/menuitems/create/';
-            $dataArr['all_menu_moduless'] = $this->M_admin_modules->getAllModules('menu');
+            $dataArr['all_menu_modules'] = $this->M_admin_modules->getAllModules('menu');
             
             
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
@@ -143,7 +143,7 @@ class C_admin_menuitems extends Controller
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
 
             $dataArr['form_action'] = 'admin/menuitems/update/';
-            $dataArr['all_menu_moduless'] = $this->M_admin_modules->getAllModules('menu');
+            $dataArr['all_menu_modules'] = $this->M_admin_modules->getAllModules('menu');
             
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
 

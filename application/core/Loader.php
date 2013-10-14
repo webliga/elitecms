@@ -17,7 +17,7 @@ class Loader extends Base
 
     public function loadClass($path, $returnConfig = false)
     {
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             require_once $path;
 
@@ -47,7 +47,7 @@ class Loader extends Base
                 SEPARATOR .
                 'block_' . $nameBlock . '.php';
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             $arrData = Core::app()->getTemplate()->_data;
             if (is_array($arrData))
@@ -78,7 +78,7 @@ class Loader extends Base
                 SEPARATOR .
                 'index.tpl.php';
 
-        if (file_exists($path))
+        if ($this->issetFile($path))
         {
             require_once $path;
         }

@@ -26,13 +26,13 @@
                 <select class="form-control" name="id_module">
                     <?php
                     $selected = '';
-                    for ($i = 0; $i < count($dataArr['all_menu_moduless']); $i++)
+                    for ($i = 0; $i < count($dataArr['all_menu_modules']); $i++)
                     {
-                        if ($dataArr['all_menu_moduless'][$i]['id'] == $dataArr['id_module'])
+                        if ($dataArr['all_menu_modules'][$i]['id'] == $dataArr['id_module'])
                         {
                             $selected = 'selected';
                         }
-                        echo '<option ' . $selected . ' value="' . $dataArr['all_menu_moduless'][$i]['id'] . '">' . $dataArr['all_menu_moduless'][$i]['name'] . '</option>';
+                        echo '<option ' . $selected . ' value="' . $dataArr['all_menu_modules'][$i]['id'] . '">' . $dataArr['all_menu_modules'][$i]['name'] . '</option>';
                         $selected = '';
                     }
                     ?>
