@@ -8,7 +8,8 @@
  */
 class Template extends Base
 {
-    public  $_data;
+
+    public $_data;
     private $_nameTemplate = '';
 
     function __construct()
@@ -24,16 +25,15 @@ class Template extends Base
     public function getTemplatePath()
     {
         $path = '/templates/' . $this->_nameTemplate . '/';
-        
+
         return $path;
     }
-    
- 
+
     public function setMainTemplateName($nameTemplate)
     {
         $this->_nameTemplate = $nameTemplate;
-    }  
-    
+    }
+
     public function showDanger($err)
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -200,6 +200,7 @@ class Template extends Base
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
 
+            Core::app()->getTemplate()->setMainTemplateName($template['name']);
             $path =
                     PATH_SITE_ROOT .
                     SEPARATOR .

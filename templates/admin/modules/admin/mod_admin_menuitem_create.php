@@ -1,5 +1,5 @@
 <div class="mod_create">
-    <form class="form-horizontal" action="<?php echo Core::app()->getHtml()->createUrl($dataArr['formAction']); ?>" method="post">
+    <form class="form-horizontal" action="<?php echo Core::app()->getHtml()->createUrl($dataArr['form_action']); ?>" method="post">
         <div class="control-group">
             <label class="control-label" for="inputEmail">Текст пункта меню:</label>
             <div class="controls">
@@ -22,10 +22,22 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="inputPassword">Меню к которому принадлежит:</label>
+            <label class="control-label" for="inputPassword">Модуль меню:</label>
             <div class="controls">
-                <input type="hidden"  class="form-control" value="<?php  if(isset($dataArr['id_module'])) echo $dataArr['id_module'];?>" name="id_module">
-                <input type="text"  class="form-control" value="<?php  if(isset($dataArr['name_module'])) echo $dataArr['name_module'];?>" name="name_module">
+                <select class="form-control" name="id_module">
+                    <?php
+                    $selected = '';
+                    for ($i = 0; $i < count($dataArr['all_menu_moduless']); $i++)
+                    {
+                        if ($dataArr['all_menu_moduless'][$i]['id'] == $dataArr['id_module'])
+                        {
+                            $selected = 'selected';
+                        }
+                        echo '<option ' . $selected . ' value="' . $dataArr['all_menu_moduless'][$i]['id'] . '">' . $dataArr['all_menu_moduless'][$i]['name'] . '</option>';
+                        $selected = '';
+                    }
+                    ?>
+                </select>
             </div>
         </div>
         <div class="checkbox">

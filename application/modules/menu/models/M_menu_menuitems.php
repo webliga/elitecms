@@ -43,7 +43,12 @@ class M_menu_menuitems extends Model
 
         return $this->selectAllByIdFromTable('menu_items', $id, $fildsSelect, $leftJoin);
     }
-         
+
+    function deleteMenuItemById($id)
+    {
+        $this->deleteTableRowById('menu_items', $id);
+    }    
+    
     function updateMenuitemById($id, $dataArr)
     {
         return $this->updateTableRowById('menu_items', $id, $dataArr);

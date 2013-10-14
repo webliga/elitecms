@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_admin_modules extends Controller
+class C_admin_positions extends Controller
 {
 
     function __construct()
@@ -58,25 +58,21 @@ class C_admin_modules extends Controller
         {
             $this->loadModel('M_admin_modules', $this->getNameModule());
 
-
             $dataArr['name'] = $post['name'];
             $dataArr['name_system'] = $post['name_system'];
             $dataArr['template_file'] = $post['template_file'];
-            
-            $dataArr['id_position'] = $post['id_position'];
+
 
             $this->M_admin_modules->setModule($dataArr);
-            
+
             $url = Core::app()->getHtml()->createUrl('admin/modules');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
         {
             $dataArr = array();
-            $this->loadModel('M_admin_position', $this->getNameModule());
             $dataArr['form_action'] = 'admin/modules/create/';
-            $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
-            
+
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
 
             Core::app()->getTemplate()->setVar('title_page', 'Создание модуля');
@@ -114,13 +110,15 @@ class C_admin_modules extends Controller
 
 
             $this->loadModel('M_admin_modules', $this->getNameModule());
-            $this->loadModel('M_admin_position', $this->getNameModule());
-            
-            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
-            
-            $dataArr['form_action'] = 'admin/modules/update/';
-            $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
 
+            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
+            $dataArr['form_action'] = 'admin/modules/update/';
+            
+            
+            
+            Core::app()->echoPre($dataArr);
+            
+            
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
 
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование модуля');

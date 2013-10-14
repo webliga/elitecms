@@ -1,9 +1,22 @@
-<table class="table table-striped table-bordered table-hover">
-    <caption><?php
-        $form_action = $dataArr['form_action'];
+<?php
+if (!isset($dataArr['form_action_edite']))
+    $dataArr['form_action_edite'] = '';
 
-        unset($dataArr['form_action']);
-        ?></caption>
+if (!isset($dataArr['form_action_delete']))
+    $dataArr['form_action_delete'] = '';
+
+$form_action_edite = $dataArr['form_action_edite'];
+$form_action_delete = $dataArr['form_action_delete'];
+$name_hidden = $dataArr['name_hidden'];
+
+unset($dataArr['form_action_edite']);
+unset($dataArr['form_action_delete']);
+unset($dataArr['name_hidden']);
+unset($dataArr['btn_title']);
+?>
+
+<table class="table table-striped table-bordered table-hover">
+
     <tbody>
         <?php
         for ($i = 0; $i < count($dataArr); $i++)
@@ -29,14 +42,12 @@
                 echo '<td>' . $value . '</td>';
             }
 
-            echo
-            '<td><form action="' . Core::app()->getHtml()->createUrl($form_action) . '" method ="post">
-  <fieldset>
-    <input type="hidden" name="id_module" value="' . $dataArr[$i]['id'] . '">
-    <button type="submit" class="btn btn-primary">Настройки</button>
-  </fieldset>
-</form></td>';
-            echo '</tr>';
+            echo '<td>';
+
+            echo Core::app()->getHtml()->createBtn($form_action_edite, 'tools.png', $dataArr[$i]['id'], $name_hidden);
+            echo Core::app()->getHtml()->createBtn($form_action_delete, 'delete.png', $dataArr[$i]['id'], $name_hidden);
+
+            echo '</td></tr>';
         }
         ?>
     </tbody>

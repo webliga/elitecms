@@ -98,8 +98,12 @@ class Model extends Base
     public function insertTableRow($nameTable, $dataArr)
     {        
         $sql = $this->_db->parse("INSERT INTO ?n SET ?u "  ,$nameTable , $dataArr);
-
         $this->_db->query($sql);
+        
+        $sql = 'select last_insert_id()';
+        $data = $this->_db->getRow($sql);
+        
+        return $data;
     }     
     
     public function update()
@@ -107,9 +111,10 @@ class Model extends Base
         
     }
 
-    public function delete()
+    public function deleteTableRowById($nameTable, $id)
     {
-        
+        $sql = $this->_db->parse('DELETE FROM ?n  WHERE id = ?i',$nameTable , $id);
+        $this->_db->query($sql);
     }
 
     public function where()
@@ -139,12 +144,12 @@ class Model extends Base
                   modules.name as name,                 
                   modules.name_system as name_system,
                   modules.template_file as template_file,                  
-                  position.name as position_name,
-                  position.name_system as position_name_system,
+                  positions.name as position_name,
+                  positions.name_system as position_name_system,
                   position_modules.priority as position_priority
             FROM modules 
-                  LEFT JOIN  position_modules   ON modules.id = position_modules.module_id
-                  LEFT JOIN  position  ON position_modules.position_id = position.id
+                  LEFT JOIN  position_modules   ON modules.id = position_modules.id_module
+                  LEFT JOIN  positions  ON position_modules.id_position = positions.id
                 ";
         
         $data = $this->_db->getAll($query);
