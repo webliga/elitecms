@@ -77,8 +77,7 @@ class C_admin_menuitems extends Controller
         }
         else
         {
-            $this->loadModel('M_admin_modules', $this->getNameModule());
-            
+            $this->loadModel('M_admin_modules', $this->getNameModule());            
             
             $dataArr = array();
             $dataArr['form_action'] = 'admin/menuitems/create/';

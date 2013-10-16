@@ -67,20 +67,22 @@ class Model extends Base
         
         $sql = $this->_db->parse('SELECT ' . $fildsSelect . '  FROM ?n ?p',$nameTable, $join);
         
-        
         $data = $this->_db->getAll($sql);
         
         return $data;
     }
 
-    public function selectAllByIdFromTable($nameTable, $id, $fildsSelect = null, $join = null)
+    public function selectAllByIdFromTable($nameTable, $id, $fildsSelect = null, $join = null, $fildWhere = null)
     {
         if($this->isEmpty($fildsSelect) || is_null($fildsSelect))
         {
             $fildsSelect = '*';
         }
-        
-        $sql = $this->_db->parse('SELECT ' . $fildsSelect . ' FROM ?n ?p WHERE ?n.id=?i',$nameTable, $join,$nameTable , $id);
+        if($this->isEmpty($fildWhere) || is_null($fildWhere))
+        {
+            $fildWhere = 'id';
+        }        
+        $sql = $this->_db->parse('SELECT ' . $fildsSelect . ' FROM ?n ?p WHERE ?n.?n=?i',$nameTable, $join,$nameTable, $fildWhere, $id);
 
         $data = $this->_db->getRow($sql);
         
@@ -97,7 +99,7 @@ class Model extends Base
 
     public function insertTableRow($nameTable, $dataArr)
     {        
-        $sql = $this->_db->parse("INSERT INTO ?n SET ?u "  ,$nameTable , $dataArr);
+        $sql = $this->_db->parse("INSERT INTO ?n SET ?u " ,$nameTable , $dataArr);
         $this->_db->query($sql);
         
         $sql = 'select last_insert_id()';
@@ -140,10 +142,10 @@ class Model extends Base
     public function selectConfig()
     {
         $query = "SELECT 
-                  modules.id as module_id, 
+                  modules.id as id_module, 
                   modules.name as name,                 
                   modules.name_system as name_system,
-                  modules.template_file as template_file,                  
+                  modules.description as description,                  
                   positions.name as position_name,
                   positions.name_system as position_name_system,
                   position_modules.priority as position_priority

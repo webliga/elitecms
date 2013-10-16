@@ -113,38 +113,40 @@ class Template extends Base
         {
             if ($modules[$i]['position_name_system'] == $nameModulePosition)
             {
-                $this->getModuleContent($modules[$i]['name_system'], $modules[$i]['template_file'], $modules[$i]);
+                $this->getModuleContent($modules[$i]);
             }
         }
     }
 
 // Получаем данные модуля
-    public function getModuleContent($nameModule, $fileContentView, $data)
+    public function getModuleContent($module)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_MODULES .
                 SEPARATOR .
-                $nameModule .
+                $module['name_system'] .
                 SEPARATOR .
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SEPARATOR .
                 PREFIX_CONTROLLER .
-                $nameModule . '_main.php';
+                $module['name_system'] . '_main.php';
 
         if ($this->issetFile($path))
         {
             require_once $path;
 
-            $className = PREFIX_CONTROLLER . $nameModule . '_main';
+            $className = PREFIX_CONTROLLER . $module['name_system'] . '_main';
             $mod = new $className;
-            $mod->setNameModule($nameModule);
+            $mod->setNameModule($module['name_system']);
 
             $action = DEFAULT_ACTION;
-            $dataArr = $mod->$action($data);
-
-            $this->moduleContentView(null, $nameModule, $dataArr, $fileContentView, false);
+            
+            
+            // Запускаем дефолтный экшн главного контроллера нашего модуля
+            // В нем мы уже выводим нужные нам данные 
+            $mod->$action($module);
         }
         else
         {

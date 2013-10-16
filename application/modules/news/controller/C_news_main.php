@@ -30,7 +30,7 @@ class C_news_main extends Controller
 
             $this->loadModel('M_main_main', 'main');
 
-            $menu_items['menu_items'] = $this->M_menu_main->getMenuById($data['module_id']);
+            $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['module_id']);
             return $menu_items;
         }
     }

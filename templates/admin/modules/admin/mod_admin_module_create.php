@@ -28,9 +28,9 @@
     </div> 
 
     <div class="control-group">
-        <label class="control-label" for="inputPassword">Файл отображения:</label>
+        <label class="control-label" for="inputPassword">Описание:</label>
         <div class="controls">
-            <input type="text"  class="form-control" value="<?php if (isset($dataArr['template_file'])) echo $dataArr['template_file']; ?>" name="template_file">
+            <textarea name="description"  class="form-control"><?php if (isset($dataArr['description'])) echo $dataArr['description']; ?></textarea>
         </div>
     </div>
     <div class="control-group">

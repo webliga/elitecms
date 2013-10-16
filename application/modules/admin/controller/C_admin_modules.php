@@ -59,7 +59,7 @@ class C_admin_modules extends Controller
         {
             $dataArr['name'] = $post['name'];
             $dataArr['name_system'] = $post['name_system'];
-            $dataArr['template_file'] = $post['template_file'];
+            $dataArr['description'] = $post['description'];
             $dataArr['id_position'] = $post['id_position'];
 
             $this->M_admin_modules->setModule($dataArr);
@@ -102,6 +102,7 @@ class C_admin_modules extends Controller
             {
                 unset($post['name_system']);
             }
+            
             $this->M_admin_modules->updateModuleById($id, $post);
 
             $url = Core::app()->getHtml()->createUrl('admin/modules');
@@ -117,17 +118,25 @@ class C_admin_modules extends Controller
 
         if (!$this->isEmpty($post))
         {
-            //Core::app()->echoPre($post);
+            
             $this->loadModel('M_admin_modules', $this->getNameModule());
             $this->loadModel('M_admin_position', $this->getNameModule());
 
             $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
-
+Core::app()->echoPre($dataArr);
             $dataArr['form_action'] = 'admin/modules/update/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
-
+            
+            // Получение стандартных для всех модулей  полей формы редактирования
             $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
+            
+            // Здесь нужно загрузить контроллер модуля, которого хотим редактировать
+            // для того что б получить от него поля формы и данные для редактирования.
+            // Также контроллер должен иметь метод обновления данных
+            
+            
+            
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);

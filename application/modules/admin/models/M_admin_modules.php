@@ -57,6 +57,7 @@ class M_admin_modules extends Model
     function setModule($dataArr)
     {
         $id_position = $dataArr['id_position'];
+        $name_system = $dataArr['name_system'];
         unset($dataArr['id_position']);
 
         $data = $this->insertTableRow('modules', $dataArr);
@@ -65,7 +66,12 @@ class M_admin_modules extends Model
         $dataArr = null;
         $dataArr['id_position'] = $id_position;
         $dataArr['id_module'] = $id_module;
+        
         $this->insertTableRow('position_modules', $dataArr);
+        unset($dataArr['id_position']);
+
+        $this->insertTableRow($name_system, $dataArr);        
+        
     }
 
     function deleteModuleById($id)

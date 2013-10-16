@@ -34,11 +34,11 @@ class Route extends Base
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
         
 // Проверяем ЧПУ (если в бд уже есть урл, то формируем $path_controller)
-        // Заодно вытягиваем
+        // Заодно вытягиваем настройки всех модулей
 
         Core::app()->getConfig()->selectSystemConfig($url);
 
-// Для удобства получаем ссылку на обрабтчик запроса
+// Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
         $request->runParseUrl($url);
         $request->setPostGet();// Получаем get post данные (глобальные обнулятся)

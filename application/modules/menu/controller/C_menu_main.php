@@ -28,10 +28,11 @@ class C_menu_main extends Controller
         {
             $this->loadModel('M_menu_main', $this->getNameModule());
 
-            $this->loadModel('M_main_main', 'main');
-
-            $menu_items['menu_items'] = $this->M_menu_main->getMenuById($data['module_id']);
-            return $menu_items;
+            $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['id_module']);
+            $settings = $this->M_menu_main->getMenuSettingsByModuleId($data['id_module']);
+            
+            // Выводим на экран содержимое файла нашего модуля
+            Core::app()->getTemplate()->moduleContentView(null, $this->getNameModule(), $menu_items, $settings['template_file']);
         }
     }
 

@@ -23,20 +23,20 @@ class M_menu_main extends Model
         
     }
 
-    function getMenuById($id)
+    function getMenuItemsByModuleId($id)
     {
         $is_active = 1;
+        $join = $this->_db->parse('WHERE menu_items.id_module = ?i AND menu_items.is_active = ?i', $id, $is_active);
         
-        $query = 'SELECT *
-            FROM menu_items 
-            WHERE id_module = ' . $id . 
-                ' AND is_active = ' . $is_active;
-
-        $data = $this->_db->getAll($query);
-          
-        return  $data;
+        $data = $this->selectAllFromTable('menu_items', null, $join);
+        return $data;
     }
 
+    function getMenuSettingsByModuleId($id)
+    {
+        $data = $this->selectAllByIdFromTable('menu',$id , null, null, 'id_module');
+        return $data;
+    }
 }
 
 ?>
