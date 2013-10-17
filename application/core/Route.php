@@ -41,7 +41,7 @@ class Route extends Base
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
         $request->runParseUrl($url);
-        $request->setPostGet();// Получаем get post данные (глобальные обнулятся)
+        $request->setGlobalVars();// Получаем get post данные (глобальные обнулятся)
         
         //путь к запускаемому контроллеру
         $path_controller =
@@ -49,11 +49,14 @@ class Route extends Base
                 SEPARATOR .
                 PATH_TO_MODULES .
                 SEPARATOR .
-                $request->getModule() .
+                $request->getModuleName() .
                 SEPARATOR .
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SEPARATOR .
-                PREFIX_CONTROLLER . $request->getModule() . '_' . $request->getController() . '.php';
+                PREFIX_CONTROLLER . 
+                $request->getModuleName() . 
+                SEPARATOR_MODULE_NAME . 
+                $request->getController() . '.php';
 
 // Получаем язык отображения                  
         $path_lang = PATH_SITE_ROOT .
@@ -68,7 +71,11 @@ class Route extends Base
         {
             Core::app()->getLoader()->loadClass($path_controller);
 
-            $controllerClass = PREFIX_CONTROLLER . $request->getModule() . '_' . $request->getController();
+            $controllerClass = 
+                    PREFIX_CONTROLLER . 
+                    $request->getModuleName() . 
+                    SEPARATOR_MODULE_NAME . 
+                    $request->getController();
 
             if (!class_exists($controllerClass))
             {
@@ -76,7 +83,7 @@ class Route extends Base
             }
 
             $module_controller = new $controllerClass;
-            $module_controller->setNameModule($request->getModule()); //Вводим имя, что потом загружать модели данного модуля
+            $module_controller->setNameModule($request->getModuleName()); //Вводим имя, что б потом загружать модели данного модуля
 
             if (method_exists($module_controller, $request->getAction()))
             {
@@ -84,7 +91,7 @@ class Route extends Base
                 // проверяем доступ пользователя к екшену
 
                 $arrAccessAction = array(
-                    'module' => $request->getModule(),
+                    'module' => $request->getModuleName(),
                     'controller' => $request->getController(),
                     'action' => $request->getAction(),
                 );
@@ -94,20 +101,19 @@ class Route extends Base
                         SEPARATOR .
                         PATH_TO_MODULES .
                         SEPARATOR .
-                        $request->getModule() .
+                        $request->getModuleName() .
                         SEPARATOR .
                         NAME_FOLDER_MODULES_CONFIG .
                         SEPARATOR .
                         PREFIX_CONFIG . 'main.php';
 
-                // Получаем настройки модуля (разрешения екшенов)        
-                $config = Core::app()->getLoader()->loadClass($path_module_config, true);
-                //Core::app()->echoPre(Core::app()->getConfig()->getConfigItem('default_role'));
-                //Core::app()->echoPre($config);
-                // Доступ екшена
-                $arrAccessAction['access'] = $config[$request->getController()][$request->getAction()];
+                // Получаем настройки модуля (разрешения екшенов)  
+                // Нужно будет подумать, стоит ли вынести этот функционал в БД 
+                // (для более гибкой и удобной настройки)
+                $configModule = Core::app()->getLoader()->loadClass($path_module_config, true);
 
-                //Core::app()->echoPre($arrAccessAction);
+                // Доступ екшена
+                $arrAccessAction['access'] = $configModule[$request->getController()][$request->getAction()];
 
                 if (Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {

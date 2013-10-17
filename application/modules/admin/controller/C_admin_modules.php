@@ -26,9 +26,8 @@ class C_admin_modules extends Controller
     /**
      * Действие по умолчанию
      */
-    public function index()
+    public function index($dataArr = null)
     {
-        //Core::app()->echoPre(Core::app()->getRequest()->getPost());
         $post = Core::app()->getRequest()->getPost();
 
         if ($this->isEmpty($post))
@@ -39,12 +38,12 @@ class C_admin_modules extends Controller
 
             $dataArr = $this->M_admin_modules->getAllModules();
 
-
             $dataArr['form_action_edite'] = 'admin/modules/edite';
             $dataArr['form_action_delete'] = 'admin/modules/delete';
             $dataArr['name_hidden'] = 'id_module';
 
-            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+            // Переделать под метод createTable
+            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, false);
 
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -68,19 +67,27 @@ class C_admin_modules extends Controller
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
-        {
-            $dataArr = array();
+        { 
             $this->loadModel('M_admin_position', $this->getNameModule());
+            
+            $dataArr = array();
             $dataArr['form_action'] = 'admin/modules/create/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
-
+            // фильтруем на уникальность системного имени
             $dataArr['all_modules'] = $this->getUniqBySysNameModuleList($dataArr['all_modules']);
-
-            $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
+            $dataArr['path'] = ''; // абсолютный путь к файлу отображения, если пустой, то формируется дальше
+            $dataArr['name_module'] = 'admin';
+            $dataArr['file_content_view'] = 'mod_admin_module_create.php';
+            $dataArr['return'] = true; // возвратить результат работы в переменную, если false, то отображаем сразу
+            $dataArr['create'] = true; // Если создание нового, то чекбокс "Активное" делаем неактивным, так как мы сразу не подгрузим нужные файлы для детальной настройки модуля
+            
+            $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
+            
             $dataArr['content'] = $content;
-
+            // переделать под createForm
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
+            
             Core::app()->getTemplate()->setVar('title_page', 'Создание модуля');
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -91,24 +98,62 @@ class C_admin_modules extends Controller
         $post = Core::app()->getRequest()->getPost();
 
         if (!$this->isEmpty($post))
-        {
+        {   
             $this->loadModel('M_admin_modules', $this->getNameModule());
-
+            
             $id = $post['id_module'];
             unset($post['id_module']);
             // Так как у нас модули наследуются, то обновить тип модуля (name_system) не получится (настройки у модулей разные)
             // нужно пересоздать модуль
-            if(isset($post['name_system']))
+            
+            if (isset($post['name_system']))
             {
                 unset($post['name_system']);
             }
             
-            $this->M_admin_modules->updateModuleById($id, $post);
+            // Во избежание автоматического случайного обновления системного имени модуля
+            // мы системное имя заново получаем из БД. Оно нужно нам, для формирование правильного пути к модулю
+            $arr = $this->M_admin_modules->getModuleById($id);
+            
+            if(isset($post['name']))
+            {
+                $updateGeneralData['name'] = $post['name'];
+                unset($post['name']);
+            }
+            
+            if(isset($post['description']))
+            {
+                $updateGeneralData['description'] = $post['description'];
+                unset($post['description']);
+            }            
+             
+            if(isset($post['id_position']))
+            {
+                $updateGeneralData['id_position'] = $post['id_position'];
+                unset($post['id_position']);
+            } 
+             
+            if (isset($post['is_active']))
+            {
+                $updateGeneralData['is_active'] = true;
+                unset($post['is_active']);
+            }
+            else
+            {
+                $updateGeneralData['is_active'] = false;
+            }  
+
+            // Обновляем общие данные (эти данные есть у каждого модуля)
+            $this->M_admin_modules->updateGeneralDataModuleById($id, $updateGeneralData);
+            
+            $dataArr = $post;  
+            $dataArr['id_module'] = $id;
+            $dataArr['name_system'] = $arr['name_system'];
+            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM_UPDATE;
+            Core::app()->getTemplate()->moduleContentView($dataArr, true);
 
             $url = Core::app()->getHtml()->createUrl('admin/modules');
             Core::app()->getRequest()->redirect($url, true, 302);
-            //Core::app()->echoPre($post);
-            //Core::app()->echoPre($this->M_admin_modules->getAllModules());
         }
     }
 
@@ -118,25 +163,27 @@ class C_admin_modules extends Controller
 
         if (!$this->isEmpty($post))
         {
-            
             $this->loadModel('M_admin_modules', $this->getNameModule());
             $this->loadModel('M_admin_position', $this->getNameModule());
 
             $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
-Core::app()->echoPre($dataArr);
+            //Core::app()->echoPre($dataArr);
             $dataArr['form_action'] = 'admin/modules/update/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
+            $dataArr['path'] = '';
+            $dataArr['name_module'] = 'admin'; //Понадобится в модуле moduleFileContentView для отображения mod_admin_module_create.php
+            $dataArr['file_content_view'] = 'mod_admin_module_create.php';
+            $dataArr['return'] = true;
             
             // Получение стандартных для всех модулей  полей формы редактирования
-            $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_module_create.php', true);
+            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
             
-            // Здесь нужно загрузить контроллер модуля, которого хотим редактировать
-            // для того что б получить от него поля формы и данные для редактирования.
-            // Также контроллер должен иметь метод обновления данных
-            
-            
-            
+            // Получаем индивидуальные поля настройки модуля. За эти поля отвечает определенный (обязательный) в константе DEFAULT_ACTION_MODULE_FORM
+            // метод главного контроллера в каждом модуле. Таким образом мы на автомате можем формировать индивидуальные настройки каждого модуля
+            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
@@ -154,8 +201,16 @@ Core::app()->echoPre($dataArr);
         {
             $this->loadModel('M_admin_modules', $this->getNameModule());
 
+            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
+            $dataArr['return'] = false;
+            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM_DELETE;
+            
+            // Удаляем модуль из общей таблицы
             $this->M_admin_modules->deleteModuleById($post['id_module']);
+            // Удаляем модуль из его собственных таблиц (у модуля есть собственный метод по удалению самого себя из БД)
+            Core::app()->getTemplate()->moduleContentView($dataArr, true);
 
+            
             $url = Core::app()->getHtml()->createUrl('admin/modules');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
@@ -198,7 +253,7 @@ Core::app()->echoPre($dataArr);
                 $arr[] = $dataArr[$i];
             }
             else
-            { 
+            {
                 $add = true;
             }
         }
@@ -208,6 +263,20 @@ Core::app()->echoPre($dataArr);
         return $arr;
     }
 
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        return 'C_admin_modules';
+    }
+
+    public function updateModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
+   
+    public function deleteModuleDataById($id)
+    {
+
+    }
 }
 
 ?>

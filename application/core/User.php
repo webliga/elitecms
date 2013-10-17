@@ -21,11 +21,6 @@ class User extends Base
     {
         if ($this->_access->checkByUserGroupAccess($this->_userRoleAcces, $arrAccessAction))
         {
-            
-            
-            
-            
-            
             return true;
         }
 

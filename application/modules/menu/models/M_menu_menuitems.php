@@ -48,6 +48,13 @@ class M_menu_menuitems extends Model
     {
         $this->deleteTableRowById('menu_items', $id);
     }    
+
+    function deleteAllMenuItemsByModuleId($id)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i','menu_items','id_module' ,$id);
+         
+        $result = $this->deleteTableRowByCondition('menu_items', $condition);
+    }        
     
     function updateMenuitemById($id, $dataArr)
     {

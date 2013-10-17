@@ -17,7 +17,7 @@ class Config extends Base
 
     public function loadConfig($fileName)
     {
-        $path_to_config = 
+        $path_to_config =
                 PATH_SITE_ROOT .
                 SEPARATOR .
                 PATH_TO_CONFIG .
@@ -38,7 +38,7 @@ class Config extends Base
             foreach ($config as $key => $value)
             {
                 $this->_data[$key] = $value;
-            }           
+            }
         }
         else
         {
@@ -96,13 +96,16 @@ class Config extends Base
     public function selectSystemConfig($url)
     {
         $model = new Model();
-        
-        $arr = $model->selectConfig();
-        
-        
-        $this->setConfigItem('modules', $arr);
-        
+
+        $result = $model->selectConfig();
+
+
+        $this->setConfigItem('modules', $result);
+
+        $template = Core::app()->getConfig()->getConfigItem('default_template');
+        Core::app()->getTemplate()->setMainTemplateName($template['name']);
     }
+
 }
 
 ?>

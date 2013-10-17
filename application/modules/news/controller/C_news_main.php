@@ -30,7 +30,7 @@ class C_news_main extends Controller
 
             $this->loadModel('M_main_main', 'main');
 
-            $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['module_id']);
+            $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['id_module']);
             return $menu_items;
         }
     }
@@ -63,6 +63,21 @@ class C_news_main extends Controller
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
     }
 
+    
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        return 'C_news_main';
+    }   
+    
+    public function updateModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
+      
+    public function deleteModuleDataById($id)
+    {
+
+    }
 }
 
 ?>

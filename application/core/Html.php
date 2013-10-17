@@ -31,6 +31,19 @@ class Html extends Base
         
         return $btn;
     }
+    
+    public function createInput($dataArr)
+    {
+        if(!isset($dataArr['input']) || $this->isEmpty($dataArr['input']))
+        {
+            $dataArr['input'] = 'form_input';
+        }
+        
+        
+        $content = Core::app()->getTemplate()->getWidget($dataArr['input'],$dataArr, null);
+        
+        return $content;
+    }
 }
 
 ?>

@@ -22,7 +22,7 @@ class C_admin_main extends Controller
     /**
      * Действие по умолчанию
      */
-    public function index()
+    public function index($dataArr = NULL)
     {
         
         $this->loadModel('M_admin_main', $this->getNameModule());
@@ -59,6 +59,15 @@ class C_admin_main extends Controller
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
     }
 
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
+
+    public function updateModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
 }
 
 ?>

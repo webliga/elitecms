@@ -28,11 +28,16 @@ class C_menu_main extends Controller
         {
             $this->loadModel('M_menu_main', $this->getNameModule());
 
-            $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['id_module']);
+            $dataArr['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['id_module']);
             $settings = $this->M_menu_main->getMenuSettingsByModuleId($data['id_module']);
-            
+            $dataArr['path'] = '';
+            $dataArr['name_module'] = $this->getNameModule();
+            $dataArr['file_content_view'] = $settings['template_file'];
+            $dataArr['return'] = false;
+
+            Core::app()->getTemplate()->moduleContentView($dataArr, false);
             // Выводим на экран содержимое файла нашего модуля
-            Core::app()->getTemplate()->moduleContentView(null, $this->getNameModule(), $menu_items, $settings['template_file']);
+            //Core::app()->getTemplate()->moduleFileContentView(null, $this->getNameModule(), $menu_items, $settings['template_file']);
         }
     }
 
@@ -64,6 +69,38 @@ class C_menu_main extends Controller
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
     }
 
+// Получаем индивидуальные поля для настройки модуля
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $this->loadModel('M_menu_main', $this->getNameModule());
+
+            $dataArr = $this->M_menu_main->getMenuSettingsByModuleId($dataArr['id']);
+            $dataArr['input'] = 'form_input';
+
+            $content = Core::app()->getHtml()->createInput($dataArr);
+
+            return $content;
+        }
+    }
+
+    public function updateModuleFormFildsConfig($dataArr)
+    {
+        $this->loadModel('M_menu_main', $this->getNameModule());
+
+        $result = $this->M_menu_main->updateMenuSettingsByModuleId($dataArr);
+    }
+
+    public function deleteModuleDataById($dataArr)
+    {
+        $id = $dataArr['id'];
+        $this->loadModel('M_menu_main', $this->getNameModule());
+        $this->loadModel('M_menu_menuitems', $this->getNameModule());
+        
+        $result = $this->M_menu_main->deleteMenuSettingsByModuleId($id);
+        $result = $this->M_menu_menuitems->deleteAllMenuItemsByModuleId($id);        
+    }
 }
 
 ?>

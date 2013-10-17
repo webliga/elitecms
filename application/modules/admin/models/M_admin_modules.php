@@ -78,8 +78,8 @@ class M_admin_modules extends Model
     {
         $this->deleteTableRowById('modules', $id);
     }
-
-    function updateModuleById($id, $dataArr)
+    
+    function updateGeneralDataModuleById($id, $dataArr)
     {
 
         $sql = $this->_db->parse("UPDATE position_modules SET id_position = ?i WHERE id_module = ?i", $dataArr['id_position'], $id);

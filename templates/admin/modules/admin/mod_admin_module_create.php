@@ -7,6 +7,26 @@
         </div>
     </div>
 
+    <div class="checkbox">
+            <label>
+                <input type="checkbox" name="is_active"  <?php
+                if (isset($dataArr['is_active']) && $dataArr['is_active'])
+                {
+                    echo 'checked';
+                }
+                else
+                {
+                    '';
+                }
+                
+                if(isset($dataArr['create']) && $dataArr['create'])
+                {
+                    echo 'disabled';
+                }
+                ?>> Активный модуль
+            </label>
+        </div>
+    
     <div class="control-group">
         <label class="control-label" for="inputEmail">Системное название модуля:</label>
         <div class="controls">

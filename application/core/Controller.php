@@ -77,7 +77,14 @@ abstract class Controller extends Base
             return $name_module;
         }
     }
-
+    abstract public function index($dataArr = null);
+    
+    // Получаем поля формы для настройки модуля. Индивидуально для каждого модуля, реализуется в каждом модуле
+    abstract public function getModuleFormFildsConfig($dataArr = null);
+    
+    abstract public function updateModuleFormFildsConfig($dataArr);
+    
+    abstract public function deleteModuleDataById($id);
 }
 
 ?>

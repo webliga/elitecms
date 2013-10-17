@@ -26,7 +26,7 @@ class C_admin_menuitems extends Controller
     /**
      * Действие по умолчанию
      */
-    public function index()
+    public function index($dataArr = NULL)
     {
         $post = Core::app()->getRequest()->getPost();
 
@@ -77,14 +77,17 @@ class C_admin_menuitems extends Controller
         }
         else
         {
-            $this->loadModel('M_admin_modules', $this->getNameModule());            
-            
+            $this->loadModel('M_admin_modules', $this->getNameModule());
+
             $dataArr = array();
             $dataArr['form_action'] = 'admin/menuitems/create/';
             $dataArr['all_menu_modules'] = $this->M_admin_modules->getAllModules('menu');
-            
-            
-            $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
+            $dataArr['path'] = '';
+            $dataArr['name_module'] = 'admin';
+            $dataArr['file_content_view'] = 'mod_admin_menuitem_create.php';
+            $dataArr['return'] = true;
+
+            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
@@ -136,15 +139,19 @@ class C_admin_menuitems extends Controller
         {
             $this->loadModel('M_menu_menuitems', 'menu');
             $this->loadModel('M_admin_modules', $this->getNameModule());
-            
+
             $dataArr = $this->M_menu_menuitems->getMenuItemById($post['id_item']);
 
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
 
             $dataArr['form_action'] = 'admin/menuitems/update/';
             $dataArr['all_menu_modules'] = $this->M_admin_modules->getAllModules('menu');
-            
-            $content = Core::app()->getTemplate()->moduleContentView(null, 'admin', $dataArr, 'mod_admin_menuitem_create.php', true);
+            $dataArr['path'] = '';
+            $dataArr['name_module'] = 'admin';
+            $dataArr['file_content_view'] = 'mod_admin_menuitem_create.php';
+            $dataArr['return'] = true;
+
+            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
             $dataArr['content'] = $content;
 
@@ -168,6 +175,20 @@ class C_admin_menuitems extends Controller
         }
     }
 
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        return 'C_admin_menuitems';
+    }
+
+    public function updateModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
+      
+    public function deleteModuleDataById($id)
+    {
+
+    }
 }
 
 ?>

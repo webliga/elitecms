@@ -22,9 +22,23 @@ class Template extends Base
         
     }
 
-    public function getTemplatePath()
+    public function getCurrentTemplatePath($system = false)
     {
-        $path = '/templates/' . $this->_nameTemplate . '/';
+        $path = '';
+
+        if (!$system)
+        {
+            $path = '/templates/' . $this->_nameTemplate . '/';
+        }
+        else
+        {
+            $path =
+                    PATH_SITE_ROOT .
+                    SEPARATOR .
+                    NAME_FOLDER_TEMPLATES .
+                    SEPARATOR .
+                    $this->_nameTemplate;
+        }
 
         return $path;
     }
@@ -34,20 +48,39 @@ class Template extends Base
         $this->_nameTemplate = $nameTemplate;
     }
 
-    public function showDanger($err)
+    public function showDanger($err, $nameFile = null, $inTemplate = false)
     {
-        $template = Core::app()->getConfig()->getConfigItem('default_template');
 
-        $path =
-                PATH_SITE_ROOT .
-                SEPARATOR .
-                $template['path'] .
-                SEPARATOR .
-                $template['name'] .
-                SEPARATOR .
-                'error' .
-                SEPARATOR .
-                'danger.php';
+        // Шаблоны виджетов можно переопределять в своем шаблоне
+        // Достаточно в папку html/widgets  шаблона поместить файлы нужного виджета
+        // и указать $inTemplate = true, метод будет искать уже в папке с текущим шаблоном
+
+        if ($nameFile == null)
+        {
+            $nameFile = 'danger';
+        }
+        $path = '';
+
+        if (!$inTemplate)
+        {
+            $path =
+                    PATH_TO_DEFAULT_ERRORS .
+                    SEPARATOR .
+                    $nameFile .
+                    EXT_TEMPLATE_FILE;
+        }
+        else
+        {
+            $path =
+                    $this->getCurrentTemplatePath(true) .
+                    SEPARATOR .
+                    NAME_FOLDER_HTML .
+                    SEPARATOR .
+                    NAME_FOLDER_ERROR .
+                    SEPARATOR .
+                    $nameFile .
+                    EXT_TEMPLATE_FILE;
+        }
 
         if ($this->issetFile($path))
         {
@@ -93,11 +126,15 @@ class Template extends Base
 
     public function show()
     {
+        // Тут можно изменить какие то конфигурационные данные
+        // Или попозже реализовать систему хуков
         Core::app()->getLoader()->loadTemplate();
     }
 
     public function showBlock($nameBlock)
     {
+        // Тут перед загрузкой блока можем реализовать какой то хук
+
         Core::app()->getLoader()->loadTemplateBlock($nameBlock);
     }
 
@@ -113,13 +150,28 @@ class Template extends Base
         {
             if ($modules[$i]['position_name_system'] == $nameModulePosition)
             {
-                $this->getModuleContent($modules[$i]);
+                $this->moduleContentView($modules[$i], true);
             }
         }
     }
 
+    public function moduleContentView($dataArr, $fromAction = false)
+    {
+        //Реализовать возможность вызова модуля из другого домена, по типу hmvc
+        // также можно предварительно обработать входящие данные, например через систему хуков (еще не реализовано)
+        // Отработать екш
+        if ($fromAction)
+        {
+            return $this->moduleActionContentView($dataArr);
+        }
+        else
+        {// Если нужно отработать какой-либо файл шаблона модуля
+            return $this->moduleFileContentView($dataArr);
+        }
+    }
+
 // Получаем данные модуля
-    public function getModuleContent($module)
+    private function moduleActionContentView($module)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
         $path =
                 PATH_SITE_ROOT .
@@ -141,11 +193,26 @@ class Template extends Base
             $mod = new $className;
             $mod->setNameModule($module['name_system']);
 
-            $action = DEFAULT_ACTION;
+            if (isset($module['action']) && !$this->isEmpty($module['action']))
+            {
+                $action = $module['action'];
+                unset($module['action']);
+            }
+            else
+            {
+                // Запускаем дефолтный экшн главного контроллера нашего модуля
+                // В нем мы уже выводим нужные нам данные
+                $action = DEFAULT_ACTION;
+            }
+
+            unset($module['name_system']);
             
-            
-            // Запускаем дефолтный экшн главного контроллера нашего модуля
-            // В нем мы уже выводим нужные нам данные 
+            if (isset($module['return']) && $module['return'])
+            {
+                $content = $mod->$action($module);
+
+                return $content;
+            }
             $mod->$action($module);
         }
         else
@@ -155,13 +222,13 @@ class Template extends Base
     }
 
 // Выводит результат работы модуля или возвращает в переменной результат работы
-    public function moduleContentView($path, $nameModule, $dataArr, $fileContentView, $return = false)
+    private function moduleFileContentView($dataArr)
     {
-        if ($this->isEmpty($path))
+        if (!isset($dataArr['path']) || $this->isEmpty($dataArr['path']))
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
 
-            $path =
+            $dataArr['path'] =
                     PATH_SITE_ROOT .
                     SEPARATOR .
                     $template['path'] .
@@ -170,49 +237,61 @@ class Template extends Base
                     SEPARATOR .
                     'modules' .
                     SEPARATOR .
-                    $nameModule .
+                    $dataArr['name_module'] .
                     SEPARATOR .
-                    $fileContentView;
+                    $dataArr['file_content_view'];
         }
 
-        if ($return)
+        if (isset($dataArr['return']) && $dataArr['return'])
         {
-            $content = $this->getRenderedHtml($path, $dataArr, false);
+            $content = $this->getRenderedHtml($dataArr['path'], $dataArr, false);
 
             return $content;
         }
 
-        if ($this->issetFile($path))
+        if ($this->issetFile($dataArr['path']))
         {
             extract($dataArr);
             // Передаем данные в шаблон вывода
-            require $path;
+            require $dataArr['path'];
         }
         else
         {
-            Core::app()->getError()->errorFileNotExist('Шаблона для модуля  ' . $path . ' не существует!');
+
+            Core::app()->getError()->errorFileNotExist('Шаблона   ' . $dataArr['path'] . ' не существует!');
         }
     }
 
-    public function getWidget($nameWidget, $dataArr, $path = null)
-    {//$dataArr обработка этого масива идет в подключенном файле
+    public function getWidget($nameWidget, $dataArr, $inTemplate = false)
+    {
+        //$dataArr обработка этого масива идет в подключенном файле
+        // Шаблоны виджетов можно переопределять в своем шаблоне
+        // Достаточно в папку html/widgets  шаблона поместить файлы нужного виджета
+        // и указать $inTemplate = true, метод будет искать уже в папке с текущим шаблоном
+
         $content = '';
 
-        if ($this->isEmpty($path))
-        {
-            $template = Core::app()->getConfig()->getConfigItem('default_template');
+        $path = '';
 
-            Core::app()->getTemplate()->setMainTemplateName($template['name']);
+        if (!$inTemplate)
+        {
             $path =
-                    PATH_SITE_ROOT .
+                    PATH_TO_DEFAULT_WIDGETS .
                     SEPARATOR .
-                    $template['path'] .
+                    $nameWidget .
+                    EXT_TEMPLATE_FILE;
+        }
+        else
+        {
+            $path =
+                    $this->getCurrentTemplatePath(true) .
                     SEPARATOR .
-                    $template['name'] .
+                    NAME_FOLDER_HTML .
                     SEPARATOR .
-                    'widgets' .
+                    NAME_FOLDER_WIDGETS .
                     SEPARATOR .
-                    $nameWidget . '.php';
+                    $nameWidget .
+                    EXT_TEMPLATE_FILE;
         }
 
         $content = $this->getRenderedHtml($path, $dataArr, false);

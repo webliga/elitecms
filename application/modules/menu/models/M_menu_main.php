@@ -37,6 +37,21 @@ class M_menu_main extends Model
         $data = $this->selectAllByIdFromTable('menu',$id , null, null, 'id_module');
         return $data;
     }
+    
+    function updateMenuSettingsByModuleId($dataArr)
+    {
+        $id_module = $dataArr['id_module'];
+        unset($dataArr['id_module']);
+        
+        $result = $this->updateTableRowByCondition('menu', 'id_module', $id_module, $dataArr);        
+    }
+    
+    function deleteMenuSettingsByModuleId($id)
+    {       
+        $condition = $this->_db->parse('?n.?n = ?i','menu','id_module' ,$id);
+         
+        $result = $this->deleteTableRowByCondition('menu', $condition);        
+    }    
 }
 
 ?>

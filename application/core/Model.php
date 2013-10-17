@@ -67,9 +67,9 @@ class Model extends Base
         
         $sql = $this->_db->parse('SELECT ' . $fildsSelect . '  FROM ?n ?p',$nameTable, $join);
         
-        $data = $this->_db->getAll($sql);
+        $result = $this->_db->getAll($sql);
         
-        return $data;
+        return $result;
     }
 
     public function selectAllByIdFromTable($nameTable, $id, $fildsSelect = null, $join = null, $fildWhere = null)
@@ -82,11 +82,11 @@ class Model extends Base
         {
             $fildWhere = 'id';
         }        
-        $sql = $this->_db->parse('SELECT ' . $fildsSelect . ' FROM ?n ?p WHERE ?n.?n=?i',$nameTable, $join,$nameTable, $fildWhere, $id);
+        $sql = $this->_db->parse('SELECT ?p FROM ?n ?p WHERE ?n.?n=?i', $fildsSelect, $nameTable, $join,$nameTable, $fildWhere, $id);
 
-        $data = $this->_db->getRow($sql);
+        $result = $this->_db->getRow($sql);
         
-        return $data;
+        return $result;
     }
 
     public function updateTableRowById($nameTable, $id, $dataArr)
@@ -95,7 +95,18 @@ class Model extends Base
         
         $this->_db->query($sql);
     }    
-    
+
+    public function updateTableRowByCondition($nameTable, $fildTableNameCondition = null, $fildTableValueCondition, $dataArr)
+    {        
+        if($fildTableNameCondition == null)
+        {
+            $fildTableNameCondition = 'id';
+        }
+        
+        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE ?n = ?i"  , $nameTable, $dataArr, $fildTableNameCondition, $fildTableValueCondition);
+        
+        $this->_db->query($sql);
+    }     
 
     public function insertTableRow($nameTable, $dataArr)
     {        
@@ -103,9 +114,9 @@ class Model extends Base
         $this->_db->query($sql);
         
         $sql = 'select last_insert_id()';
-        $data = $this->_db->getRow($sql);
+        $result = $this->_db->getRow($sql);
         
-        return $data;
+        return $result;
     }     
     
     public function update()
@@ -119,6 +130,12 @@ class Model extends Base
         $this->_db->query($sql);
     }
 
+    public function deleteTableRowByCondition($nameTable, $condition)
+    {
+        $sql = $this->_db->parse('DELETE FROM ?n  WHERE ?p',$nameTable , $condition);
+        $this->_db->query($sql);
+    }
+    
     public function where()
     {
         
@@ -152,10 +169,11 @@ class Model extends Base
             FROM modules 
                   LEFT JOIN  position_modules   ON modules.id = position_modules.id_module
                   LEFT JOIN  positions  ON position_modules.id_position = positions.id
+            WHERE modules.is_active = 1
                 ";
         
-        $data = $this->_db->getAll($query);
-        return $data;
+        $result = $this->_db->getAll($query);
+        return $result;
         
     }
 }

@@ -17,6 +17,7 @@ class Request extends Base
     private $_url;
     private $_post;
     private $_get;
+    private $_file;    
     private $_host;
 
     function __construct()
@@ -31,7 +32,7 @@ class Request extends Base
 
     public function getPost($key = null)
     {
-        if ($key != null && is_array($_post))
+        if ($key != null && is_array($this->_post))
         {
             return $this->_post[$key];
         }
@@ -41,7 +42,7 @@ class Request extends Base
 
     public function getGet($key = null)
     {
-        if ($key != null && is_array($_get))
+        if ($key != null && is_array($this->_get))
         {
             return $this->_get[$key];
         }
@@ -49,7 +50,17 @@ class Request extends Base
         return $this->_get;
     }
 
-    public function setPostGet()
+    public function getFile($key = null)
+    {
+        if ($key != null && is_array($this->_file))
+        {
+            return $this->_file[$key];
+        }
+
+        return $this->_get;
+    }
+    
+    public function setGlobalVars()
     {
         if (isset($_POST))
         {// Можно проверку сделать
@@ -62,6 +73,12 @@ class Request extends Base
             $this->_get = $_GET;
             $_GET = null;
         }
+
+        if (isset($_FILE))
+        {// Можно проверку сделать
+            $this->_file = $_FILE;
+            $_FILE = null;
+        }       
     }
 
     /**
@@ -126,7 +143,7 @@ class Request extends Base
         }
     }
 
-    public function getModule()
+    public function getModuleName()
     {
         return $this->_module;
     }
