@@ -173,6 +173,12 @@ class Template extends Base
 // Получаем данные модуля
     private function moduleActionContentView($module)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
+        
+        if($this->isEmpty($module['name_controller']))
+        {
+            $module['name_controller'] = 'main';
+        }
+        
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -183,13 +189,16 @@ class Template extends Base
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SEPARATOR .
                 PREFIX_CONTROLLER .
-                $module['name_system'] . '_main.php';
+                $module['name_system'] . 
+                SEPARATOR_MODULE_NAME .
+                $module['name_controller'] .
+                EXT_TEMPLATE_FILE;
 
         if ($this->issetFile($path))
         {
             require_once $path;
 
-            $className = PREFIX_CONTROLLER . $module['name_system'] . '_main';
+            $className = PREFIX_CONTROLLER . $module['name_system'] . SEPARATOR_MODULE_NAME . $module['name_controller'];
             $mod = new $className;
             $mod->setNameModule($module['name_system']);
 
@@ -206,6 +215,7 @@ class Template extends Base
             }
 
             unset($module['name_system']);
+            unset($module['name_controller']);
             
             if (isset($module['return']) && $module['return'])
             {

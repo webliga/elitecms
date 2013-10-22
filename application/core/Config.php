@@ -99,7 +99,7 @@ class Config extends Base
 
         $result = $model->selectConfig();
 
-
+        
         $this->setConfigItem('modules', $result);
 
         $template = Core::app()->getConfig()->getConfigItem('default_template');

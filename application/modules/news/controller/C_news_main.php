@@ -26,9 +26,9 @@ class C_news_main extends Controller
     {
         if ($data != null)
         {
-            $this->loadModel('M_menu_main', 'menu');
+            $this->loadModule('M_menu_main', 'menu');
 
-            $this->loadModel('M_main_main', 'main');
+            $this->loadModule('M_main_main', 'main');
 
             $menu_items['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($data['id_module']);
             return $menu_items;
@@ -37,16 +37,16 @@ class C_news_main extends Controller
 
     public function create()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
+        $this->loadModule('M_main', $this->getNameModule());
+        $this->loadModule('M_shop', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
     }
 
     public function write()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
+        $this->loadModule('M_main', $this->getNameModule());
+        $this->loadModule('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница записи новости. Отображается форма записи');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -55,8 +55,8 @@ class C_news_main extends Controller
 
     public function edite()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
+        $this->loadModule('M_main', $this->getNameModule());
+        $this->loadModule('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);

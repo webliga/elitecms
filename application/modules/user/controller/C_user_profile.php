@@ -24,8 +24,8 @@ class C_user_profile extends Controller
      */
     public function index()
     {
-        $this->loadModel('M_user_user', $this->getNameModule());
-        $this->loadModel('M_main_shop', $this->getNameModule('main'));
+        $this->loadModule('M_user_user', $this->getNameModule());
+        $this->loadModule('M_main_shop', $this->getNameModule('main'));
 
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
             контроллером с адресной строки. Сейчас находимся в user/profile

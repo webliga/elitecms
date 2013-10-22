@@ -44,6 +44,19 @@ class Html extends Base
         
         return $content;
     }
+        
+    public function createSelect($dataArr)
+    {
+        if(!isset($dataArr['select']) || $this->isEmpty($dataArr['select']))
+        {
+            $dataArr['select'] = 'form_select';
+        }
+        
+        
+        $content = Core::app()->getTemplate()->getWidget($dataArr['select'],$dataArr, null);
+        
+        return $content;
+    }
 }
 
 ?>

@@ -171,7 +171,7 @@ class Model extends Base
                   LEFT JOIN  positions  ON position_modules.id_position = positions.id
             WHERE modules.is_active = 1
                 ";
-        
+        //$this->echoPre($query);
         $result = $this->_db->getAll($query);
         return $result;
         

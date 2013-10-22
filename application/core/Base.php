@@ -51,6 +51,23 @@ abstract class Base
         }
     }
 
+    public function echoEcho($str = "test")
+    {
+        echo $str . '<br/>';
+    }
+
+    /**
+     * Выводит масив
+     * 
+     * @param arr
+     */
+    public function echoPre($arr)
+    {
+        echo '<pre>';
+        print_r($arr);
+        echo '</pre>';
+    }
+
 }
 
 ?>

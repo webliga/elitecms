@@ -17,8 +17,6 @@ abstract class Controller extends Base
     function __construct()
     {
         parent::__construct();
-        
-        
     }
 
     function __destruct()
@@ -34,9 +32,11 @@ abstract class Controller extends Base
     }
 
 //создание модели
-    public function loadModel($model, $module_name = null)
+    public function loadModule($className, $module_name = null, $isController = false)
     {
-        if (is_null($module_name))
+        $model_path = '';
+        
+        if ($this->isEmpty($module_name) || is_null($module_name))
         {
             $_module_name = '';
         }
@@ -45,14 +45,20 @@ abstract class Controller extends Base
             $_module_name = SEPARATOR . $module_name;
         }
 
-        $model_path = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES . $_module_name . SEPARATOR . NAME_FOLDER_MODULES_MODELS . SEPARATOR . $model . '.php';
+        if($isController)
+        {
+            $model_path = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES . $_module_name . SEPARATOR . NAME_FOLDER_MODULES_CONTROLLERS . SEPARATOR . $className . '.php';
+        }
+        else
+        {
+            $model_path = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES . $_module_name . SEPARATOR . NAME_FOLDER_MODULES_MODELS . SEPARATOR . $className . '.php';
+        }
 
         if (file_exists($model_path))
         {
             require_once $model_path;
 
-            $nameModel = $model;
-            $this->$nameModel = new $model;
+            $this->$className = new $className;
         }
         else
         {
@@ -77,13 +83,14 @@ abstract class Controller extends Base
             return $name_module;
         }
     }
+
     abstract public function index($dataArr = null);
-    
+
     // Получаем поля формы для настройки модуля. Индивидуально для каждого модуля, реализуется в каждом модуле
     abstract public function getModuleFormFildsConfig($dataArr = null);
-    
+
     abstract public function updateModuleFormFildsConfig($dataArr);
-    
+
     abstract public function deleteModuleDataById($id);
 }
 

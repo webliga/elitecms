@@ -39,7 +39,7 @@
     <div class="control-group">
         <label class="control-label" for="inputPassword">Модуль меню:</label>
         <div class="controls">
-            <select class="form-control" name="id_module">
+            <select class="form-control" name="id_module" id="id_module">
                 <?php
                 $selected = '';
                 for ($i = 0; $i < count($dataArr['all_menu_modules']); $i++)

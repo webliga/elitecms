@@ -77,16 +77,22 @@ class M_admin_modules extends Model
     function deleteModuleById($id)
     {
         $this->deleteTableRowById('modules', $id);
+        
+        
+        $condition = $this->_db->parse('id_module = ?i', $id);
+        $this->deleteTableRowByCondition('position_modules', $condition);
+        
+        
     }
     
     function updateGeneralDataModuleById($id, $dataArr)
     {
-
         $sql = $this->_db->parse("UPDATE position_modules SET id_position = ?i WHERE id_module = ?i", $dataArr['id_position'], $id);
 
         $this->_db->query($sql);
 
         unset($dataArr['id_position']);
+              
 
         $this->updateTableRowById('modules', $id, $dataArr);
     }

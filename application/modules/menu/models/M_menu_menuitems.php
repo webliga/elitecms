@@ -38,7 +38,7 @@ class M_menu_menuitems extends Model
 
         $leftJoin = $this->_db->parse('LEFT JOIN  modules  ON menu_items.id_module = modules.id');
 
-        $fildsSelect = 'menu_items.*, modules.id as id_module, modules.name as name_module, modules.name_system as name_system_module';
+        $fildsSelect = 'menu_items.*, modules.id as id_module, modules.name as name_module, modules.name_system as name_system';
 
 
         return $this->selectAllByIdFromTable('menu_items', $id, $fildsSelect, $leftJoin);

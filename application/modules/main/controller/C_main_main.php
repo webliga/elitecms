@@ -22,13 +22,12 @@ class C_main_main extends Controller
     /**
      * Действие по умолчанию
      */
-    public function index()
+    public function index($dataArr = null)
     {
         $this->loadModel('M_main_main', $this->getNameModule());
         $this->loadModel('M_main_shop', $this->getNameModule());
-        
+
         //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
-        
         //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
 
 
@@ -66,6 +65,25 @@ class C_main_main extends Controller
         Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
         //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+    }
+
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+
+            return $content;
+        }
+    }
+
+    public function updateModuleFormFildsConfig($dataArr)
+    {
+
+    }
+
+    public function deleteModuleDataById($dataArr)
+    {
+
     }
 
 }
