@@ -26,7 +26,7 @@ echo $currItem;
                 var options = '<option value="0">Корень меню</option>';
 
                 jQuery.each(ar_result, function()
-                {
+                {// Показываем в списке родителя меню все пункты модуля кроме текущего
                     if (id_menu == this['id_module'] && currItem != this['id'])
                     {
                         options += '<option value="' + this['id'] + '">' + this['name'] + '</option>';
@@ -36,9 +36,6 @@ echo $currItem;
                 });
 
                 $('#id_parent').html(options);
-
-                //alert(options);
-
             }
     );
 

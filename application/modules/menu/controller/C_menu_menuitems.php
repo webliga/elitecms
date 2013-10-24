@@ -41,6 +41,9 @@ class C_menu_menuitems extends Controller
             $dataArr['form_action_delete'] = 'admin/menuitems/delete';
             $dataArr['name_hidden'] = 'id_item';
 
+
+
+
             $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
 
             Core::app()->getTemplate()->setVar('content', $content);
@@ -49,28 +52,24 @@ class C_menu_menuitems extends Controller
 
     public function create()
     {
-
         $post = Core::app()->getRequest()->getPost();
 
         if (!$this->isEmpty($post))
-        {
+        {// Сделать проверку на валидность и пустоту
             $this->loadModule('M_menu_menuitems', 'menu');
-
-            $dataArr['name'] = $post['name'];
-            $dataArr['link'] = $post['link'];
-            $dataArr['title'] = $post['title'];
-            $dataArr['id_module'] = $post['id_module'];
+            
+            unset($post['id']);
 
             if (isset($post['is_active']))
             {
-                $dataArr['is_active'] = true;
+                $post['is_active'] = true;
             }
             else
             {
-                $dataArr['is_active'] = false;
+                $post['is_active'] = false;
             }
 
-            $this->M_menu_menuitems->setMenuItem($dataArr);
+            $this->M_menu_menuitems->setMenuItem($post);
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -88,9 +87,16 @@ class C_menu_menuitems extends Controller
             $dataArr['return'] = true;
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
+
+            $dataArr['name_system'] = 'menu';
+            $dataArr['name_controller'] = 'menuitems';
+            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
+
             Core::app()->getTemplate()->setVar('title_page', 'Создание пункта меню');
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -106,26 +112,25 @@ class C_menu_menuitems extends Controller
 
             $id = $post['id'];
 
-
-            $dataArr['name'] = $post['name'];
-            $dataArr['link'] = $post['link'];
-            $dataArr['title'] = $post['title'];
-            $dataArr['id_module'] = $post['id_module'];
-            $dataArr['id_parent'] = $post['id_parent'];
-            
             if (isset($post['is_active']))
             {
-                $dataArr['is_active'] = true;
+                $post['is_active'] = true;
             }
             else
             {
-                $dataArr['is_active'] = false;
+                $post['is_active'] = false;
             }
 
+            // На всяк случай проверяем, а не является ли родителем сам пункт меню
+            // Если да, то не меняем родителя
+            if ($id == $post['id_parent'])
+            {
+                unset($post['id_parent']);
+            }
             //Core::app()->echoPre($post); 
             //Core::app()->echoPre($dataArr);
 
-            $this->M_menu_menuitems->updateMenuitemById($id, $dataArr);
+            $this->M_menu_menuitems->updateMenuitemById($id, $post);
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -134,8 +139,6 @@ class C_menu_menuitems extends Controller
 
     public function edite()
     {
-        // Нужно создать функцию проверки дочерних элементов у пункта меню
-        // Элементы которые являются дочерними не показывать в селекте "Родительский пункт меню"
         $post = Core::app()->getRequest()->getPost();
 
         if (!$this->isEmpty($post))
@@ -189,43 +192,86 @@ class C_menu_menuitems extends Controller
 
         if ($dataArr != null)
         {
-            if (!$this->isEmpty($dataArr['id_parent']))
+            $this->loadModule('M_menu_menuitems', $this->getNameModule());
+
+            $dataOptionArr = $this->M_menu_menuitems->getAllMenuItems();
+
+            $dataArr = $this->getDefaultMenuItemData($dataArr);
+
+            $dataArr['select_all_items'] = $dataOptionArr;
+            $dataArr['select'] = 'form_select';
+            $dataArr['select_name'] = 'id_parent';
+            $dataArr['select_lable'] = 'Родительский пункт меню:';
+            $dataArr['option_value_selected'] = $dataArr['id_parent']; // Существующий родительский пункт
+
+            $y = 0;
+
+            $dataArr['select_data'][$y]['option_value'] = 0;
+            $dataArr['select_data'][$y]['option_text'] = 'Корень меню';
+            $y++;
+            
+            // Формируем текущий список родительских пунктов меню
+            for ($i = 0; $i < count($dataOptionArr); $i++)
             {
-                $this->loadModule('M_menu_menuitems', $this->getNameModule());
-
-                $dataOptionArr = $this->M_menu_menuitems->getAllMenuItems();
-                $dataArr['select_all_items'] = $dataOptionArr;
-                $dataArr['select'] = 'form_select';
-                $dataArr['select_name'] = 'id_parent';
-                $dataArr['select_lable'] = 'Родительский пункт меню:';
-                $dataArr['option_value_selected'] = $dataArr['id_parent']; // Существующий родительский пункт
-
-                $y = 0;
-                
-                $dataArr['select_data'][$y]['option_value'] = 0;
-                $dataArr['select_data'][$y]['option_text'] = 'Корень меню';
-                $y++;
-
-                for ($i = 0; $i < count($dataOptionArr); $i++)
+                if ($dataArr['id_module'] == $dataOptionArr[$i]['id_module'] && $dataArr['id'] != $dataOptionArr[$i]['id'])
                 {
-                    if ($dataArr['id_module'] == $dataOptionArr[$i]['id_module'] && $dataArr['id'] != $dataOptionArr[$i]['id'])
-                    {
-                        $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
-                        $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
-                        $y++;
-                    }
+                    $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
+                    $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
+                    $y++;
                 }
-
-                $content = Core::app()->getHtml()->createSelect($dataArr);
-                
-                $content .= Core::app()->getTemplate()->getWidget('menuitems_js', $dataArr, true);
-                
-                //$this->echoPre($dataArr);
-                //$this->echoPre($dataOptionArr);
             }
+
+            $content .= Core::app()->getHtml()->createSelect($dataArr);
+
+
+            $dataArr['input_name'] = 'priority';
+            $dataArr['input_value'] = $dataArr['priority'];
+            $dataArr['input_lable'] = 'Очередь показа';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'class_li';
+            $dataArr['input_value'] = $dataArr['class_li'];
+            $dataArr['input_lable'] = 'Индивидуальный класс для пункта меню (li)';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            // Третий параметр указывает, что виджет нужно искать в папке с шаблоном    
+            $content .= Core::app()->getTemplate()->getWidget('menuitems_js', $dataArr, true);
         }
 
         return $content;
+    }
+
+    private function getDefaultMenuItemData($dataArr)
+    {
+        if (is_array($dataArr))
+        {
+            if (!isset($dataArr['id_module']) || $this->isEmpty($dataArr['id_module']))
+            {
+                $dataArr['id_module'] = 1;
+            }
+
+            if (!isset($dataArr['priority']) || $this->isEmpty($dataArr['priority']))
+            {
+                $dataArr['priority'] = 0;
+            }
+
+            if (!isset($dataArr['id_parent']) || $this->isEmpty($dataArr['id_parent']))
+            {
+                $dataArr['id_parent'] = 0;
+            }
+
+            if (!isset($dataArr['id']) || $this->isEmpty($dataArr['id']))
+            {
+                $dataArr['id'] = 0;
+            }
+
+            if (!isset($dataArr['class_li']) || $this->isEmpty($dataArr['class_li']))
+            {
+                $dataArr['class_li'] = '';
+            }                         
+        }
+
+        return $dataArr;
     }
 
     public function updateModuleFormFildsConfig($dataArr = null)

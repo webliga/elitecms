@@ -26,7 +26,7 @@ class M_menu_main extends Model
     function getMenuItemsByModuleId($id)
     {
         $is_active = 1;
-        $join = $this->_db->parse('WHERE menu_items.id_module = ?i AND menu_items.is_active = ?i', $id, $is_active);
+        $join = $this->_db->parse('WHERE menu_items.id_module = ?i AND menu_items.is_active = ?i ORDER BY priority ASC', $id, $is_active);
         
         $data = $this->selectAllFromTable('menu_items', null, $join);
         return $data;

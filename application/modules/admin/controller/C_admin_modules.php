@@ -103,9 +103,9 @@ class C_admin_modules extends Controller
 
             $id = $post['id_module'];
             unset($post['id_module']);
+            
             // Так как у нас модули наследуются, то обновить тип модуля (name_system) не получится (настройки у модулей разные)
             // нужно пересоздать модуль
-
             if (isset($post['name_system']))
             {
                 unset($post['name_system']);

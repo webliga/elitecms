@@ -174,7 +174,7 @@ class Template extends Base
     private function moduleActionContentView($module)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
         
-        if($this->isEmpty($module['name_controller']))
+        if(!isset($module['name_controller']) ||  $this->isEmpty($module['name_controller']))
         {
             $module['name_controller'] = 'main';
         }
@@ -247,7 +247,7 @@ class Template extends Base
                     SEPARATOR .
                     'modules' .
                     SEPARATOR .
-                    $dataArr['name_module'] .
+                    $dataArr['name_module'] .// Скорее всего нужно переименовать в name_system, что б небыло путаницы
                     SEPARATOR .
                     $dataArr['file_content_view'];
         }
