@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_admin_menuitems extends Controller
+class C_admin_categoryitems extends Controller
 {
 
     function __construct()
@@ -14,8 +14,8 @@ class C_admin_menuitems extends Controller
         parent::__construct();
 
         $this->init();
-
-        $this->loadModule('C_menu_menuitems', 'menu', true);
+        
+        $this->loadModule('C_category_categoryitems', 'category', true);
     }
 
     function __destruct()
@@ -28,44 +28,49 @@ class C_admin_menuitems extends Controller
      */
     public function index($dataArr = NULL)
     {
-        $this->C_menu_menuitems->index($dataArr);
-
+        $this->C_category_categoryitems->index($dataArr);
     }
 
     public function create()
     {
-        $this->C_menu_menuitems->create();
+        $this->C_category_categoryitems->create();
     }
 
     public function update()
     {
-        $this->C_menu_menuitems->update();
+        $this->C_category_categoryitems->update();
     }
 
     public function edite()
     {
-        $this->C_menu_menuitems->edite();
+        $this->C_category_categoryitems->edite();
     }
 
     public function delete()
     {
-        $this->C_menu_menuitems->delete();
+        $this->C_category_categoryitems->delete();
     }
 
     public function getModuleFormFildsConfig($dataArr = null)
     {
-        return 'C_admin_menuitems';
+        
+    }
+
+    private function getDefaultMenuItemData($dataArr)
+    {
+        
     }
 
     public function updateModuleFormFildsConfig($dataArr = null)
     {
         
     }
-      
+
     public function deleteModuleDataById($id)
     {
-
+        
     }
+
 }
 
 ?>

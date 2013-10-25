@@ -16,14 +16,17 @@ echo $arr;
 
 
 $currItem = "var currItem = " . $dataArr['id'] . ";";
+$rootItem = "var rootItem = '" . $dataArr['root'] . "';";
 echo $currItem;
+echo $rootItem;
+
 ?>
 
     $('#id_module').change(
             function()
             {
                 var id_menu = $(this).val();
-                var options = '<option value="0">Корень меню</option>';
+                var options = '<option value="0">' + rootItem + '</option>';
 
                 jQuery.each(ar_result, function()
                 {// Показываем в списке родителя меню все пункты модуля кроме текущего

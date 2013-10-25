@@ -8,29 +8,29 @@
     </div>
 
     <div class="checkbox">
-            <label>
-                <input type="checkbox" name="is_active"  <?php
-                if (isset($dataArr['is_active']) && $dataArr['is_active'])
-                {
-                    echo 'checked';
-                }
-                else
-                {
-                    '';
-                }
-                
-                if(isset($dataArr['create']) && $dataArr['create'])
-                {
-                    echo 'disabled';
-                }
-                ?>> Активный модуль
-            </label>
-        </div>
-    
+        <label>
+            <input type="checkbox" name="is_active"  <?php
+            if (isset($dataArr['is_active']) && $dataArr['is_active'])
+            {
+                echo 'checked';
+            }
+            else
+            {
+                '';
+            }
+
+            if (isset($dataArr['create']) && $dataArr['create'])
+            {
+                echo 'disabled';
+            }
+            ?>> Активный модуль
+        </label>
+    </div>
+
     <div class="control-group">
         <label class="control-label" for="inputEmail">Системное название модуля:</label>
         <div class="controls">
-            <select <?php if(isset($dataArr['id'])) echo 'disabled';   ?> class="form-control" name="name_system">
+            <select <?php if (isset($dataArr['id'])) echo 'disabled'; ?> class="form-control" name="name_system">
                 <?php
                 $selected = '';
                 for ($i = 0; $i < count($dataArr['all_modules']); $i++)
@@ -56,19 +56,30 @@
     <div class="control-group">
         <label class="control-label" for="inputPassword">Позиция:</label>
         <div class="controls">
-            <select class="form-control" name="id_position">
-                <?php
-                $selected = '';
-                for ($i = 0; $i < count($dataArr['all_positions']); $i++)
+            <?php
+            $disabled = '';
+            $options = '';
+
+            $options .= '<option selected value="0">Без позиции, выводится по запросу</option>';
+
+            $selected = '';
+            
+            for ($i = 0; $i < count($dataArr['all_positions']); $i++)
+            {
+                if ($dataArr['all_positions'][$i]['id'] == $dataArr['id_position'])
                 {
-                    if ($dataArr['all_positions'][$i]['id'] == $dataArr['id_position'])
-                    {
-                        $selected = 'selected';
-                    }
-                    echo '<option ' . $selected . ' value="' . $dataArr['all_positions'][$i]['id'] . '">' . $dataArr['all_positions'][$i]['name'] . '</option>';
-                    $selected = '';
+                    $selected = 'selected';
                 }
-                ?>
+                $options .= '<option ' . $selected . ' value="' . $dataArr['all_positions'][$i]['id'] . '">' . $dataArr['all_positions'][$i]['name'] . '</option>';
+                $selected = '';
+            }
+            ?>
+
+
+            <select class="form-control" name="id_position" <?php echo $disabled; ?>>
+            <?php 
+                echo $options;
+            ?>
             </select>
         </div>
     </div>       

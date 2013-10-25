@@ -24,8 +24,8 @@ class C_main_main extends Controller
      */
     public function index($dataArr = null)
     {
-        $this->loadModel('M_main_main', $this->getNameModule());
-        $this->loadModel('M_main_shop', $this->getNameModule());
+        $this->loadModule('M_main_main', $this->getNameModule());
+        $this->loadModule('M_main_shop', $this->getNameModule());
 
         //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
         //Core::app()->echoPre($this->M_main_main->getAllUsersArr());

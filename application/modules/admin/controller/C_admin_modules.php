@@ -16,6 +16,7 @@ class C_admin_modules extends Controller
         $this->init();
 
         Core::app()->getTemplate()->setVar('createPath', 'modules/create');
+        Core::app()->getTemplate()->setVar('createTitle', 'Создать дубликат модуля');    
     }
 
     function __destruct()
@@ -71,6 +72,7 @@ class C_admin_modules extends Controller
             $this->loadModule('M_admin_position', $this->getNameModule());
 
             $dataArr = array();
+            $dataArr['id_position'] = 0;
             $dataArr['form_action'] = 'admin/modules/create/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
@@ -88,7 +90,7 @@ class C_admin_modules extends Controller
             // переделать под createForm
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
 
-            Core::app()->getTemplate()->setVar('title_page', 'Создание модуля');
+            Core::app()->getTemplate()->setVar('title_page', 'Создание дубликата модуля');
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
@@ -100,7 +102,7 @@ class C_admin_modules extends Controller
         if (!$this->isEmpty($post))
         {
             $this->loadModule('M_admin_modules', $this->getNameModule());
-
+//Core::app()->echoPre($post);
             $id = $post['id_module'];
             unset($post['id_module']);
             
@@ -172,6 +174,7 @@ class C_admin_modules extends Controller
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
             $dataArr['path'] = '';
+            
             $dataArr['name_module'] = 'admin'; //Понадобится в модуле moduleFileContentView для отображения mod_admin_module_create.php
             $dataArr['file_content_view'] = 'mod_admin_module_create.php';
             $dataArr['return'] = true;

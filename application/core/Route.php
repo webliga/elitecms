@@ -57,7 +57,7 @@ class Route extends Base
                 $request->getModuleName() . 
                 SEPARATOR_MODULE_NAME . 
                 $request->getController() . '.php';
-
+        
 // Получаем язык отображения                  
         $path_lang = PATH_SITE_ROOT .
                 SEPARATOR .

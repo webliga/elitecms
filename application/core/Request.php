@@ -17,7 +17,7 @@ class Request extends Base
     private $_url;
     private $_post;
     private $_get;
-    private $_file;    
+    private $_file;
     private $_host;
 
     function __construct()
@@ -59,7 +59,7 @@ class Request extends Base
 
         return $this->_get;
     }
-    
+
     public function setGlobalVars()
     {
         if (isset($_POST))
@@ -78,7 +78,7 @@ class Request extends Base
         {// Можно проверку сделать
             $this->_file = $_FILE;
             $_FILE = null;
-        }       
+        }
     }
 
     /**
@@ -97,31 +97,28 @@ class Request extends Base
         $this->_controller = $configDefaultUrl['controller'];
         $this->_action = $configDefaultUrl['action'];
 
-
-        $routes = explode('/', $url);
+        $routes = explode('?', $url);
+        
+        $routes = explode('/', $routes[0]);
 
         // lang
         if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
         {
             $this->_lang = $routes[1];
         }
-        else
-        {
-            //Core::app()->getError()->errorPage404('5');
-            return;
-        }
+
         // module
-        if (isset($routes[2]))
+        if (isset($routes[2]) && !$this->isEmpty($routes[2]))
         {
             $this->_module = $routes[2];
         }
         // controller
-        if (isset($routes[3]))
+        if (isset($routes[3]) && !$this->isEmpty($routes[3]))
         {
             $this->_controller = $routes[3];
         }
         // action       
-        if (isset($routes[4]) && strlen($routes[4]) > 0)
+        if (isset($routes[4]) && !$this->isEmpty($routes[4]))
         {
             $this->_action = $routes[4];
         }
@@ -171,7 +168,7 @@ class Request extends Base
     public function redirect($url, $terminate = true, $statusCode = 302)
     {
         $url = $this->_host . $url;
-        
+
         header('Location: ' . $url, true, $statusCode);
         if ($terminate)
             Core::app()->appExit();

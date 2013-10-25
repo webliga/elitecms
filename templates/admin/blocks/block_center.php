@@ -4,8 +4,14 @@
         <div class="panel-heading"><?php echo $title_page ?></div>
         <div class="panel-body">
             <p>
-                <a href="<?php echo Core::app()->getHtml()->createUrl('admin/' . $createPath); ?>" title="Создать"><img src="<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(false); ?>img/add.png" alt="" width="50"></a>
-
+                <?php if(isset($createPath) && !$this->isEmpty($createPath)) 
+                    {
+                ?>
+                
+                <a href="<?php echo Core::app()->getHtml()->createUrl('admin/' . $createPath); ?>" title="<?php echo $createTitle  ?>"><img src="<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(false); ?>img/add.png" alt="" width="50"></a>
+                <?php
+                    }
+                ?>
             </p>
         </div>
 
