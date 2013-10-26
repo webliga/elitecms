@@ -31,7 +31,9 @@ class C_news_main extends Controller
         }
         else
         {
-            Core::app()->getTemplate()->setVar('content', 'Главный контент. Сейчас находимся в news/main');
+            $get = Core::app()->getRequest()->getGet();
+            $content = $this->echoPre($get, true);
+            Core::app()->getTemplate()->setVar('content', $content . 'Главный контент. Сейчас находимся в news/main');
         }
     }
 
@@ -65,7 +67,7 @@ class C_news_main extends Controller
 
     public function getModuleFormFildsConfig($dataArr = null)
     {
-        return 'C_news_main';
+        return 'C_news_main2';
     }
 
     public function updateModuleFormFildsConfig($dataArr = null)

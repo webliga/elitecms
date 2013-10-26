@@ -118,7 +118,7 @@ class Template extends Base
         }
         else
         {
-            Core::app()->getError()->errorFileNotExist('getRenderedHtml.  не существует $path = ' . $path);
+            Core::app()->getError()->errorFileNotExist('метод getRenderedHtml.  не существует $path = ' . $path);
         }
 
         return $content;

@@ -62,7 +62,7 @@ $config = array(
         'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
         'delete' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
     ),  
-    'news' => array(//Контроллер
+    'newsitems' => array(//Контроллер
         // Действия
         'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
         'create' => array('r' => true, 'c' => true, 'w' => false, 'e' => false, 'd' => false),

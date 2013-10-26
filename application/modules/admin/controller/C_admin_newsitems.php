@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_admin_news extends Controller
+class C_admin_newsitems extends Controller
 {
 
     function __construct()
@@ -15,7 +15,7 @@ class C_admin_news extends Controller
 
         $this->init();
 
-        $this->loadModule('C_news_main', 'news', true);
+        $this->loadModule('C_news_newsitems', 'news', true);
     }
 
     function __destruct()
@@ -28,33 +28,33 @@ class C_admin_news extends Controller
      */
     public function index($dataArr = NULL)
     {
-        $this->C_news_main->index($dataArr);
+        $this->C_news_newsitems->index($dataArr);
 
     }
 
     public function create()
     {
-        $this->C_news_main->create();
+        $this->C_news_newsitems->create();
     }
 
     public function update()
     {
-        $this->C_news_main->update();
+        $this->C_news_newsitems->update();
     }
 
     public function edite()
     {
-        $this->C_news_main->edite();
+        $this->C_news_newsitems->edite();
     }
 
     public function delete()
     {
-        $this->C_news_main->delete();
+        $this->C_news_newsitems->delete();
     }
 
     public function getModuleFormFildsConfig($dataArr = null)
     {
-        return 'C_news_main';
+        return 'C_admin_newsitems';
     }
 
     public function updateModuleFormFildsConfig($dataArr = null)

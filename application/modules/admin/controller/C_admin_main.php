@@ -68,6 +68,11 @@ class C_admin_main extends Controller
     {
         
     }
+    
+    public function deleteModuleDataById($id)
+    {
+        
+    }
 }
 
 ?>

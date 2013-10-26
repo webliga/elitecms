@@ -37,8 +37,54 @@
     margin: 0px 20px 20px 20px;
 }
 
+.textarea-text
+{
+    height: 500px;
+}
 
+.checkbox-group
+{
+    width: 100%;
+    float: left;
+    margin: 30px 0px 0px 0px;
+}
 
+.checkbox
+{
+    border: 0px solid red;
+    width: 120px;
+    float: left;
+}
 
+.control-group
+{border: 0px solid red;
+    width: auto;
+    float: left;    
+}
 
+.datapicker
+{
+    width: 200px;  
+    margin: 0px 0px 0px 30px; 
+}
 
+.mod_news_create
+{
+    float: left;    
+}
+
+.panel
+{
+    float: left;    
+}
+.both
+{
+    width: 100%;
+    clear: both;
+    float: left;   
+}
+
+.input-news
+{
+    width: 670px;    
+}

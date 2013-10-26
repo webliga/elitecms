@@ -16,5 +16,8 @@
     <script src="http://code.jquery.com/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="<?php echo Core::app()->getTemplate()->getCurrentTemplatePath();?>lib/bootstrap/js/bootstrap.js"></script>
+
+    <script src="/lib/texteditors/ckeditor/ckeditor.js"></script>
+
 </head>
 
