@@ -33,6 +33,7 @@ class C_admin_modules extends Controller
 
         if ($this->isEmpty($post))
         {
+            
             $this->loadModule('M_admin_modules', $this->getNameModule());
 
             Core::app()->getTemplate()->setVar('title_page', 'Список модулей');
@@ -45,7 +46,7 @@ class C_admin_modules extends Controller
 
             // Переделать под метод createTable
             $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, false);
-
+//$this->echoPre($content);
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }

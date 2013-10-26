@@ -61,10 +61,10 @@ abstract class Base
      * 
      * @param arr
      */
-    public function echoPre($arr)
+    public function echoPre($dataArr)
     {
         echo '<pre>';
-        print_r($arr);
+        print_r($dataArr);
         echo '</pre>';
     }
 
