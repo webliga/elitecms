@@ -133,6 +133,7 @@ class Model extends Base
     public function deleteTableRowByCondition($nameTable, $condition)
     {
         $sql = $this->_db->parse('DELETE FROM ?n  WHERE ?p',$nameTable , $condition);
+
         $this->_db->query($sql);
     }
     

@@ -151,7 +151,7 @@ class C_admin_modules extends Controller
             
             $dataArr = $post;
             $dataArr['id_module'] = $id;
-            $dataArr['name_system'] = $arr['name_system'];
+            $dataArr['name_system'] = $arr['name_system']; // Для формирования пути к файлу модуля
             $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM_UPDATE;
             Core::app()->getTemplate()->moduleContentView($dataArr, true);
 

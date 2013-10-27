@@ -55,10 +55,14 @@ class C_news_newsitems extends Controller
     {
         $post = Core::app()->getRequest()->getPost();
 
+        $this->loadModule('M_category_categoryitems', 'category');
+
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
+            // http://spuzom.ru/detail.php?id=249
+            // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
             $this->loadModule('M_news_newsitems', 'news');
-            
+
             unset($post['id']);
 
             $post = $this->getDefaultNewsItemData($post);
@@ -73,8 +77,10 @@ class C_news_newsitems extends Controller
             $this->loadModule('M_admin_modules', 'admin');
 
             $dataArr = array();
+
+            $dataArr['root'] = 'Без категории';
             $dataArr['form_action'] = 'admin/newsitems/create/';
-            $dataArr['all_news_modules'] = $this->M_admin_modules->getAllModules('news');
+            $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'admin';
             $dataArr['file_content_view'] = 'mod_admin_newsitem_create.php';
@@ -107,7 +113,7 @@ class C_news_newsitems extends Controller
             $id = $post['id'];
             unset($post['id']);
             $post = $this->getDefaultNewsItemData($post);
-             
+
             //Core::app()->echoPre($post); 
             //Core::app()->echoPre($dataArr);
 
@@ -125,13 +131,15 @@ class C_news_newsitems extends Controller
         if (!$this->isEmpty($post))
         {
             $this->loadModule('M_news_newsitems', 'news');
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModule('M_category_categoryitems', 'category');
 
             $dataArr = $this->M_news_newsitems->getNewsItemById($post['id_item']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование статьи / новости');
 
+
+            $dataArr['root'] = 'Без категории';
             $dataArr['form_action'] = 'admin/newsitems/update/';
-            $dataArr['all_news_modules'] = $this->M_admin_modules->getAllModules('news');
+            $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'admin';
             $dataArr['file_content_view'] = 'mod_admin_newsitem_create.php';
@@ -140,11 +148,11 @@ class C_news_newsitems extends Controller
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
             /*
-            $dataArr['name_controller'] = 'newsitems';
-            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-            */
-
+              $dataArr['name_controller'] = 'newsitems';
+              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+             */
+            //$this->echoPre($dataArr);
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
@@ -179,14 +187,14 @@ class C_news_newsitems extends Controller
         if (is_array($dataArr))
         {
             $date = Date('H:i:s d-m-Y');
-            
-            if (isset($dataArr['show']))
+
+            if (isset($dataArr['is_active']))
             {
-                $dataArr['show'] = true;
+                $dataArr['is_active'] = true;
             }
             else
             {
-                $dataArr['show'] = false;
+                $dataArr['is_active'] = false;
             }
 
             if (isset($dataArr['show_title']))
@@ -196,7 +204,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['show_title'] = false;
-            }            
+            }
 
             if (isset($dataArr['show_preview']))
             {
@@ -205,7 +213,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['show_preview'] = false;
-            }            
+            }
 
             if (isset($dataArr['show_img']))
             {
@@ -214,7 +222,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['show_img'] = false;
-            }            
+            }
 
             if (isset($dataArr['show_date']))
             {
@@ -223,7 +231,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['show_date'] = false;
-            }            
+            }
 
             if (isset($dataArr['show_author']))
             {
@@ -232,7 +240,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['show_author'] = false;
-            }            
+            }
 
             if (isset($dataArr['date_create']) && $this->isEmpty($dataArr['date_create']))
             {
@@ -241,7 +249,7 @@ class C_news_newsitems extends Controller
             else
             {
                 $dataArr['date_create'] = $date;
-            }                         
+            }
         }
 
         return $dataArr;

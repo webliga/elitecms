@@ -7,9 +7,6 @@
 
         <div class="control-group">
             <div class="controls">
-                <label class="checkbox">
-
-                </label>
                 <button type="submit" class="btn btn-default">Обновить</button>
             </div>
         </div>

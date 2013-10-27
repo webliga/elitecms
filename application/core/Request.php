@@ -15,8 +15,8 @@ class Request extends Base
     private $_action;
     private $_params;
     private $_url;
-    private $_post;
-    private $_get;
+    private $_post = null;
+    private $_get = null;
     private $_file;
     private $_host;
 

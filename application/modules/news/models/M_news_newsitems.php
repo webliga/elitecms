@@ -25,9 +25,13 @@ class M_news_newsitems extends Model
 
     function getAllNewsItems()
     {
-        $leftJoin = $this->_db->parse('LEFT JOIN  modules  ON news_items.id_module = modules.id');
+        $leftJoin = $this->_db->parse('LEFT JOIN  category_items  ON 
+                                       news_items.id_category_items = category_items.id'
+                                      );
 
-        $fildsSelect = 'news_items.*, modules.id as id_module, modules.name as name_module, modules.name_system as name_system_module';
+        $fildsSelect = 'news_items.*, 
+                        category_items.id as id_category_items, 
+                        category_items.name as name_category_items';
 
 
         return $this->selectAllFromTable('news_items', $fildsSelect, $leftJoin);
@@ -36,9 +40,13 @@ class M_news_newsitems extends Model
     function getNewsItemById($id)
     {
 
-        $leftJoin = $this->_db->parse('LEFT JOIN  modules  ON news_items.id_module = modules.id');
+        $leftJoin = $this->_db->parse('LEFT JOIN  category_items  ON 
+                                       news_items.id_category_items = category_items.id'
+                                      );
 
-        $fildsSelect = 'news_items.*, modules.id as id_module, modules.name as name_module, modules.name_system as name_system';
+        $fildsSelect = 'news_items.*, 
+                        category_items.id as id_category_items, 
+                        category_items.name as name_category_items';
 
 
         return $this->selectAllByIdFromTable('news_items', $id, $fildsSelect, $leftJoin);

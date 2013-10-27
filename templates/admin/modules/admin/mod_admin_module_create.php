@@ -6,7 +6,7 @@
             <input type="text"  class="form-control" value="<?php if (isset($dataArr['name'])) echo $dataArr['name']; ?>"  name="name">
         </div>
     </div>
-
+    <div class="both"></div>
     <div class="checkbox">
         <label>
             <input type="checkbox" name="is_active"  <?php
@@ -26,7 +26,7 @@
             ?>> Активный модуль
         </label>
     </div>
-
+<div class="both"></div>
     <div class="control-group">
         <label class="control-label" for="inputEmail">Системное название модуля:</label>
         <div class="controls">
@@ -46,13 +46,14 @@
             </select>
         </div>
     </div> 
-
+<div class="both"></div>
     <div class="control-group">
         <label class="control-label" for="inputPassword">Описание:</label>
         <div class="controls">
             <textarea name="description"  class="form-control"><?php if (isset($dataArr['description'])) echo $dataArr['description']; ?></textarea>
         </div>
     </div>
+<div class="both"></div>
     <div class="control-group">
         <label class="control-label" for="inputPassword">Позиция:</label>
         <div class="controls">
@@ -84,4 +85,5 @@
         </div>
     </div>       
 </div>
+<div class="both"></div>
 
