@@ -28,10 +28,18 @@ class C_admin_menuitems extends Controller
      */
     public function index($dataArr = NULL)
     {
-        $this->C_menu_menuitems->index($dataArr);
+        return $this->C_menu_menuitems->index($dataArr);
+        
+        
 
     }
 
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
+
+    }
+    
     public function create()
     {
         $this->C_menu_menuitems->create();

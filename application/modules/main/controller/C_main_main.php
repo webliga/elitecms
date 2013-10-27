@@ -38,7 +38,13 @@ class C_main_main extends Controller
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
             контроллером с адресной строки. Сейчас находимся в main/main');
     }
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     public function create()
     {
         $this->loadModel('M_main', $this->getNameModule());

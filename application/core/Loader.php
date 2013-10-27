@@ -45,7 +45,8 @@ class Loader extends Base
                 SEPARATOR .
                 'blocks' .
                 SEPARATOR .
-                'block_' . $nameBlock . '.php';
+                PREFIX_BLOCK . 
+                $nameBlock . EXT_TEMPLATE_FILE;
 
         if ($this->issetFile($path))
         {
@@ -55,7 +56,7 @@ class Loader extends Base
                 extract($arrData);
             }
 
-            require_once $path;
+            require $path;
         }
         else
         {
@@ -63,12 +64,15 @@ class Loader extends Base
         }
     }
 
-    public function loadTemplate()
+    public function loadTemplate($page = null)
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');
 
-        //Core::app()->getTemplate()->setMainTemplateName($template['name']);
-        
+        if(!isset($page) || $this->isEmpty($page))
+        {
+            $page = DEFAULT_PAGE_MAIN;
+        }
+
         $path =
                 PATH_SITE_ROOT .
                 SEPARATOR .
@@ -76,7 +80,9 @@ class Loader extends Base
                 SEPARATOR .
                 $template['name'] .
                 SEPARATOR .
-                'index.tpl.php';
+                'pages' .
+                SEPARATOR .
+                $page;
 
         if ($this->issetFile($path))
         {

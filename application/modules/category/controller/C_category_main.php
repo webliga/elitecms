@@ -22,13 +22,19 @@ class C_category_main extends Controller
     /**
      * Получаем стартовые данные для формирования меню
      */
-    public function index($data = null)
+    public function index($dataArr = null)
     {
         Core::app()->getTemplate()->setVar('content', 'Выводим данные связанные с этой категорией. Сейчас находимся в category/main');
     
         $this->echoPre(Core::app()->getRequest()->getGet());
     }
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     function buildTree($array_items)
     {
         if (is_array($array_items))

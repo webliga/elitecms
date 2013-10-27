@@ -124,11 +124,11 @@ class Template extends Base
         return $content;
     }
 
-    public function show()
+    public function show($page = null)
     {
         // Тут можно изменить какие то конфигурационные данные
         // Или попозже реализовать систему хуков
-        Core::app()->getLoader()->loadTemplate();
+        Core::app()->getLoader()->loadTemplate($page);
     }
 
     public function showBlock($nameBlock)
@@ -150,6 +150,8 @@ class Template extends Base
         {
             if ($modules[$i]['position_name_system'] == $nameModulePosition)
             {
+                // Запускаем экшн, который выводит данные в позиции
+                $modules[$i]['action'] = DEFAULT_ACTION_MODULE_SHOW_DATA_BY_POSITION;
                 $this->moduleContentView($modules[$i], true);
             }
         }
@@ -191,12 +193,12 @@ class Template extends Base
                 PREFIX_CONTROLLER .
                 $module['name_system'] . 
                 SEPARATOR_MODULE_NAME .
-                $module['name_controller'] .
-                EXT_TEMPLATE_FILE;
+                $module['name_controller'] . EXT_TEMPLATE_FILE;
+                
 
         if ($this->issetFile($path))
         {
-            require_once $path;
+            require_once  $path;
 
             $className = PREFIX_CONTROLLER . $module['name_system'] . SEPARATOR_MODULE_NAME . $module['name_controller'];
             $mod = new $className;
@@ -300,8 +302,8 @@ class Template extends Base
                     SEPARATOR .
                     NAME_FOLDER_WIDGETS .
                     SEPARATOR .
-                    $nameWidget .
-                    EXT_TEMPLATE_FILE;
+                    $nameWidget . EXT_TEMPLATE_FILE;
+                    
         }
 
         $content = $this->getRenderedHtml($path, $dataArr, false);

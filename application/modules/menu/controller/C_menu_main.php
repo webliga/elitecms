@@ -24,6 +24,13 @@ class C_menu_main extends Controller
      */
     public function index($dataArr = null)
     {
+
+    }
+
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
+        // $dataArr - данные для вызова модуля в позиции
         if ($dataArr != null)
         {
             $this->loadModule('M_menu_main', $this->getNameModule());
@@ -31,9 +38,8 @@ class C_menu_main extends Controller
             $dataArr['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($dataArr['id_module']);
 //$this->echoPre($dataArr['menu_items']);
             $settings = $this->M_menu_main->getMenuSettingsByModuleId($dataArr['id_module']);
-            
-            // Сделать сортировку масива пунктов меню по дочерним элементам (priority)
 
+            // Сделать сортировку масива пунктов меню по дочерним элементам (priority)
             // Получаем индивидуальные настройки CSS для пунктов меню из БД
 
             $classArr['menu_ul'] = $settings['menu_ul'];
@@ -175,8 +181,8 @@ class C_menu_main extends Controller
 
             $dataArr = $this->M_menu_main->getMenuSettingsByModuleId($dataArr['id']);
             $dataArr = $this->getDefaultMenuData($dataArr);
-            
-            
+
+
             $dataArr['input'] = 'form_input';
 
 
@@ -204,7 +210,7 @@ class C_menu_main extends Controller
             $dataArr['input_value'] = $dataArr['menu_li_active'];
             $dataArr['input_lable'] = 'CSS класс для активного li';
             $content .= Core::app()->getHtml()->createInput($dataArr);
-            
+
             $dataArr['input_name'] = 'menu_a';
             $dataArr['input_value'] = $dataArr['menu_a'];
             $dataArr['input_lable'] = 'CSS класс для a';
@@ -227,27 +233,27 @@ class C_menu_main extends Controller
             {
                 $dataArr['menu_ul'] = 'nav-ul';
             }
-            
+
             if ($this->isEmpty($dataArr['menu_ul_level']))
             {
                 $dataArr['menu_ul_level'] = 'nav-ul-level';
             }
-            
+
             if ($this->isEmpty($dataArr['menu_li']))
             {
                 $dataArr['menu_li'] = 'nav-li';
             }
-            
+
             if ($this->isEmpty($dataArr['menu_li_active']))
             {
                 $dataArr['menu_li_active'] = 'nav-li-active';
-            }            
-            
+            }
+
             if ($this->isEmpty($dataArr['menu_a']))
             {
                 $dataArr['menu_a'] = 'nav-a';
             }
-            
+
             if ($this->isEmpty($dataArr['menu_span']))
             {
                 $dataArr['menu_span'] = 'nav-span';

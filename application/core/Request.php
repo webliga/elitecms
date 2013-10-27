@@ -19,6 +19,7 @@ class Request extends Base
     private $_get = null;
     private $_file;
     private $_host;
+    private $_routeRuleArr;
 
     function __construct()
     {
@@ -84,6 +85,11 @@ class Request extends Base
     /**
      * Обязательно переделать этот метод, нет нормального разбора урл
      */
+    public function setRouteRule($routeRuleArr)
+    {
+        $this->_routeRuleArr = $routeRuleArr;
+    }
+
     public function runParseUrl($url)
     {
         $configDefaultUrl = Core::app()->getConfig()->getConfigItem('default_module');
@@ -97,34 +103,37 @@ class Request extends Base
         $this->_controller = $configDefaultUrl['controller'];
         $this->_action = $configDefaultUrl['action'];
 
-        $routes = explode('?', $url);
-        
-        $routes = explode('/', $routes[0]);
+        if (isset($this->_routeRuleArr) && is_array($this->_routeRuleArr))
+        {
+            $routes = explode('?', $url);
 
-        // lang
-        if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
-        {
-            $this->_lang = $routes[1];
-        }
+            $routes = explode('/', $routes[0]);
 
-        // module
-        if (isset($routes[2]) && !$this->isEmpty($routes[2]))
-        {
-            $this->_module = $routes[2];
-        }
-        // controller
-        if (isset($routes[3]) && !$this->isEmpty($routes[3]))
-        {
-            $this->_controller = $routes[3];
-        }
-        // action       
-        if (isset($routes[4]) && !$this->isEmpty($routes[4]))
-        {
-            $this->_action = $routes[4];
-        }
-        else
-        {
-            $this->_action = DEFAULT_ACTION;
+            // lang
+            if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
+            {
+                $this->_lang = $routes[1];
+            }
+
+            // module
+            if (isset($routes[2]) && !$this->isEmpty($routes[2]))
+            {
+                $this->_module = $routes[2];
+            }
+            // controller
+            if (isset($routes[3]) && !$this->isEmpty($routes[3]))
+            {
+                $this->_controller = $routes[3];
+            }
+            // action       
+            if (isset($routes[4]) && !$this->isEmpty($routes[4]))
+            {
+                $this->_action = $routes[4];
+            }
+            else
+            {
+                $this->_action = DEFAULT_ACTION;
+            }
         }
     }
 

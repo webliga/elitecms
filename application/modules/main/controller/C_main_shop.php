@@ -33,7 +33,13 @@ class C_main_shop extends Controller
             
 ');
     }
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     public function create()
     {
         $this->loadModel('M_main', $this->getNameModule());

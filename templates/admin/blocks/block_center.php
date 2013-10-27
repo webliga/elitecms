@@ -23,6 +23,7 @@
 
 
 
+
         Core::app()->getTemplate()->getModulesByPosition('center_bottom');
         ?>
     </div>

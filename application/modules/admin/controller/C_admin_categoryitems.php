@@ -30,7 +30,14 @@ class C_admin_categoryitems extends Controller
     {
         $this->C_category_categoryitems->index($dataArr);
     }
+    
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     public function create()
     {
         $this->C_category_categoryitems->create();

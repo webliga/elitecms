@@ -30,16 +30,22 @@ class Route extends Base
 
         $this->_started = true;
 
-        // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
+// Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
-        
-// Проверяем ЧПУ (если в бд уже есть урл, то формируем $path_controller)
-        // Заодно вытягиваем настройки всех модулей
 
         Core::app()->getConfig()->selectSystemConfig($url);
 
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
+        
+// Масив с правилами роутинга, будет создаваться из файлов модулей        
+        $routeRuleArr = array(
+            'asas' => 'asasa',
+        );
+
+        $request->setRouteRule($routeRuleArr);
+        
+        
         $request->runParseUrl($url);
         $request->setGlobalVars();// Получаем get post данные (глобальные обнулятся)
         
@@ -134,10 +140,11 @@ class Route extends Base
                     Core::app()->getConfig()->setConfigItem('lang', $lang);
 
                     $action = $request->getAction();
+// Отрабатываем модуль, который выводит главное содержание страницы
+// и получаем страницу отображения контента
+                    $page = $module_controller->$action();
 
-                    $module_controller->$action();
-
-                    Core::app()->getTemplate()->show();
+                    Core::app()->getTemplate()->show($page);
                 }
                 else
                 {

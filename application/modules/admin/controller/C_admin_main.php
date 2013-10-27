@@ -33,6 +33,13 @@ class C_admin_main extends Controller
             контроллером с адресной строки. Сейчас находимся в админке');
     }
 
+        
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
+
+    }
+    
     public function create()
     {
 

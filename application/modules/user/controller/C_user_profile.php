@@ -30,26 +30,46 @@ class C_user_profile extends Controller
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
             контроллером с адресной строки. Сейчас находимся в user/profile
             
-');
+        ');
+    }
+
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
         
     }
-    
+
+    // Получаем поля формы для настройки модуля. Индивидуально для каждого модуля, реализуется в каждом модуле     
+    public function getModuleFormFildsConfig($dataArr = null)
+    {
+        
+    }
+
+    public function updateModuleFormFildsConfig($dataArr)
+    {
+        
+    }
+
+    public function deleteModuleDataById($id)
+    {
+        
+    }
+
     public function create()
     {
         
     }
 
-        
     public function update()
     {
         
     }
-    
-        
+
     public function delete()
     {
         
     }
+
 }
 
 ?>

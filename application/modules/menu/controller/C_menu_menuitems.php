@@ -48,9 +48,17 @@ class C_menu_menuitems extends Controller
             $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
 
             Core::app()->getTemplate()->setVar('content', $content);
+            
+            return 'index.tpl.php';
         }
     }
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();

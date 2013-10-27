@@ -15,11 +15,14 @@ define('NAME_FOLDER_ERROR','error');
 define('PREFIX_CONTROLLER','C_');
 define('PREFIX_MODEL','M_');
 define('PREFIX_CONFIG','config_');
+define('PREFIX_BLOCK','block_');
 
 define('DEFAULT_ACTION','index');
+define('DEFAULT_ACTION_MODULE_SHOW_DATA_BY_POSITION','showDataByPosition');
 define('DEFAULT_ACTION_MODULE_FORM','getModuleFormFildsConfig');
 define('DEFAULT_ACTION_MODULE_FORM_UPDATE','updateModuleFormFildsConfig');
 define('DEFAULT_ACTION_MODULE_FORM_DELETE','deleteModuleDataById');
+define('DEFAULT_PAGE_MAIN','index.tpl.php');
 
 define('PATH_TO_CORE','application/core');
 define('PATH_TO_APPLICATION','application');

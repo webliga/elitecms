@@ -50,7 +50,13 @@ class C_category_categoryitems extends Controller
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
+    
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
 
+    }
+    
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();

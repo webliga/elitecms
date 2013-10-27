@@ -28,10 +28,16 @@ class C_admin_newsitems extends Controller
      */
     public function index($dataArr = NULL)
     {
-        $this->C_news_newsitems->index($dataArr);
+        return $this->C_news_newsitems->index($dataArr);
 
     }
 
+    // Загружаем этот метод только для вывода в позиции модуля
+    public function showDataByPosition($dataArr = null)
+    {
+
+    }
+    
     public function create()
     {
         $this->C_news_newsitems->create();
