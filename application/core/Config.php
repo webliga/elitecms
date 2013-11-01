@@ -19,9 +19,9 @@ class Config extends Base
     {
         $path_to_config =
                 PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 PATH_TO_CONFIG .
-                SEPARATOR .
+                SD .
                 $fileName . '.php';
 
         if (file_exists($path_to_config))
@@ -100,40 +100,50 @@ class Config extends Base
         $result = $model->selectConfig();
 
 
-        $this->setConfigItem('modules', $result);
+        if (!isset($result['settings']['template_main']) || $this->isEmpty($result['settings']['template_main']))
+        {
+            $template = Core::app()->getConfig()->getConfigItem('default_template');
+            Core::app()->getTemplate()->setMainTemplateName($template['name']);
+        }
+        else
+        {
+            Core::app()->getTemplate()->setMainTemplateName($result['settings']['template_main']);
+        }
 
-        $template = Core::app()->getConfig()->getConfigItem('default_template');
-        Core::app()->getTemplate()->setMainTemplateName($template['name']);
+        $this->setConfigItem('modules', $result['modules']);
+        $this->setConfigItem('settings', $result['settings']);
+
+        //$this->echoPre($this->_data);
     }
 
     public function getModuleRouteRule()
     {
-        $dir = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES;
+        $result = null;
+
+        $dir = PATH_SITE_ROOT . SD . PATH_TO_MODULES;
         $loader = Core::app()->getLoader();
 
-
         $modulesDirArr = scandir($dir);
-        $modules;
+
 
         foreach ($modulesDirArr as $key => $value)
         {
             if ($value != '..' && $value != '.')
             {
-
-                $mConfig = $dir . SEPARATOR . $value . SEPARATOR . 'config' . SEPARATOR . PREFIX_CONFIG . 'admin_route.php';
+                $mConfig = $dir . SD . $value . SD . 'config' . SD . PFX_CONFIG . 'route.php';
                 $arr = $loader->loadFile($mConfig, true);
 
                 if (isset($arr) && is_array($arr))
                 {
                     foreach ($arr as $key => $value)
                     {
-                        $modules[$key] = $value;
+                        $result[$key] = $value;
                     }
                 }
             }
         }
 
-        $this->echoPre($modules);
+        return $result;
     }
 
 }

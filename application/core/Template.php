@@ -34,9 +34,9 @@ class Template extends Base
         {
             $path =
                     PATH_SITE_ROOT .
-                    SEPARATOR .
+                    SD .
                     NAME_FOLDER_TEMPLATES .
-                    SEPARATOR .
+                    SD .
                     $this->_nameTemplate;
         }
 
@@ -65,7 +65,7 @@ class Template extends Base
         {
             $path =
                     PATH_TO_DEFAULT_ERRORS .
-                    SEPARATOR .
+                    SD .
                     $nameFile .
                     EXT_TEMPLATE_FILE;
         }
@@ -73,11 +73,11 @@ class Template extends Base
         {
             $path =
                     $this->getCurrentTemplatePath(true) .
-                    SEPARATOR .
+                    SD .
                     NAME_FOLDER_HTML .
-                    SEPARATOR .
+                    SD .
                     NAME_FOLDER_ERROR .
-                    SEPARATOR .
+                    SD .
                     $nameFile .
                     EXT_TEMPLATE_FILE;
         }
@@ -183,16 +183,16 @@ class Template extends Base
         
         $path =
                 PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 PATH_TO_MODULES .
-                SEPARATOR .
+                SD .
                 $module['name_system'] .
-                SEPARATOR .
+                SD .
                 NAME_FOLDER_MODULES_CONTROLLERS .
-                SEPARATOR .
-                PREFIX_CONTROLLER .
+                SD .
+                PFX_CONTROLLER .
                 $module['name_system'] . 
-                SEPARATOR_MODULE_NAME .
+                SD_MODULE_NAME .
                 $module['name_controller'] . EXT_TEMPLATE_FILE;
                 
 
@@ -200,7 +200,7 @@ class Template extends Base
         {
             require_once  $path;
 
-            $className = PREFIX_CONTROLLER . $module['name_system'] . SEPARATOR_MODULE_NAME . $module['name_controller'];
+            $className = PFX_CONTROLLER . $module['name_system'] . SD_MODULE_NAME . $module['name_controller'];
             $mod = new $className;
             $mod->setNameModule($module['name_system']);
 
@@ -242,15 +242,15 @@ class Template extends Base
 
             $dataArr['path'] =
                     PATH_SITE_ROOT .
-                    SEPARATOR .
+                    SD .
                     $template['path'] .
-                    SEPARATOR .
+                    SD .
                     $template['name'] .
-                    SEPARATOR .
+                    SD .
                     'modules' .
-                    SEPARATOR .
+                    SD .
                     $dataArr['name_module'] .// Скорее всего нужно переименовать в name_system, что б небыло путаницы
-                    SEPARATOR .
+                    SD .
                     $dataArr['file_content_view'];
         }
 
@@ -289,7 +289,7 @@ class Template extends Base
         {
             $path =
                     PATH_TO_DEFAULT_WIDGETS .
-                    SEPARATOR .
+                    SD .
                     $nameWidget .
                     EXT_TEMPLATE_FILE;
         }
@@ -297,11 +297,11 @@ class Template extends Base
         {
             $path =
                     $this->getCurrentTemplatePath(true) .
-                    SEPARATOR .
+                    SD .
                     NAME_FOLDER_HTML .
-                    SEPARATOR .
+                    SD .
                     NAME_FOLDER_WIDGETS .
-                    SEPARATOR .
+                    SD .
                     $nameWidget . EXT_TEMPLATE_FILE;
                     
         }

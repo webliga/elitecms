@@ -1,6 +1,6 @@
 <?php
-define('SEPARATOR','/');
-define('SEPARATOR_MODULE_NAME','_');
+define('SD','/');
+define('SD_MODULE_NAME','_');
 
 define('EXT_TEMPLATE_FILE','.php');
 
@@ -12,10 +12,10 @@ define('NAME_FOLDER_TEMPLATES','templates');
 define('NAME_FOLDER_HTML','html');
 define('NAME_FOLDER_ERROR','error');
 
-define('PREFIX_CONTROLLER','C_');
-define('PREFIX_MODEL','M_');
-define('PREFIX_CONFIG','config_');
-define('PREFIX_BLOCK','block_');
+define('PFX_CONTROLLER','C_');
+define('PFX_MODEL','M_');
+define('PFX_CONFIG','config_');
+define('PFX_BLOCK','block_');
 
 define('DEFAULT_ACTION','index');
 define('DEFAULT_ACTION_MODULE_SHOW_DATA_BY_POSITION','showDataByPosition');
@@ -32,8 +32,8 @@ define('PATH_TO_CONFIG','application/config');
 define('PATH_TO_LIB','application/lib');
 define('PATH_SITE_ROOT',$_SERVER['DOCUMENT_ROOT']);
 
-define('PATH_TO_DEFAULT_WIDGETS',PATH_SITE_ROOT . SEPARATOR . PATH_TO_APPLICATION . SEPARATOR . NAME_FOLDER_HTML . SEPARATOR . NAME_FOLDER_WIDGETS);
-define('PATH_TO_DEFAULT_ERRORS',PATH_SITE_ROOT . SEPARATOR . PATH_TO_APPLICATION . SEPARATOR . NAME_FOLDER_HTML . SEPARATOR . NAME_FOLDER_ERROR);
+define('PATH_TO_DEFAULT_WIDGETS',PATH_SITE_ROOT . SD . PATH_TO_APPLICATION . SD . NAME_FOLDER_HTML . SD . NAME_FOLDER_WIDGETS);
+define('PATH_TO_DEFAULT_ERRORS',PATH_SITE_ROOT . SD . PATH_TO_APPLICATION . SD . NAME_FOLDER_HTML . SD . NAME_FOLDER_ERROR);
 
 require_once PATH_TO_CORE.'/Base.php';
 

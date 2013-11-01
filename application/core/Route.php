@@ -40,42 +40,35 @@ class Route extends Base
         
 // Масив с правилами роутинга, будет создаваться из файлов модулей    
         
-        $arrTestDelete = Core::app()->getConfig()->getModuleRouteRule();
+        $routeRuleArr = Core::app()->getConfig()->getModuleRouteRule();
         
-        
-        
-        $routeRuleArr = array(
-            'asas' => 'asasa',
-        );
-
+        $this->echoPre($routeRuleArr);
         $request->setRouteRule($routeRuleArr);
-        
-        
         $request->runParseUrl($url);
         $request->setGlobalVars();// Получаем get post данные (глобальные обнулятся)
         
         //путь к запускаемому контроллеру
         $path_controller =
                 PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 PATH_TO_MODULES .
-                SEPARATOR .
+                SD .
                 $request->getModuleName() .
-                SEPARATOR .
+                SD .
                 NAME_FOLDER_MODULES_CONTROLLERS .
-                SEPARATOR .
-                PREFIX_CONTROLLER . 
+                SD .
+                PFX_CONTROLLER . 
                 $request->getModuleName() . 
-                SEPARATOR_MODULE_NAME . 
+                SD_MODULE_NAME . 
                 $request->getController() . '.php';
-        
+
 // Получаем язык отображения                  
         $path_lang = PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 PATH_TO_LANG .
-                SEPARATOR .
+                SD .
                 $request->getLang() .
-                SEPARATOR .
+                SD .
                 $request->getLang() . '.php';
 
         if (file_exists($path_controller))
@@ -83,9 +76,9 @@ class Route extends Base
             Core::app()->getLoader()->loadFile($path_controller);
 
             $controllerClass = 
-                    PREFIX_CONTROLLER . 
+                    PFX_CONTROLLER . 
                     $request->getModuleName() . 
-                    SEPARATOR_MODULE_NAME . 
+                    SD_MODULE_NAME . 
                     $request->getController();
 
             if (!class_exists($controllerClass))
@@ -109,14 +102,14 @@ class Route extends Base
 
                 $path_module_config =
                         PATH_SITE_ROOT .
-                        SEPARATOR .
+                        SD .
                         PATH_TO_MODULES .
-                        SEPARATOR .
+                        SD .
                         $request->getModuleName() .
-                        SEPARATOR .
+                        SD .
                         NAME_FOLDER_MODULES_CONFIG .
-                        SEPARATOR .
-                        PREFIX_CONFIG . 'main.php';
+                        SD .
+                        PFX_CONFIG . 'main.php';
 
                 // Получаем настройки модуля (разрешения екшенов)  
                 // Нужно будет подумать, стоит ли вынести этот функционал в БД 
@@ -132,11 +125,11 @@ class Route extends Base
                     {
                         $path_lang =
                                 PATH_SITE_ROOT .
-                                SEPARATOR .
+                                SD .
                                 PATH_TO_LANG .
-                                SEPARATOR .
+                                SD .
                                 $request->getLang('ru') .
-                                SEPARATOR .
+                                SD .
                                 $request->getLang('ru') . '.php';
                     }
 

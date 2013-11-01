@@ -159,9 +159,9 @@ class Core extends Base
         
         $pathToClassUser =
                 PATH_SITE_ROOT . 
-                SEPARATOR . 
+                SD . 
                 $pathToClass .
-                SEPARATOR .
+                SD .
                 $className . '.php';
 
         self::app()->getLoader()->loadFile($pathToClassUser);

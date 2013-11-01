@@ -42,14 +42,14 @@ class Loader extends Base
 
         $path =
                 PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 $template['path'] .
-                SEPARATOR .
+                SD .
                 $template['name'] .
-                SEPARATOR .
+                SD .
                 'blocks' .
-                SEPARATOR .
-                PREFIX_BLOCK . 
+                SD .
+                PFX_BLOCK . 
                 $nameBlock . EXT_TEMPLATE_FILE;
 
         if ($this->issetFile($path))
@@ -79,13 +79,13 @@ class Loader extends Base
 
         $path =
                 PATH_SITE_ROOT .
-                SEPARATOR .
+                SD .
                 $template['path'] .
-                SEPARATOR .
+                SD .
                 $template['name'] .
-                SEPARATOR .
+                SD .
                 'pages' .
-                SEPARATOR .
+                SD .
                 $page;
 
         if ($this->issetFile($path))

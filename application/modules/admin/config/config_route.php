@@ -31,6 +31,7 @@
  */
 //Права доступа к модулю main
 $config = array(
-    'admin' => 'news/',   
+    'admin/([0-9a-z]+/[0-9a-z]+/[0-9a-z]+)' => 'news/',  
+    'admin/modules' => 'admin/modules',    
 );
 ?>

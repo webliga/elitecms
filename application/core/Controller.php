@@ -42,16 +42,16 @@ abstract class Controller extends Base
         }
         else
         {
-            $_module_name = SEPARATOR . $module_name;
+            $_module_name = SD . $module_name;
         }
 
         if($isController)
         {
-            $model_path = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES . $_module_name . SEPARATOR . NAME_FOLDER_MODULES_CONTROLLERS . SEPARATOR . $className . '.php';
+            $model_path = PATH_SITE_ROOT . SD . PATH_TO_MODULES . $_module_name . SD . NAME_FOLDER_MODULES_CONTROLLERS . SD . $className . '.php';
         }
         else
         {
-            $model_path = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES . $_module_name . SEPARATOR . NAME_FOLDER_MODULES_MODELS . SEPARATOR . $className . '.php';
+            $model_path = PATH_SITE_ROOT . SD . PATH_TO_MODULES . $_module_name . SD . NAME_FOLDER_MODULES_MODELS . SD . $className . '.php';
         }
 
         if (file_exists($model_path))

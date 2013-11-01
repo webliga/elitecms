@@ -22,9 +22,9 @@ class Model extends Base
             $nameClass = 'SafeMySQL';
             $path =
                     PATH_SITE_ROOT .
-                    SEPARATOR .
+                    SD .
                     PATH_TO_LIB .
-                    SEPARATOR .
+                    SD .
                     $nameClass .
                     '.php';
 
@@ -159,6 +159,24 @@ class Model extends Base
 
     public function selectConfig()
     {
+        //Выбираем главные настройки
+         //Выбираем настройки модулей
+        $querySettings = "
+            SELECT 
+                  settings.*
+            FROM settings 
+                ";
+        
+        $arr = $this->_db->getAll($querySettings);//$this->echoPre($result2);       
+        $settings = null;
+        for($i = 0;$i < count($arr);$i++)
+        {
+            $settings[$arr[$i]['name']] = $arr[$i]['value'];
+        }
+
+        $result['settings'] = $settings;
+        
+        //Выбираем настройки модулей
         $query = "SELECT 
                   modules.id as id_module, 
                   modules.name as name,                 
@@ -173,7 +191,8 @@ class Model extends Base
             WHERE modules.is_active = 1
                 ";
         
-        $result = $this->_db->getAll($query);//$this->echoPre($result);
+        $result['modules'] = $this->_db->getAll($query);
+
         return $result;
         
     }
