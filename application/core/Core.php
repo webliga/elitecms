@@ -164,7 +164,7 @@ class Core extends Base
                 SEPARATOR .
                 $className . '.php';
 
-        self::app()->getLoader()->loadClass($pathToClassUser);
+        self::app()->getLoader()->loadFile($pathToClassUser);
 
         return $className;
     }

@@ -20,9 +20,8 @@ class C_news_main extends Controller
     }
 
     /**
-     * index вызывается только в двух случаях
+     * index вызывается только в одном случаяе
      * 1. через url ($dataArr == null)
-     * 2. при выводе в позиции ($dataArr != null)
      */
     // Загружаем этот метод только из строки браузера
     // $dataArr - get параметры, передаваемые в строке браузера
@@ -42,11 +41,15 @@ class C_news_main extends Controller
 
             $dataArr = $this->M_news_main->getNewsById($id_news);
 
+            //$this->M_news_main->test();
+            
+            
+            
             $dataArr['path'] = '';
             $dataArr['name_module'] = $this->getNameModule();
             $dataArr['file_content_view'] = 'mod_news_detail.php';
-            $dataArr['return'] = true;
-            //$this->echoPre($dataArr);
+            $dataArr['return'] = true;//возвратить результат как текст (что б занести в переменную)
+
             $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
 
             //$this->echoPre($news);

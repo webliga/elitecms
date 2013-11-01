@@ -12,6 +12,7 @@
                 Core::app()->getTemplate()->showBlock('header');
                 ?>
                 <?php
+                
                 Core::app()->getTemplate()->showBlock('center');
                 ?>
                 <?php

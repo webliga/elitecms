@@ -38,7 +38,12 @@ class Route extends Base
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
         
-// Масив с правилами роутинга, будет создаваться из файлов модулей        
+// Масив с правилами роутинга, будет создаваться из файлов модулей    
+        
+        $arrTestDelete = Core::app()->getConfig()->getModuleRouteRule();
+        
+        
+        
         $routeRuleArr = array(
             'asas' => 'asasa',
         );
@@ -75,7 +80,7 @@ class Route extends Base
 
         if (file_exists($path_controller))
         {
-            Core::app()->getLoader()->loadClass($path_controller);
+            Core::app()->getLoader()->loadFile($path_controller);
 
             $controllerClass = 
                     PREFIX_CONTROLLER . 
@@ -116,7 +121,7 @@ class Route extends Base
                 // Получаем настройки модуля (разрешения екшенов)  
                 // Нужно будет подумать, стоит ли вынести этот функционал в БД 
                 // (для более гибкой и удобной настройки)
-                $configModule = Core::app()->getLoader()->loadClass($path_module_config, true);
+                $configModule = Core::app()->getLoader()->loadFile($path_module_config, true);
 
                 // Доступ екшена
                 $arrAccessAction['access'] = $configModule[$request->getController()][$request->getAction()];
@@ -135,7 +140,7 @@ class Route extends Base
                                 $request->getLang('ru') . '.php';
                     }
 
-                    $lang = Core::app()->getLoader()->loadClass($path_lang, true);
+                    $lang = Core::app()->getLoader()->loadFile($path_lang, true);
 
                     Core::app()->getConfig()->setConfigItem('lang', $lang);
 

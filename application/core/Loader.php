@@ -15,7 +15,7 @@ class Loader extends Base
         
     }
 
-    public function loadClass($path, $returnConfig = false)
+    public function loadFile($path, $returnConfig = false)
     {
         if ($this->issetFile($path))
         {
@@ -28,10 +28,14 @@ class Loader extends Base
         }
         else
         {
-            Core::app()->getError()->errorFileNotExist('Файл ' . $path . ' не существует!');
+            // Если возвращаем масив конфигураций и файла конфигураций небыло, то ошибку не выводим
+            if(!$returnConfig)
+            {
+                Core::app()->getError()->errorFileNotExist('Файл ' . $path . ' не существует!');
+            }
         }
-    }
-
+    }      
+    
     public function loadTemplateBlock($nameBlock)
     {
         $template = Core::app()->getConfig()->getConfigItem('default_template');

@@ -99,11 +99,41 @@ class Config extends Base
 
         $result = $model->selectConfig();
 
-        
+
         $this->setConfigItem('modules', $result);
 
         $template = Core::app()->getConfig()->getConfigItem('default_template');
         Core::app()->getTemplate()->setMainTemplateName($template['name']);
+    }
+
+    public function getModuleRouteRule()
+    {
+        $dir = PATH_SITE_ROOT . SEPARATOR . PATH_TO_MODULES;
+        $loader = Core::app()->getLoader();
+
+
+        $modulesDirArr = scandir($dir);
+        $modules;
+
+        foreach ($modulesDirArr as $key => $value)
+        {
+            if ($value != '..' && $value != '.')
+            {
+
+                $mConfig = $dir . SEPARATOR . $value . SEPARATOR . 'config' . SEPARATOR . PREFIX_CONFIG . 'admin_route.php';
+                $arr = $loader->loadFile($mConfig, true);
+
+                if (isset($arr) && is_array($arr))
+                {
+                    foreach ($arr as $key => $value)
+                    {
+                        $modules[$key] = $value;
+                    }
+                }
+            }
+        }
+
+        $this->echoPre($modules);
     }
 
 }

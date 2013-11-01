@@ -28,7 +28,7 @@ class Model extends Base
                     $nameClass .
                     '.php';
 
-            Core::app()->getLoader()->loadClass($path);
+            Core::app()->getLoader()->loadFile($path);
             $this->_db = new $nameClass($optionals);
         }
     }

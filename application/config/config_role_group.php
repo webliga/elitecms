@@ -1,5 +1,5 @@
 <?php
-
+// Это временный файл, данные настройки нужно вынести в бд
 $config = array(
     'groups' => array(
         'guest' => array(//Группа
@@ -54,6 +54,11 @@ $config = array(
                         'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
                         'edite' => array('r' => false, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
                     ),
+                    'newsitems' => array(// Контролер модуля
+                        'write' => array( 'w' => true,),
+                        'create' => array('c' => true,),
+                        'edite' => array('e' => true,),
+                    ),                  
                 ),
             )
         ),

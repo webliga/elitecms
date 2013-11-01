@@ -7,8 +7,6 @@ Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'db');
 Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'default');
 Core::app()->getConfig()->loadConfig(PREFIX_CONFIG.'role_group');
 
-//Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
-
 $time_start = microtime(true);
 
 
