@@ -37,16 +37,14 @@ class Route extends Base
 
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
-        
+
 // Масив с правилами роутинга, будет создаваться из файлов модулей    
-        
         $routeRuleArr = Core::app()->getConfig()->getModuleRouteRule();
-        
-        $this->echoPre($routeRuleArr);
+
         $request->setRouteRule($routeRuleArr);
+        $request->setGlobalVars(); // Получаем get post данные (глобальные обнулятся)
         $request->runParseUrl($url);
-        $request->setGlobalVars();// Получаем get post данные (глобальные обнулятся)
-        
+
         //путь к запускаемому контроллеру
         $path_controller =
                 PATH_SITE_ROOT .
@@ -57,9 +55,9 @@ class Route extends Base
                 SD .
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SD .
-                PFX_CONTROLLER . 
-                $request->getModuleName() . 
-                SD_MODULE_NAME . 
+                PFX_CONTROLLER .
+                $request->getModuleName() .
+                SD_MODULE_NAME .
                 $request->getController() . '.php';
 
 // Получаем язык отображения                  
@@ -71,19 +69,19 @@ class Route extends Base
                 SD .
                 $request->getLang() . '.php';
 
-        if (file_exists($path_controller))
+        if ($this->issetFile($path_controller))
         {
             Core::app()->getLoader()->loadFile($path_controller);
 
-            $controllerClass = 
-                    PFX_CONTROLLER . 
-                    $request->getModuleName() . 
-                    SD_MODULE_NAME . 
+            $controllerClass =
+                    PFX_CONTROLLER .
+                    $request->getModuleName() .
+                    SD_MODULE_NAME .
                     $request->getController();
 
             if (!class_exists($controllerClass))
             {
-                Core::app()->getError()->errorPage404('3 Класс '.$controllerClass.' не существует');
+                Core::app()->getError()->errorPage404('3 Класс ' . $controllerClass . ' не существует');
             }
 
             $module_controller = new $controllerClass;
@@ -93,7 +91,6 @@ class Route extends Base
             {
                 // вызываем действие контроллера и включаем язык
                 // проверяем доступ пользователя к екшену
-
                 $arrAccessAction = array(
                     'module' => $request->getModuleName(),
                     'controller' => $request->getController(),
@@ -112,14 +109,15 @@ class Route extends Base
                         PFX_CONFIG . 'main.php';
 
                 // Получаем настройки модуля (разрешения екшенов)  
-                // Нужно будет подумать, стоит ли вынести этот функционал в БД 
-                // (для более гибкой и удобной настройки)
-                $configModule = Core::app()->getLoader()->loadFile($path_module_config, true);
+                // Разработчик модуля прописывает тип  доступа к экшену
+                $configModule = Core::app()->getLoader()->loadFile($path_module_config, true, false);
 
                 // Доступ екшена
-                $arrAccessAction['access'] = $configModule[$request->getController()][$request->getAction()];
+                $arrAccessAction['access'] = $configModule['controller'][$request->getController()]['action'][$request->getAction()];
 
-                if (Core::app()->getUser()->checkUserAccess($arrAccessAction))
+                Core::app()->echoPre($arrAccessAction);
+//Сначала проверяем доступен ли данный экшн только из админки? А потом уже груповой доступ
+                if ($arrAccessAction['access']['callFromAdmin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {
                     if (!file_exists($path_lang))
                     {

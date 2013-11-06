@@ -29,46 +29,42 @@
  * 
  * 
  */
-//Права доступа к модулю main
+
 $config = array(
-    'main' => array(//Контроллер
-        // Действия
-        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
-        'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
-        'write' => array('r' => false, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
-        'edite' => array('r' => false, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
+    'is_admin' => true, //Является ли модуль административным (отображение админки)
+    'controller' => array(// Настройки контроллеров
+        'main' => array(// Имя контроллера
+            'action' => array(// Настройки экшна
+                'index' => array(// Имя экшна
+                    'desc' => 'Главная админки', //Описание экшна 
+                    'accessType' => array(
+                        'r' => true,
+                    ), //Доступ к экшну для пользователя по url
+                    'callFromAdmin' => true, // Доступ только из админки по url?
+                ),
+            ),
+            'desc' => 'Главная страница админки', //Описание контроллера 
+        ),
+        'modules' => array(// Имя контроллера
+            'action' => array(// Настройки экшна
+                'index' => array(// Имя экшна
+                    'desc' => 'Модули', //Описание экшна 
+                    'accessType' => array(
+                        'r' => true,
+                    ), //Доступ к экшну для пользователя по url
+                    'callFromAdmin' => true, // Доступ только из админки по url?
+                ),
+                'create' => array(// Имя экшна
+                    'desc' => 'Создание модуля', //Описание экшна 
+                    'accessType' => array(
+                        'c' => true,
+                    ), //Доступ к экшну для пользователя по url
+                    'callFromAdmin' => true, // Доступ только из админки по url?
+                ),                
+            ),
+            'desc' => 'Главная страница списка модули', //Описание контроллера 
+        ),        
     ),
-    'modules' => array(//Контроллер
-        // Действия
-        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
-        'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
-        'update' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
-        'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
-        'delete' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
-    ),
-    'menuitems' => array(//Контроллер
-        // Действия
-        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
-        'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
-        'update' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
-        'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
-        'delete' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
-    ),  
-    'categoryitems' => array(//Контроллер
-        // Действия
-        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
-        'create' => array('r' => true, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
-        'update' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
-        'edite' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
-        'delete' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
-    ),  
-    'newsitems' => array(//Контроллер
-        // Действия
-        'index' => array('r' => true, 'c' => false, 'w' => false, 'e' => false, 'd' => false),
-        'create' => array('r' => true, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
-        'update' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => false),
-        'edite' => array('e' => true, ),
-        'delete' => array('r' => true, 'c' => false, 'w' => false, 'e' => true, 'd' => false),        
-    ),    
 );
+
 ?>

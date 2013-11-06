@@ -15,11 +15,18 @@ class Loader extends Base
         
     }
 
-    public function loadFile($path, $returnConfig = false)
+    public function loadFile($path, $returnConfig = false, $once = true)
     {
         if ($this->issetFile($path))
         {
-            require_once $path;
+            if($once)
+            {
+                require_once $path;
+            }
+            else
+            {
+                require $path;
+            }
 
             if ($returnConfig)
             {

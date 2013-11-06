@@ -9,17 +9,18 @@
 class Request extends Base
 {
 
-    private $_lang;
-    private $_module;
-    private $_controller;
-    private $_action;
-    private $_params;
-    private $_url;
+    private $_lang = null;
+    private $_module = null;
+    private $_controller = null;
+    private $_action = null;
+    private $_params = null;
+    private $_url = null;
     private $_post = null;
     private $_get = null;
     private $_file;
     private $_host;
     private $_routeRuleArr;
+    private $_callFromAdmin = false;
 
     function __construct()
     {
@@ -90,12 +91,38 @@ class Request extends Base
         $this->_routeRuleArr = $routeRuleArr;
     }
 
+    private function setCallFromAdmin($url)
+    {
+        $this->parse($url);
+
+        if (!$this->isEmpty($this->_module))
+        {
+            $path_module_config =
+                    PATH_SITE_ROOT .
+                    SD .
+                    PATH_TO_MODULES .
+                    SD .
+                    $this->_module .
+                    SD .
+                    NAME_FOLDER_MODULES_CONFIG .
+                    SD .
+                    PFX_CONFIG . 'main.php';
+
+            $configModule = Core::app()->getLoader()->loadFile($path_module_config, true);
+
+            if (isset($configModule['is_admin']) && $configModule['is_admin'])
+            {
+                $this->_callFromAdmin = $configModule['is_admin'];
+            }
+        }
+    }
+
     public function runParseUrl($url)
     {
         $configDefaultUrl = Core::app()->getConfig()->getConfigItem('default_module');
         $configDefaultLang = Core::app()->getConfig()->getConfigItem('default_lang');
 
-        //Core::app()->echoPre($configDefaultUrl);
+
         // Ставим путь по умолчанию
         $this->_url = $url;
         $this->_lang = $configDefaultLang['name'];
@@ -103,37 +130,63 @@ class Request extends Base
         $this->_controller = $configDefaultUrl['controller'];
         $this->_action = $configDefaultUrl['action'];
 
+        $routes = explode('?', $url); //если в строке есть get параметры через ?
+        
+        // Если наш модуль административный
+        $this->setCallFromAdmin($routes[0]);
+
         if (isset($this->_routeRuleArr) && is_array($this->_routeRuleArr))
         {
-            $routes = explode('?', $url);
+            $patternArr = array();
+            $replacementArr = array();
 
-            $routes = explode('/', $routes[0]);
-
-            // lang
-            if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
+            foreach ($this->_routeRuleArr as $key => $value)
             {
-                $this->_lang = $routes[1];
+                array_push($patternArr, $key);
+                array_push($replacementArr, $value);
             }
 
-            // module
-            if (isset($routes[2]) && !$this->isEmpty($routes[2]))
-            {
-                $this->_module = $routes[2];
-            }
-            // controller
-            if (isset($routes[3]) && !$this->isEmpty($routes[3]))
-            {
-                $this->_controller = $routes[3];
-            }
-            // action       
-            if (isset($routes[4]) && !$this->isEmpty($routes[4]))
-            {
-                $this->_action = $routes[4];
-            }
-            else
-            {
-                $this->_action = DEFAULT_ACTION;
-            }
+            $routes[0] = preg_replace($patternArr, $replacementArr, $routes[0]);
+        }
+        
+        $this->parse($routes[0]);
+    }
+
+    private function parse($url)
+    {
+        Core::app()->echoPre($url);
+        
+        $routes = explode('/', $url);
+
+        Core::app()->echoPre($routes);
+        // Скорее всего нужно получить все языки, которые у нас установленны
+        // и сравниваем языки с первой переменной. Если совпадает, то определили язык,
+        // нет, значит ищем в сессии и куках, если там нет, то ставим по умолчанию и расцениваем, что это у нас модуль
+        // Аналогичные проверки делаем для модуля
+        // lang
+        if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
+        {
+            $this->_lang = $routes[1];
+        }
+
+        // module
+        if (isset($routes[2]) && !$this->isEmpty($routes[2]))
+        {
+            $this->_module = $routes[2];
+        }
+        // controller
+        if (isset($routes[3]) && !$this->isEmpty($routes[3]))
+        {
+            $this->_controller = $routes[3];
+        }
+        // action       
+        if (isset($routes[4]) && !$this->isEmpty($routes[4]))
+        {
+            $this->_action = $routes[4];
+        }
+        else
+        {
+            $this->_action = DEFAULT_ACTION;
         }
     }
 
@@ -172,6 +225,11 @@ class Request extends Base
     public function getUrl()
     {
         return $this->_url;
+    }
+
+    public function getCallFromAdmin()
+    {
+        return $this->_callFromAdmin;
     }
 
     public function redirect($url, $terminate = true, $statusCode = 302)

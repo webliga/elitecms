@@ -40,7 +40,7 @@ class C_admin_newsitems extends Controller
     
     public function create()
     {
-        $this->C_news_newsitems->create();
+        //$this->C_news_newsitems->create();
     }
 
     public function update()

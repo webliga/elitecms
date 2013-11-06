@@ -169,9 +169,6 @@ class Core extends Base
         return $className;
     }
 
-
-
-
     // Доступ к главному класу (сделан как singleton))
     public static function app()
     {

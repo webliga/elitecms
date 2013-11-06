@@ -31,6 +31,6 @@
  */
 //Права доступа к модулю main
 $config = array(
-    'main' => 'news/',
+    //'main' => 'news/',
 );
 ?>

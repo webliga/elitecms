@@ -8,7 +8,6 @@
  */
 class C_menu_menuitems extends Controller
 {
-
     function __construct()
     {
         parent::__construct();

@@ -37,11 +37,11 @@ define('PATH_TO_DEFAULT_ERRORS',PATH_SITE_ROOT . SD . PATH_TO_APPLICATION . SD .
 
 require_once PATH_TO_CORE.'/Base.php';
 
-require_once PATH_TO_CORE.'/Access.php';
+//require_once PATH_TO_CORE.'/Access.php';
 require_once PATH_TO_CORE.'/Controller.php';
 require_once PATH_TO_CORE.'/Model.php'; 
 require_once PATH_TO_CORE.'/Config.php';
 
-require_once PATH_TO_CORE.'/Template.php';
+//require_once PATH_TO_CORE.'/Template.php';
 require_once PATH_TO_CORE.'/Core.php';
 require_once PATH_TO_CORE.'/Loader.php';

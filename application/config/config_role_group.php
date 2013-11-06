@@ -1,4 +1,5 @@
 <?php
+
 // Это временный файл, данные настройки нужно вынести в бд
 $config = array(
     'groups' => array(
@@ -44,6 +45,12 @@ $config = array(
                     ),
                 ),
                 'admin' => array(// Модуль
+                    'main' => array(// Контролер модуля
+                        'index' => array('r' => true,),
+                        'create' => array('c' => true,),
+                        'edite' => array('e' => true,),
+                        'delete' => array('d' => true,),
+                    ),
                     'modules' => array(// Контролер модуля
                         'write' => array('r' => true, 'c' => false, 'w' => true, 'e' => false, 'd' => true),
                         'create' => array('r' => false, 'c' => true, 'w' => false, 'e' => false, 'd' => false),
@@ -55,10 +62,27 @@ $config = array(
                         'edite' => array('r' => false, 'c' => false, 'w' => false, 'e' => true, 'd' => false),
                     ),
                     'newsitems' => array(// Контролер модуля
-                        'write' => array( 'w' => true,),
+                        'write' => array('w' => true,),
                         'create' => array('c' => true,),
                         'edite' => array('e' => true,),
-                    ),                  
+                    ),
+                ),
+                'news' => array(// Модуль
+                    'newsitems' => array(// Контролер модуля
+                        'index' => array('r' => true,),
+                        'create' => array('c' => true,),
+                        'edite' => array('e' => true,),
+                        'delete' => array('d' => true,),
+                    ),
+                ),
+                'category' => array(// Модуль
+                    'categoryitems' => array(// Контролер модуля
+                        'index' => array('r' => true,),
+                        'create' => array('c' => true,),
+                        'edite' => array('e' => true,),
+                        'delete' => array('d' => true,),
+                        'update' => array('e' => true,),
+                    ),
                 ),
             )
         ),

@@ -31,7 +31,9 @@
  */
 //Права доступа к модулю main
 $config = array(
-    'category/create' => 'category/',
-    'categoryitems' => 'category/categoryitems',
+    '/category\/([0-9]+)/' => 'category/main/index/$1',
+    '/category\/([a-z]+)\/([0-9]+)/' => 'category/main/index/$2',
+    '/category\/create/' => 'category/categoryitems/create',
+    '/categoryitems/' => 'category/categoryitems',
 );
 ?>

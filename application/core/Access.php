@@ -101,16 +101,19 @@ class Access extends Base
                                 // Если это наш екшн
                                 if ($key_action == $arrAccessAction['action'] || $key_action == '*')
                                 {
+                                    Core::app()->echoPre($access_user_group);
+                                
+                                
                                     // Реализовать проверку доступа  конкретного пользователя
                                     // Например, редактор только тот, кто создал статью и модератор
                                     // Скорее всего проверка на id пользователя и id статьи или в базе булево значение прописать 
                                     if (
                                             // Если доступ групы позволяет доступ екшена (доступ пользователя здесь не проверяется)
-                                            (isset($arrAccessAction['access']['d']) && $arrAccessAction['access']['d'] && $value_action_arr[$key_action]['d']) ||
-                                            (isset($arrAccessAction['access']['e']) && $arrAccessAction['access']['e'] && $value_action_arr[$key_action]['e']) ||
-                                            (isset($arrAccessAction['access']['w']) && $arrAccessAction['access']['w'] && $value_action_arr[$key_action]['w']) ||
-                                            (isset($arrAccessAction['access']['c']) && $arrAccessAction['access']['c'] && $value_action_arr[$key_action]['c']) ||
-                                            (isset($arrAccessAction['access']['r']) && $arrAccessAction['access']['r'] && $value_action_arr[$key_action]['r'])
+                                            (isset($arrAccessAction['access']['accessType']['d']) && $arrAccessAction['access']['accessType']['d'] && $value_action_arr[$key_action]['d']) ||
+                                            (isset($arrAccessAction['access']['accessType']['e']) && $arrAccessAction['access']['accessType']['e'] && $value_action_arr[$key_action]['e']) ||
+                                            (isset($arrAccessAction['access']['accessType']['w']) && $arrAccessAction['access']['accessType']['w'] && $value_action_arr[$key_action]['w']) ||
+                                            (isset($arrAccessAction['access']['accessType']['c']) && $arrAccessAction['access']['accessType']['c'] && $value_action_arr[$key_action]['c']) ||
+                                            (isset($arrAccessAction['access']['accessType']['r']) && $arrAccessAction['access']['accessType']['r'] && $value_action_arr[$key_action]['r'])
                                     )
                                     {
                                         $bool = true;
