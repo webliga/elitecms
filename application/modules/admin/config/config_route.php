@@ -34,6 +34,7 @@ $config = array(
     '/admin\/((.)*)/' => '$1',  
     '/admin\/?$/' => 'admin/main',  
       
-    '/modules/' => 'admin/modules',    
+    '/modules/' => 'admin/modules', 
+    '/settings/' => 'admin/settings',    
 );
 ?>

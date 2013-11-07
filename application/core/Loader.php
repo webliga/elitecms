@@ -45,14 +45,10 @@ class Loader extends Base
     
     public function loadTemplateBlock($nameBlock)
     {
-        $template = Core::app()->getConfig()->getConfigItem('default_template');
+        $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true);
 
         $path =
-                PATH_SITE_ROOT .
-                SD .
-                $template['path'] .
-                SD .
-                $template['name'] .
+                $templateName .
                 SD .
                 'blocks' .
                 SD .
@@ -77,24 +73,21 @@ class Loader extends Base
 
     public function loadTemplate($page = null)
     {
-        $template = Core::app()->getConfig()->getConfigItem('default_template');
-
+        $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true); 
+        
         if(!isset($page) || $this->isEmpty($page))
         {
             $page = DEFAULT_PAGE_MAIN;
         }
 
         $path =
-                PATH_SITE_ROOT .
-                SD .
-                $template['path'] .
-                SD .
-                $template['name'] .
+                $templateName .
                 SD .
                 'pages' .
                 SD .
                 $page;
-
+        
+        
         if ($this->issetFile($path))
         {
             require_once $path;

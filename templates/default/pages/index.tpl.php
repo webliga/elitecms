@@ -7,10 +7,12 @@
     <body>
         <div align="center">
             <div class="main">
+                
                 <?php
                 Core::app()->getTemplate()->showBlock('header');
                 ?>
                 <?php
+                
                 Core::app()->getTemplate()->showBlock('center');
                 ?>
                 <?php

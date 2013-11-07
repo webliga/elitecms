@@ -103,7 +103,7 @@ class Model extends Base
             $fildTableNameCondition = 'id';
         }
         
-        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE ?n = ?i"  , $nameTable, $dataArr, $fildTableNameCondition, $fildTableValueCondition);
+        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE ?n = ?s"  , $nameTable, $dataArr, $fildTableNameCondition, $fildTableValueCondition);
         
         $this->_db->query($sql);
     }     

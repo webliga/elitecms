@@ -8,9 +8,10 @@
  */
 class Template extends Base
 {
-
     public $_data;
     private $_nameTemplate = '';
+    private $_nameAdminTemplate = '';
+
 
     function __construct()
     {
@@ -24,11 +25,17 @@ class Template extends Base
 
     public function getCurrentTemplatePath($system = false)
     {
+        // Если отображаем административный модуль  то $templateName = template_admin
+        $templateName = $this->getCurrentTemplateName(Core::app()->getRequest()->getCallFromAdmin());
+
         $path = '';
 
         if (!$system)
         {
-            $path = '/templates/' . $this->_nameTemplate . '/';
+            $path = 
+                    NAME_FOLDER_TEMPLATES . 
+                    '/' . 
+                    $templateName;
         }
         else
         {
@@ -37,15 +44,32 @@ class Template extends Base
                     SD .
                     NAME_FOLDER_TEMPLATES .
                     SD .
-                    $this->_nameTemplate;
+                    $templateName;
         }
 
         return $path;
     }
 
+    public function getCurrentTemplateName($admin = false)
+    {
+        if (!$admin)
+        {
+            return $this->_nameTemplate;
+        }
+        else
+        {
+            return $this->_nameAdminTemplate;
+        }
+    }
+
     public function setMainTemplateName($nameTemplate)
     {
         $this->_nameTemplate = $nameTemplate;
+    }
+
+    public function setAdminTemplateName($nameTemplate)
+    {
+        $this->_nameAdminTemplate = $nameTemplate;
     }
 
     public function showDanger($err, $nameFile = null, $inTemplate = false)
@@ -175,12 +199,11 @@ class Template extends Base
 // Получаем данные модуля
     private function moduleActionContentView($module)
     {//Реализовать возможность вызова модуля из другого домена, по типу hmvc
-        
-        if(!isset($module['name_controller']) ||  $this->isEmpty($module['name_controller']))
+        if (!isset($module['name_controller']) || $this->isEmpty($module['name_controller']))
         {
             $module['name_controller'] = 'main';
         }
-        
+
         $path =
                 PATH_SITE_ROOT .
                 SD .
@@ -191,14 +214,14 @@ class Template extends Base
                 NAME_FOLDER_MODULES_CONTROLLERS .
                 SD .
                 PFX_CONTROLLER .
-                $module['name_system'] . 
+                $module['name_system'] .
                 SD_MODULE_NAME .
                 $module['name_controller'] . EXT_TEMPLATE_FILE;
-                
+
 
         if ($this->issetFile($path))
         {
-            require_once  $path;
+            require_once $path;
 
             $className = PFX_CONTROLLER . $module['name_system'] . SD_MODULE_NAME . $module['name_controller'];
             $mod = new $className;
@@ -218,7 +241,7 @@ class Template extends Base
 
             unset($module['name_system']);
             unset($module['name_controller']);
-            
+
             if (isset($module['return']) && $module['return'])
             {
                 $content = $mod->$action($module);
@@ -238,18 +261,14 @@ class Template extends Base
     {
         if (!isset($dataArr['path']) || $this->isEmpty($dataArr['path']))
         {
-            $template = Core::app()->getConfig()->getConfigItem('default_template');
+            $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true);
 
             $dataArr['path'] =
-                    PATH_SITE_ROOT .
-                    SD .
-                    $template['path'] .
-                    SD .
-                    $template['name'] .
+                    $templateName .
                     SD .
                     'modules' .
                     SD .
-                    $dataArr['name_module'] .// Скорее всего нужно переименовать в name_system, что б небыло путаницы
+                    $dataArr['name_module'] . // Скорее всего нужно переименовать в name_system, что б небыло путаницы
                     SD .
                     $dataArr['file_content_view'];
         }
@@ -303,7 +322,6 @@ class Template extends Base
                     NAME_FOLDER_WIDGETS .
                     SD .
                     $nameWidget . EXT_TEMPLATE_FILE;
-                    
         }
 
         $content = $this->getRenderedHtml($path, $dataArr, false);

@@ -42,24 +42,26 @@ class C_news_main extends Controller
             $dataArr = $this->M_news_main->getNewsById($id_news);
 
             //$this->M_news_main->test();
-            
-            
-            
+
+
+
             $dataArr['path'] = '';
             $dataArr['name_module'] = $this->getNameModule();
             $dataArr['file_content_view'] = 'mod_news_detail.php';
-            $dataArr['return'] = true;//возвратить результат как текст (что б занести в переменную)
+            $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
 
             //$this->echoPre($news);
+            Core::app()->getTemplate()->setVar('title_page', $dataArr['name']);
 
             Core::app()->getTemplate()->setVar('content', $content . 'Главный контент. Сейчас находимся в news/main');
-        
+
             return 'index.tpl.php'; // Тут нужно возвратить шаблон страницы отображения
         }
         else
         {
+            Core::app()->getTemplate()->setVar('title_page', 'Не хватает данных');
             Core::app()->getTemplate()->setVar('content', 'Не хватает данных');
         }
     }

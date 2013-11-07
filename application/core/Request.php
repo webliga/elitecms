@@ -154,11 +154,11 @@ class Request extends Base
 
     private function parse($url)
     {
-        Core::app()->echoPre($url);
+        //Core::app()->echoPre($url);
         
         $routes = explode('/', $url);
 
-        Core::app()->echoPre($routes);
+        //Core::app()->echoPre($routes);
         // Скорее всего нужно получить все языки, которые у нас установленны
         // и сравниваем языки с первой переменной. Если совпадает, то определили язык,
         // нет, значит ищем в сессии и куках, если там нет, то ставим по умолчанию и расцениваем, что это у нас модуль

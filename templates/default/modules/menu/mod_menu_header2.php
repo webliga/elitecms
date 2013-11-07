@@ -1,4 +1,4 @@
-<div class="collapse navbar-collapse header">
+<div class="collapse navbar-collapse">
     <!--<ul class="nav navbar-nav">-->
     <?php
     // Пункты меню создаются в методе createMenuTreeView модуля menu, контроллер C_menu_main

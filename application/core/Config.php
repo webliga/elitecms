@@ -110,6 +110,18 @@ class Config extends Base
             Core::app()->getTemplate()->setMainTemplateName($result['settings']['template_main']);
         }
 
+        if (!isset($result['settings']['template_admin']) || $this->isEmpty($result['settings']['template_admin']))
+        {
+            // Если в настройках нету указано шаблона для админки, то ставим тот что на сайте
+            $template = Core::app()->getTemplate()->getCurrentTemplateName();
+            Core::app()->getTemplate()->setAdminTemplateName($template);
+        }
+        else
+        {
+            Core::app()->getTemplate()->setAdminTemplateName($result['settings']['template_admin']);
+        }
+        
+        
         $this->setConfigItem('modules', $result['modules']);
         $this->setConfigItem('settings', $result['settings']);
 

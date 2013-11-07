@@ -101,7 +101,7 @@ class Access extends Base
                                 // Если это наш екшн
                                 if ($key_action == $arrAccessAction['action'] || $key_action == '*')
                                 {
-                                    Core::app()->echoPre($access_user_group);
+                                    //Core::app()->echoPre($access_user_group);
                                 
                                 
                                     // Реализовать проверку доступа  конкретного пользователя

@@ -56,6 +56,12 @@
     float: left;
 }
 
+.checkbox2
+{
+    border: 0px solid red;
+    width: 150px;
+    float: left;
+}
 .control-group
 {
     border: 0px solid red;

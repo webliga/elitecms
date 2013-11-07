@@ -1,34 +1,5 @@
 <?php
 
-/*
- * Нужно подумать  переписать ли примерно так?
- * $config = array(
- * 'r' => array(
- *      'main' => array('index'),
- *      'shop' => array('index'),
- *   ),
- * 
- * 'c' => array(
- *      'main' => array('create'),
- *      'shop' => array('create'),
- *   ),
- * 
- * 'w' => array(
- *      'main' => array('write'),
- *   ),
- * 
- * 'e' => array(
- *      'main' => array('edite'),
- *   ),  
- * 
- * 'd' => array(), 
- * 
- * );
- * 
- * 
- * 
- * 
- */
 $config = array(
     'is_admin' => false, //Является ли модуль административным (отображение админки)
     'controller' => array(// Настройки контроллеров
@@ -67,6 +38,13 @@ $config = array(
                         ),
                     'callFromAdmin' => true,
                 ),
+                'update' => array(
+                    'desc' => 'Редактирование новости',
+                    'accessType' => array(
+                        'e' => true,
+                        ),
+                    'callFromAdmin' => true,
+                ),                
                 'delete' => array(
                     'desc' => 'Удаление новости',
                     'accessType' => array(

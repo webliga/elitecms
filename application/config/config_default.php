@@ -3,8 +3,8 @@
 $config = array(
     'default_template' => array(
         'name' => 'admin',
-        'path' => 'templates',
-    ),
+        //'path' => 'templates',
+    ),    
     'default_module' => array(
         'name' => 'main',
         'controller' => 'main',
@@ -56,7 +56,7 @@ $config = array(
         ),          
     ),
     'default_role' => array(
-        'user_group' => 'admin',
+        'user_group' => 'superadmin',
         'access' => '',
         'path' => array('*'),
     ),

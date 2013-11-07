@@ -115,7 +115,7 @@ class Route extends Base
                 // Доступ екшена
                 $arrAccessAction['access'] = $configModule['controller'][$request->getController()]['action'][$request->getAction()];
 
-                Core::app()->echoPre($arrAccessAction);
+                //Core::app()->echoPre($arrAccessAction);
 //Сначала проверяем доступен ли данный экшн только из админки? А потом уже груповой доступ
                 if ($arrAccessAction['access']['callFromAdmin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($arrAccessAction))
                 {

@@ -8,7 +8,7 @@
                     {
                 ?>
                 
-                <a href="<?php echo Core::app()->getHtml()->createUrl('admin/' . $createPath); ?>" title="<?php echo $createTitle  ?>"><img src="<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(false); ?>img/add.png" alt="" width="50"></a>
+                <a href="<?php echo Core::app()->getHtml()->createUrl('admin/' . $createPath); ?>" title="<?php echo $createTitle  ?>"><img src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(false); ?>/img/add.png" alt="" width="50"></a>
                 <?php
                     }
                 ?>
