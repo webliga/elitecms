@@ -1,7 +1,4 @@
 <div class="center">
-
-22
-
     <?php
     Core::app()->getTemplate()->getModulesByPosition('center_top');
 
