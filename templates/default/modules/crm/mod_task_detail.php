@@ -15,9 +15,10 @@
     </div>
 
     <div class="text">
-
-        <a href="/ru/crm/tasks/edite/?id=<?php echo $dataArr['id']; ?>">редактировать</a>
-        
+<br/><br/> <br/><br/> 
+        <a href="/ru/crm/tasks/edite/?id=<?php echo $dataArr['id']; ?>">редактировать</a><br/><br/>
+        <a href="/ru/crm/tasks/create/?id_parent=<?php echo $dataArr['id']; ?>">создать подзадачу</a> <br/><br/>  
+        <a href="/ru/crm/tasks/delete/?id=<?php echo $dataArr['id']; ?>">удалить эту задачу</a>   <br/><br/>     
     </div>
 
 </div>

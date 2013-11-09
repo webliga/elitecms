@@ -84,6 +84,8 @@ abstract class Controller extends Base
         }
     }
 
+    //abstract public function getModuleElementsByCategoryId($id);
+
     abstract public function index($dataArr = null);
     
     abstract public function showDataByPosition($dataArr = null);

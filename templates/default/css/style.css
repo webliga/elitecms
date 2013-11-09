@@ -110,3 +110,25 @@
 {
     margin: 20px 0px 0px 0px;     
 }
+
+span.task_menu_a
+{
+    border-bottom: 1px dotted #999999;
+    color: #999999;
+    font-size: 12px;
+    padding-left: 0px;
+}
+
+
+span.task_menu_a_complete
+{
+    border-bottom: 1px dotted #999999;
+    color: green;
+    font-size: 12px;
+    padding-left: 0px;
+}
+
+.menu_li 
+{
+    margin-bottom: 20px;
+}

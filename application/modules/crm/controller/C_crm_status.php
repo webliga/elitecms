@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_crm_tasks extends Controller
+class C_crm_status extends Controller
 {
 
     function __construct()
@@ -15,8 +15,8 @@ class C_crm_tasks extends Controller
 
         $this->init();
 
-        Core::app()->getTemplate()->setVar('createPath', 'crm/tasks/create');
-        Core::app()->getTemplate()->setVar('createTitle', 'Создать новость/статью');
+        Core::app()->getTemplate()->setVar('createPath', 'crm/status/create');
+        Core::app()->getTemplate()->setVar('createTitle', 'Создать статус');
     }
 
     function __destruct()
@@ -31,17 +31,18 @@ class C_crm_tasks extends Controller
     {
         $get = Core::app()->getRequest()->getGet();
 
+        $this->loadModule('M_crm_status', 'crm');
+        
         if ($get != null)
         {
-            $id_task = $get['id'];
+            $id_status = $get['id'];
 
-            $this->loadModule('M_crm_tasks', 'crm');
 
-            $dataArr = $this->M_crm_tasks->getTaskById($id_task);
+            $dataArr = $this->M_crm_status->getStatusById($id_status);
 
             $dataArr['path'] = '';
             $dataArr['name_module'] = $this->getNameModule();
-            $dataArr['file_content_view'] = 'mod_task_detail.php';
+            $dataArr['file_content_view'] = 'mod_status_detail.php';
             $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
@@ -54,8 +55,32 @@ class C_crm_tasks extends Controller
         }
         else
         {
-            Core::app()->getTemplate()->setVar('title_page', 'Не хватает данных');
-            Core::app()->getTemplate()->setVar('content', 'Не хватает данных');
+
+            $content = '';
+            // Если существуют GET данные - $dataArr
+            // показываем статью по id
+            // Если нету GET данных, значит неправильно набран URL или без параметров
+
+            $get = Core::app()->getRequest()->getGet();
+
+            $this->loadModule('M_crm_status', 'crm');
+
+            $classArr['menu_ul'] = 'menu_ul';
+            $classArr['menu_ul_level'] = 'menu_ul_level';
+            $classArr['menu_li'] = 'menu_li';
+            $classArr['menu_a'] = 'menu_span';
+            $classArr['menu_span'] = 'menu_a';
+
+            $dataArr['statuses'] = $this->M_crm_status->getAllStatuses();
+            $dataArr['path'] = '';
+            $dataArr['name_module'] = $this->getNameModule();
+            $dataArr['file_content_view'] = 'mod_status_list.php';
+            $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
+
+            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, false);
+            Core::app()->getTemplate()->setVar('title_page', 'Список статусов');
+
+            Core::app()->getTemplate()->setVar('content', $content);
         }
     }
 
@@ -70,7 +95,7 @@ class C_crm_tasks extends Controller
         $post = Core::app()->getRequest()->getPost();
 
         $get = Core::app()->getRequest()->getGet();
-        $this->loadModule('M_crm_tasks', 'crm');
+        $this->loadModule('M_crm_status', 'crm');
 
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
@@ -78,34 +103,25 @@ class C_crm_tasks extends Controller
             // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
             unset($post['id']);
 
-            $post = $this->getDefaultTaskItemData($post);
+            $post = $this->getDefaultStatusItemData($post);
 
-            $this->M_crm_tasks->setTaskItem($post);
+            $this->M_crm_status->setStatusItem($post);
 
-            $url = Core::app()->getHtml()->createUrl('crm');
+            $url = Core::app()->getHtml()->createUrl('crm/status');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
         {
-            $this->loadModule('M_crm_status', 'crm');
-
             $dataArr = array();
-            $id_parent = 0;
 
-            if (isset($get['id_parent']) && !$this->isEmpty($get['id_parent']))
-            {
-                $id_parent = $get['id_parent'];
-            }
             $dataArr['id'] = 0;
-            $dataArr['root'] = 'Это проект';
-            $dataArr['rootStatus'] = 'Без статуса';
-            $dataArr['all_tasks'] = $this->M_crm_tasks->getAllTasks();
-            $dataArr['all_statuses'] = $this->M_crm_status->getAllStatuses();
-            $dataArr['id_parent'] = $id_parent;
-            $dataArr['form_action'] = 'crm/tasks/create/';
+            //$dataArr['root'] = 'Это проект';
+            //$dataArr['all_tasks'] = $this->M_crm_tasks->getAllTasks();
+            //$dataArr['id_parent'] = $id_parent;
+            $dataArr['form_action'] = 'crm/status/create/';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'crm';
-            $dataArr['file_content_view'] = 'admin_task_create.php';
+            $dataArr['file_content_view'] = 'admin_status_create.php';
             $dataArr['return'] = true;
 
             $dataArr['content'] = Core::app()->getTemplate()->moduleContentView($dataArr);
@@ -122,22 +138,16 @@ class C_crm_tasks extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_crm_tasks', 'crm');
+            $this->loadModule('M_crm_status', 'crm');
 
             $id = $post['id'];
             unset($post['id']);
 
-            if ($post['id_parent'] == $id)
-            {
-                $post['id_parent'] = 0;
-            }
+            $post = $this->getDefaultStatusItemData($post);
 
+            $this->M_crm_status->updateStatusById($id, $post);
 
-            $post = $this->getDefaultTaskItemData($post);
-
-            $this->M_crm_tasks->updateTaskById($id, $post);
-
-            $url = Core::app()->getHtml()->createUrl('crm');
+            $url = Core::app()->getHtml()->createUrl('crm/status');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }
@@ -148,20 +158,18 @@ class C_crm_tasks extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_crm_tasks', 'crm');
             $this->loadModule('M_crm_status', 'crm');
+            //$this->loadModule('M_category_categoryitems', 'category');
 
-            $dataArr = $this->M_crm_tasks->getTaskById($post['id']);
-            Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
+            $dataArr = $this->M_crm_status->getStatusById($post['id']);
+            Core::app()->getTemplate()->setVar('title_page', 'Редактирование статуса');
 
-            $dataArr['root'] = 'Это проект';
-            $dataArr['rootStatus'] = 'Без статуса';
-            $dataArr['all_tasks'] = $this->M_crm_tasks->getAllTasks();
-            $dataArr['all_statuses'] = $this->M_crm_status->getAllStatuses();
-            $dataArr['form_action'] = 'crm/tasks/update/';
+            //$dataArr['root'] = 'Это проект';
+            //$dataArr['all_tasks'] = $this->M_crm_status->getAllStatuses();
+            $dataArr['form_action'] = 'crm/status/update/';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'crm';
-            $dataArr['file_content_view'] = 'admin_task_create.php';
+            $dataArr['file_content_view'] = 'admin_status_create.php';
             $dataArr['return'] = true;
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
@@ -185,11 +193,11 @@ class C_crm_tasks extends Controller
 
         if (!$this->isEmpty($get))
         {
-            $this->loadModule('M_crm_tasks', 'crm');
+            $this->loadModule('M_crm_status', 'crm');
 
-            $this->M_crm_tasks->deleteTaskById($get['id']);
+            $this->M_crm_status->deleteStatusById($get['id']);
 
-            $url = Core::app()->getHtml()->createUrl('crm');
+            $url = Core::app()->getHtml()->createUrl('crm/status');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }
@@ -201,7 +209,7 @@ class C_crm_tasks extends Controller
         return $content;
     }
 
-    private function getDefaultTaskItemData($dataArr)
+    private function getDefaultStatusItemData($dataArr)
     {
         if (is_array($dataArr))
         {
@@ -216,6 +224,16 @@ class C_crm_tasks extends Controller
             {
                 $dataArr['date_create'] = $date;
             }
+
+            if (isset($dataArr['is_complete']) && !$this->isEmpty($dataArr['is_complete']))
+            {
+                $dataArr['is_complete'] = 1;
+            }
+            else
+            {
+                $dataArr['is_complete'] = 0;
+            }            
+            
         }
 
         return $dataArr;

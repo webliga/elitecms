@@ -9,7 +9,7 @@ $config = array(
                     'desc' => 'Просмотр новости', //Описание экшна 
                     'accessType' => array(//Доступ к экшну для пользователя по url
                         'r' => true,
-                    ), 
+                    ),
                     'callFromAdmin' => false, // Доступ только из админки по url?
                 ),
             ),
@@ -18,42 +18,82 @@ $config = array(
         'tasks' => array(
             'action' => array(
                 'index' => array(
-                    'desc' => 'Просмотр списка новостей',
+                    'desc' => 'Просмотр списка заданий',
                     'accessType' => array(
                         'r' => true,
-                        ),
+                    ),
                     'callFromAdmin' => false,
                 ),
                 'create' => array(
                     'desc' => 'Создание задания',
                     'accessType' => array(
                         'c' => true,
-                        ),
+                    ),
                     'callFromAdmin' => false,
                 ),
                 'edite' => array(
                     'desc' => 'Редактирование задания',
                     'accessType' => array(
                         'e' => true,
-                        ),
+                    ),
                     'callFromAdmin' => false,
                 ),
                 'update' => array(
                     'desc' => 'Редактирование задания',
                     'accessType' => array(
                         'e' => true,
-                        ),
+                    ),
                     'callFromAdmin' => false,
-                ),                
-                /*'delete' => array(
+                ),
+                'delete' => array(
                     'desc' => 'Удаление задания',
                     'accessType' => array(
                         'd' => true,
-                        ),
-                    'callFromAdmin' => true,
-                ),*/
+                    ),
+                    'callFromAdmin' => false,
+                ),
             ),
             'desc' => 'Управление задачами',
+        ),
+        'status' => array(
+            'action' => array(
+                'index' => array(
+                    'desc' => 'Просмотр всех статусов',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+                'create' => array(
+                    'desc' => 'Создание статуса',
+                    'accessType' => array(
+                        'c' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+                'edite' => array(
+                    'desc' => 'Редактирование статуса',
+                    'accessType' => array(
+                        'e' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+                'update' => array(
+                    'desc' => 'Редактирование статуса',
+                    'accessType' => array(
+                        'e' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+                'delete' => array(
+                    'desc' => 'Удаление статуса',
+                    'accessType' => array(
+                        'd' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+            ),
+            'desc' => 'Управление статусами',
         ),
     ),
 );

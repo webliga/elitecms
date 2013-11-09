@@ -5,6 +5,7 @@
             <div class="control-group  news-input">
                 <label class="control-label" for="inputEmail">Название задачи:</label>
                 <div class="controls">
+                    <input type="hidden" name="id_parent" value="<?php if (isset($dataArr['id_parent'])) echo $dataArr['id_parent']; ?>">
                     <input type="hidden" name="id" value="<?php if (isset($dataArr['id'])) echo $dataArr['id']; ?>">
                     <input type="text"  class="form-control" value="<?php if (isset($dataArr['name'])) echo $dataArr['name']; ?>"  name="name">
                 </div>
@@ -17,15 +18,15 @@
             </div>
 
             <div class="both"></div>
-            <!--
+
             <div class="control-group news-select">
-                <label class="control-label" for="inputPassword">Категория:</label>
+                <label class="control-label" for="inputPassword">Родительское задача:</label>
                 <div class="controls">
-                    <select class="form-control" name="id_category_items" id="id_module">
+                    <select class="form-control" name="id_parent">
                         <?php
                         $selected = '';
 
-                        If ($dataArr['id_category_items'] == 0)
+                        If ($dataArr['id_parent'] == 0)
                         {
                             $selected = 'selected';
                         }
@@ -33,11 +34,48 @@
                         $options = '<option ' . $selected . ' value="0">' . $dataArr['root'] . '</option>';
                         $selected = '';
 
-                        for ($i = 0; $i < count($dataArr['all_categories']); $i++)
+                        for ($i = 0; $i < count($dataArr['all_tasks']); $i++)
                         {
-                            $item = $dataArr['all_categories'][$i];
+                            $item = $dataArr['all_tasks'][$i];
 
-                            if ($item['id'] == $dataArr['id_category_items'])
+                            if ($dataArr['id'] != $item['id'])
+                            {
+                                if ($item['id'] == $dataArr['id_parent'])
+                                {
+                                    $selected = 'selected';
+                                }
+                                $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                                $selected = '';
+                            }
+                        }
+
+                        echo $options;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="control-group news-select">
+                <label class="control-label" for="inputPassword">Статус задания:</label>
+                <div class="controls">
+                    <select class="form-control" name="id_status">
+                        <?php
+                        $selected = '';
+
+                        If ($dataArr['id_status'] == 0)
+                        {
+                            $selected = 'selected';
+                        }
+
+                        $options = '<option ' . $selected . ' value="0">' . $dataArr['rootStatus'] . '</option>';
+                        $selected = '';
+
+                        for ($i = 0; $i < count($dataArr['all_statuses']); $i++)
+                        {
+                            $item = $dataArr['all_statuses'][$i];
+
+                            if ($item['id'] == $dataArr['id_status'])
                             {
                                 $selected = 'selected';
                             }
@@ -50,8 +88,6 @@
                     </select>
                 </div>
             </div>
-            
-            -->
         </div>
     </div>
     <div class="both"></div>

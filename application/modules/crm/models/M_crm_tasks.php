@@ -23,35 +23,45 @@ class M_crm_tasks extends Model
         
     }
 
-    function getAllCrmItems()
+    function getAllTasks()
     {
         $leftJoin = $this->_db->parse('LEFT JOIN  category_items  ON 
-                                       Crm_items.id_category_items = category_items.id'
+                                       crm_tasks.id_category_items = category_items.id'
                                       );
 
-        $fildsSelect = 'Crm_items.*, 
+        $fildsSelect = 'crm_tasks.*, 
                         category_items.id as id_category_items, 
                         category_items.name as name_category_items';
 
 
-        return $this->selectAllFromTable('Crm_items', $fildsSelect, $leftJoin);
+        return $this->selectAllFromTable('crm_tasks', $fildsSelect, $leftJoin);
     }
 
-    function getCrmTaskById($id)
+
+    function getTaskById($id)
     {
-        return $this->selectAllByIdFromTable('crm_tasks', $id);
+        $sql = $this->_db->parse("
+            SELECT *
+            FROM crm_tasks 
+            WHERE id = ?i", $id);
+
+        $data = $this->_db->getRow($sql);
+
+        return $data;
     }
 
-    function deleteCrmItemById($id)
+    function deleteTaskById($id)
     {
-        $this->deleteTableRowById('Crm_items', $id);
+        $this->deleteTableRowById('crm_tasks', $id);
+        
+        $this->deleteAllTasksByParentId($id);
     }    
 
-    function deleteAllCrmItemsByModuleId($id)
+    function deleteAllTasksByParentId($id)
     {
-        $condition = $this->_db->parse('?n.?n = ?i','Crm_items','id_module' ,$id);
+        $condition = $this->_db->parse('?n.?n = ?i','crm_tasks','id_parent' ,$id);
          
-        $result = $this->deleteTableRowByCondition('Crm_items', $condition);
+        $result = $this->deleteTableRowByCondition('crm_tasks', $condition);
     }        
     
     function updateTaskById($id, $dataArr)
