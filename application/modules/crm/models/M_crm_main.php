@@ -23,21 +23,12 @@ class M_crm_main extends Model
         
     }
 
-    function getTaskById($id)
-    {
-        $sql = $this->_db->parse("
-            SELECT *
-            FROM crm_tasks 
-            WHERE id = ?i", $id);
-
-        $data = $this->_db->getRow($sql);
-
-        return $data;
-    }
-
     function getAllTasks($limit = null)
     {
-        $filds = 'crm_tasks.*, crm_statuses.name as crm_statuses_name, crm_statuses. description as crm_statuses_description, crm_statuses.is_complete as crm_statuses_is_complete ';
+        $filds = 'crm_tasks.*, 
+            crm_statuses.name as crm_statuses_name, 
+            crm_statuses. description as crm_statuses_description, 
+            crm_statuses.is_complete as crm_statuses_is_complete ';
 
         if (!$this->isEmpty($limit))
         {

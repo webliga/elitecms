@@ -78,6 +78,10 @@ abstract class Base
         }
     }
 
+    public function appExit($str = '')
+    {
+        die($str);
+    }
 }
 
 ?>

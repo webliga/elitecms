@@ -23,27 +23,40 @@ class M_crm_tasks extends Model
         
     }
 
-    function getAllTasks()
+    function getAllTasks($limit = null)
     {
-        $leftJoin = $this->_db->parse('LEFT JOIN  category_items  ON 
-                                       crm_tasks.id_category_items = category_items.id'
-                                      );
+        $filds = 'crm_tasks.*, 
+            crm_statuses.name as crm_statuses_name, 
+            crm_statuses. description as crm_statuses_description, 
+            crm_statuses.is_complete as crm_statuses_is_complete ';
 
-        $fildsSelect = 'crm_tasks.*, 
-                        category_items.id as id_category_items, 
-                        category_items.name as name_category_items';
+        if (!$this->isEmpty($limit))
+        {
+            $join = $this->_db->parse('LEFT JOIN crm_statuses ON crm_tasks.id_status = crm_statuses.id ORDER BY date_create ASC LIMIT ?i', $limit);
+        }
+        else
+        {
+            $join = $this->_db->parse('LEFT JOIN crm_statuses ON crm_tasks.id_status = crm_statuses.id ORDER BY date_create ASC');
+        }
 
+        $data = $this->selectAllFromTable('crm_tasks', $filds, $join);
 
-        return $this->selectAllFromTable('crm_tasks', $fildsSelect, $leftJoin);
+        return $data;
     }
 
 
     function getTaskById($id)
     {
         $sql = $this->_db->parse("
-            SELECT *
+            SELECT crm_tasks.*,
+                crm_statuses.name as crm_statuses_name, 
+                crm_statuses. description as crm_statuses_description, 
+                crm_statuses.is_complete as crm_statuses_is_complete 
             FROM crm_tasks 
-            WHERE id = ?i", $id);
+            LEFT JOIN crm_statuses ON crm_statuses.id = crm_tasks.id_status
+            WHERE crm_tasks.id = ?i 
+            
+", $id);
 
         $data = $this->_db->getRow($sql);
 

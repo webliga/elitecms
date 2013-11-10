@@ -132,3 +132,18 @@ span.task_menu_a_complete
 {
     margin-bottom: 20px;
 }
+
+.displaynone
+{
+    display: none;
+}
+
+.img_arrow
+{
+    
+}
+
+.img_arrow:hover
+{
+    cursor: pointer;
+}

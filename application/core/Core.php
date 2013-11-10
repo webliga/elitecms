@@ -188,10 +188,6 @@ class Core extends Base
      */
 
 
-    public function appExit($str = '')
-    {
-        die($str);
-    }
 
 }
 

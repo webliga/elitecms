@@ -38,7 +38,7 @@ class C_Crm_main extends Controller
         $this->loadModule('M_crm_main', 'crm');
 
         $classArr['menu_ul'] = 'menu_ul';
-        $classArr['menu_ul_level'] = 'menu_ul_level';
+        $classArr['menu_ul_level'] = 'level';
         $classArr['menu_li'] = 'menu_li';
         $classArr['menu_a'] = 'menu_span';
         $classArr['menu_span'] = 'task_menu_a';
@@ -53,6 +53,11 @@ class C_Crm_main extends Controller
         $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
 
         $content .= Core::app()->getTemplate()->moduleContentView($dataArr, false);
+
+        // Третий параметр указывает, что виджет нужно искать в папке с шаблоном    
+        $content .= Core::app()->getTemplate()->getWidget('crm_view_js', null, true);
+
+
         Core::app()->getTemplate()->setVar('title_page', 'Список задач');
 
         Core::app()->getTemplate()->setVar('content', $content);
@@ -165,9 +170,15 @@ class C_Crm_main extends Controller
 
     public function createTreeView($array_items, $level = 1, $classArr)
     {
+        $display = '';
+        if ($level > 1)
+        {
+            $display = 'displaynone';
+        }
+
         $result = '';
 
-        $result .= '<ul class="' . $classArr['menu_ul'] . ' ' . $classArr['menu_ul_level'] . '-' . $level . '">';
+        $result .= '<ul  class="' . $classArr['menu_ul'] . ' ' . $classArr['menu_ul_level'] . '-' . $level . ' ' . $display . '">';
 
         if (is_array($array_items))
         {
@@ -181,7 +192,7 @@ class C_Crm_main extends Controller
 
                 if (!isset($item['crm_statuses_name']))
                 {
-                    $item['crm_statuses_name'] = 'Без статуса';
+                    $item['crm_statuses_name'] = 'Открытая';
                 }
 
                 if (!isset($item['title']))
@@ -199,8 +210,23 @@ class C_Crm_main extends Controller
                     $menu_span = 'task_menu_a_complete';
                 }
 
+                $count = 0;
+                $arrow = '';
+                if (is_array($item['children']))
+                { //верхний уровень
+                    $count = count($item['children']);
+                }
+
+                if ($count != 0)
+                {
+                    $arrow =
+                            '<img class="img_arrow" src=\'/img/red_arrow.png\' width=\'20\' />' .
+                            '(' . $count . ')  ';
+                }
+
                 $result .= '<li class="' . $classArr['menu_li'] . ' ' . $item['class_li'] . '">';
                 $result .=
+                        $arrow .
                         '<a  class="' . $classArr['menu_a'] . '"  href="' . Core::app()->getHtml()->createUrl('crm/tasks/?id=' . $item['id']) . '" title="' . $item['title'] . '">' .
                         $item['name'] .
                         ' (' .
@@ -229,28 +255,7 @@ class C_Crm_main extends Controller
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-        // $dataArr - данные для вызова модуля в позиции
-
-        if ($dataArr != null)
-        {
-            // Если есть данные $dataArr модуля
-            // Выводим модуль в его позиции, согласно данным $dataArr
-            // Если данных нету, значит мы вызвали этот экшн через строку в браузере
-            $this->loadModule('M_crm_main', $this->getNameModule());
-
-            $settings = $this->M_crm_main->getCrmSettingsByModuleId($dataArr['id_module']);
-
-            //Формируем HTML структуру списка новостей
-            $dataArr['crm_items'] = $this->M_crm_main->getCrm($settings['count_elements']);
-
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = $this->getNameModule();
-            $dataArr['file_content_view'] = $settings['template_file'];
-            $dataArr['return'] = false;
-            //$this->echoPre($dataArr);
-            Core::app()->getTemplate()->moduleContentView($dataArr, false);
-            //$this->echoPre($dataArr);
-        }
+        // этот модуль вызывается только через url
     }
 
     public function create()
@@ -287,27 +292,45 @@ class C_Crm_main extends Controller
         {
             $content = '';
 
+            $this->loadModule('M_crm_status', $this->getNameModule());
             $this->loadModule('M_crm_main', $this->getNameModule());
-
-            $dataArr = $this->M_crm_main->getCrmSettingsByModuleId($dataArr['id']);
-            $this->echoPre($dataArr);
-
-            $dataArr = $this->getDefaultCrmData($dataArr);
-
 
             $dataArr['input'] = 'form_input';
 
 
-            $dataArr['input_name'] = 'template_file';
-            $dataArr['input_value'] = $dataArr['template_file'];
-            $dataArr['input_lable'] = 'Файл отображения списка новостей';
-            $content .= Core::app()->getHtml()->createInput($dataArr);
+            $dataOptionArr = $this->M_crm_status->getAllStatuses();
+            $setting = $this->M_crm_main->getCrmSettingsByModuleId($dataArr['id']);
 
+
+            //$this->echoPre($dataOptionArr);
+            //$this->echoPre($setting);
+
+            $dataArr['select'] = 'form_select';
+            $dataArr['select_name'] = 'id_status_work';
+            $dataArr['select_lable'] = 'Статус работы по умолчанию';
+            $dataArr['option_value_selected'] = $setting['id_status_work']; // Существующий родительский пункт
+
+            $y = 0;
+
+            $dataArr['select_data'][$y]['option_value'] = 0;
+            $dataArr['select_data'][$y]['option_text'] = 'Открытая';
+            $y++;
+
+            // Формируем текущий список родительских пунктов меню
+            for ($i = 0; $i < count($dataOptionArr); $i++)
+            {
+                $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
+                $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
+                $y++;
+            }
+
+            $content .= Core::app()->getHtml()->createSelect($dataArr);
+/*
             $dataArr['input_name'] = 'count_elements';
             $dataArr['input_value'] = $dataArr['count_elements'];
             $dataArr['input_lable'] = 'К-ство элементов';
             $content .= Core::app()->getHtml()->createInput($dataArr);
-
+*/
             return $content;
         }
     }
