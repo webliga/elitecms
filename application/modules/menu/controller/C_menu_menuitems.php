@@ -32,7 +32,7 @@ class C_menu_menuitems extends Controller
 
         if ($this->isEmpty($post))
         {
-            $this->loadModule('M_menu_menuitems', 'menu');
+            $this->loadModel('menuitems', 'menu');
 
             Core::app()->getTemplate()->setVar('title_page', 'Пункты меню');
 
@@ -64,7 +64,7 @@ class C_menu_menuitems extends Controller
 
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
-            $this->loadModule('M_menu_menuitems', 'menu');
+            $this->loadModel('menuitems', 'menu');
             
             unset($post['id']);
 
@@ -84,7 +84,7 @@ class C_menu_menuitems extends Controller
         }
         else
         {
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModel('modules', 'admin');
 
             $dataArr = array();
             $dataArr['form_action'] = 'admin/menuitems/create/';
@@ -116,7 +116,7 @@ class C_menu_menuitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_menu_menuitems', 'menu');
+            $this->loadModel('menuitems', 'menu');
 
             $id = $post['id'];
 
@@ -151,8 +151,8 @@ class C_menu_menuitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_menu_menuitems', 'menu');
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModel('menuitems', 'menu');
+            $this->loadModel('modules', 'admin');
 
             $dataArr = $this->M_menu_menuitems->getMenuItemById($post['id_item']);
 
@@ -185,7 +185,7 @@ class C_menu_menuitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_menu_menuitems', 'menu');
+            $this->loadModel('menuitems', 'menu');
 
             $this->M_menu_menuitems->deleteMenuItemById($post['id_item']);
 
@@ -202,7 +202,7 @@ class C_menu_menuitems extends Controller
         {
             $dataArr['root'] = 'Корень меню';
             
-            $this->loadModule('M_menu_menuitems', $this->getNameModule());
+            $this->loadModel('menuitems', $this->getNameModule());
 
             $dataOptionArr = $this->M_menu_menuitems->getAllMenuItems();
 

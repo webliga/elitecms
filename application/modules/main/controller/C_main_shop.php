@@ -24,9 +24,9 @@ class C_main_shop extends Controller
      */
     public function index()
     {
-        $this->loadModel('M_main_main', $this->getNameModule());
-        $this->loadModel('M_main_shop', $this->getNameModule());
-        $this->loadModel('M_user_user', $this->getNameModule('user'));
+        $this->loadModel('main', $this->getNameModule());
+        $this->loadModel('shop', $this->getNameModule());
+        $this->loadModel('user', $this->getNameModule('user'));
 
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
             контроллером с адресной строки. Сейчас находимся в main/shop

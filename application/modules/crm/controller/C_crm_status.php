@@ -31,7 +31,7 @@ class C_crm_status extends Controller
     {
         $get = Core::app()->getRequest()->getGet();
 
-        $this->loadModule('M_crm_status', 'crm');
+        $this->loadModel('status', 'crm');
         
         if ($get != null)
         {
@@ -63,7 +63,7 @@ class C_crm_status extends Controller
 
             $get = Core::app()->getRequest()->getGet();
 
-            $this->loadModule('M_crm_status', 'crm');
+            $this->loadModel('status', 'crm');
 
             $classArr['menu_ul'] = 'menu_ul';
             $classArr['menu_ul_level'] = 'menu_ul_level';
@@ -95,7 +95,7 @@ class C_crm_status extends Controller
         $post = Core::app()->getRequest()->getPost();
 
         $get = Core::app()->getRequest()->getGet();
-        $this->loadModule('M_crm_status', 'crm');
+        $this->loadModel('status', 'crm');
 
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
@@ -138,7 +138,7 @@ class C_crm_status extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_crm_status', 'crm');
+            $this->loadModel('status', 'crm');
 
             $id = $post['id'];
             unset($post['id']);
@@ -158,8 +158,8 @@ class C_crm_status extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_crm_status', 'crm');
-            //$this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('status', 'crm');
+            //$this->loadModel('categoryitems', 'category');
 
             $dataArr = $this->M_crm_status->getStatusById($post['id']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование статуса');
@@ -193,7 +193,7 @@ class C_crm_status extends Controller
 
         if (!$this->isEmpty($get))
         {
-            $this->loadModule('M_crm_status', 'crm');
+            $this->loadModel('status', 'crm');
 
             $this->M_crm_status->deleteStatusById($get['id']);
 

@@ -35,7 +35,7 @@ class C_admin_settings extends Controller
         {
 
 
-            $this->loadModule('M_admin_settings', $this->getNameModule());
+            $this->loadModel('settings', $this->getNameModule());
 
             Core::app()->getTemplate()->setVar('title_page', 'Список настроек');
 
@@ -90,7 +90,7 @@ class C_admin_settings extends Controller
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
-        $this->loadModule('M_admin_settings', $this->getNameModule());
+        $this->loadModel('settings', $this->getNameModule());
 
         if (!$this->isEmpty($post))
         {
@@ -130,7 +130,7 @@ class C_admin_settings extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_settings', $this->getNameModule());
+            $this->loadModel('settings', $this->getNameModule());
             
             $dataArr = $post;
             

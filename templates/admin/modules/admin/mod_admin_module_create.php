@@ -28,7 +28,7 @@
     </div>
 <div class="both"></div>
     <div class="control-group">
-        <label class="control-label" for="inputEmail">Системное название модуля:</label>
+        <label class="control-label" for="inputEmail">Какой модуль копируем:</label>
         <div class="controls">
             <select <?php if (isset($dataArr['id'])) echo 'disabled'; ?> class="form-control" name="name_system">
                 <?php

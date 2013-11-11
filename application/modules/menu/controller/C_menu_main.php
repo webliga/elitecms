@@ -33,7 +33,7 @@ class C_menu_main extends Controller
         // $dataArr - данные для вызова модуля в позиции
         if ($dataArr != null)
         {
-            $this->loadModule('M_menu_main', $this->getNameModule());
+            $this->loadModel('main', $this->getNameModule());
 
             $dataArr['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($dataArr['id_module']);
 //$this->echoPre($dataArr['menu_items']);
@@ -144,16 +144,16 @@ class C_menu_main extends Controller
 
     public function create()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
     }
 
     public function write()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница записи новости. Отображается форма записи');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -162,8 +162,8 @@ class C_menu_main extends Controller
 
     public function edite()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -177,7 +177,7 @@ class C_menu_main extends Controller
         {
             $content = '';
 
-            $this->loadModule('M_menu_main', $this->getNameModule());
+            $this->loadModel('main', $this->getNameModule());
 
             $dataArr = $this->M_menu_main->getMenuSettingsByModuleId($dataArr['id']);
             $dataArr = $this->getDefaultMenuData($dataArr);
@@ -266,7 +266,7 @@ class C_menu_main extends Controller
 
     public function updateModuleFormFildsConfig($dataArr)
     {
-        $this->loadModule('M_menu_main', $this->getNameModule());
+        $this->loadModel('main', $this->getNameModule());
 
         $result = $this->M_menu_main->updateMenuSettingsByModuleId($dataArr);
     }
@@ -274,8 +274,8 @@ class C_menu_main extends Controller
     public function deleteModuleDataById($dataArr)
     {
         $id = $dataArr['id'];
-        $this->loadModule('M_menu_main', $this->getNameModule());
-        $this->loadModule('M_menu_menuitems', $this->getNameModule());
+        $this->loadModel('main', $this->getNameModule());
+        $this->loadModel('menuitems', $this->getNameModule());
 
         $result = $this->M_menu_main->deleteMenuSettingsByModuleId($id);
         $result = $this->M_menu_menuitems->deleteAllMenuItemsByModuleId($id);

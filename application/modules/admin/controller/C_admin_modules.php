@@ -15,8 +15,10 @@ class C_admin_modules extends Controller
 
         $this->init();
 
+        Core::app()->getTemplate()->setVar('dublicatePath', 'modules/createdublicate');
+        Core::app()->getTemplate()->setVar('dublicateTitle', 'Создать дубликат модуля');    
         Core::app()->getTemplate()->setVar('createPath', 'modules/create');
-        Core::app()->getTemplate()->setVar('createTitle', 'Создать дубликат модуля');    
+        Core::app()->getTemplate()->setVar('createTitle', 'Создать нового модуля');         
     }
 
     function __destruct()
@@ -34,7 +36,7 @@ class C_admin_modules extends Controller
         if ($this->isEmpty($post))
         {
             
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             Core::app()->getTemplate()->setVar('title_page', 'Список модулей');
 
@@ -59,8 +61,13 @@ class C_admin_modules extends Controller
     
     public function create()
     {
+        Core::app()->getTemplate()->setVar('content', 'создание нового модуля' );
+    }
+    
+    public function createdublicate()
+    {
         $post = Core::app()->getRequest()->getPost();
-        $this->loadModule('M_admin_modules', $this->getNameModule());
+        $this->loadModel('modules', $this->getNameModule());
 
         if (!$this->isEmpty($post))
         {
@@ -76,11 +83,11 @@ class C_admin_modules extends Controller
         }
         else
         {
-            $this->loadModule('M_admin_position', $this->getNameModule());
+            $this->loadModel('position', $this->getNameModule());
 
             $dataArr = array();
             $dataArr['id_position'] = 0;
-            $dataArr['form_action'] = 'admin/modules/create/';
+            $dataArr['form_action'] = 'admin/modules/createdublicate/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
             $dataArr['all_modules'] = $this->M_admin_modules->getAllModules();
             // фильтруем на уникальность системного имени
@@ -108,7 +115,7 @@ class C_admin_modules extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 //Core::app()->echoPre($post);
             $id = $post['id_module'];
             unset($post['id_module']);
@@ -172,8 +179,8 @@ class C_admin_modules extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
-            $this->loadModule('M_admin_position', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
+            $this->loadModel('position', $this->getNameModule());
 
             $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
             //Core::app()->echoPre($dataArr);
@@ -209,7 +216,7 @@ class C_admin_modules extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
             $dataArr['return'] = false;

@@ -30,7 +30,11 @@
  * 
  */
 //Права доступа к модулю main
+//
 $config = array(
-    //'user' => 'news/',   
+    '/user\/([0-9]+)/' => 'user/main/$1',
+    '/user\/?$/' => 'user/main/index',
+    '/user\/([a-z]+)\/([0-9]+)/' => 'user/main/$2',    
+    '/user\/create/' => 'user/main/create',  
 );
 ?>

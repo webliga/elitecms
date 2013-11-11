@@ -31,28 +31,58 @@ abstract class Controller extends Base
         Core::app()->getTemplate()->setVar('title_page', '');
     }
 
-//создание модели
-    public function loadModule($className, $module_name = null, $isController = false)
+    public function loadController($controllerName, $module_name)
+    {
+        $controller_path = '';
+        $className =
+                PFX_CONTROLLER .
+                $module_name .
+                S_MODULE_NAME .
+                $controllerName;
+        
+        $controller_path = 
+                PATH_SITE_ROOT . 
+                SD . 
+                PATH_TO_MODULES . 
+                $module_name . 
+                SD . 
+                NAME_FOLDER_MODULES_CONTROLLERS . 
+                SD . 
+                $className . '.php';
+
+
+        if (file_exists($controller_path))
+        {
+            require_once $controller_path;
+
+            $this->$className = new $className;
+        }
+        else
+        {
+            $err['error'] = '!file_exists in Controller =  ' . $model_path;
+            Core::app()->getTemplate()->showDanger($err);
+        }
+    }
+
+    public function loadModel($modelName, $module_name)
     {
         $model_path = '';
-        
-        if ($this->isEmpty($module_name) || is_null($module_name))
-        {
-            $_module_name = '';
-        }
-        else
-        {
-            $_module_name = SD . $module_name;
-        }
+        $className =
+                PFX_MODEL .
+                $module_name .
+                S_MODULE_NAME .
+                $modelName;
 
-        if($isController)
-        {
-            $model_path = PATH_SITE_ROOT . SD . PATH_TO_MODULES . $_module_name . SD . NAME_FOLDER_MODULES_CONTROLLERS . SD . $className . '.php';
-        }
-        else
-        {
-            $model_path = PATH_SITE_ROOT . SD . PATH_TO_MODULES . $_module_name . SD . NAME_FOLDER_MODULES_MODELS . SD . $className . '.php';
-        }
+        $model_path =
+                PATH_SITE_ROOT .
+                SD .
+                PATH_TO_MODULES .
+                SD .
+                $module_name .
+                SD .
+                NAME_FOLDER_MODULES_MODELS .
+                SD .
+                $className . '.php';
 
         if (file_exists($model_path))
         {
@@ -87,9 +117,9 @@ abstract class Controller extends Base
     //abstract public function getModuleElementsByCategoryId($id);
 
     abstract public function index($dataArr = null);
-    
+
     abstract public function showDataByPosition($dataArr = null);
-    
+
     // Получаем поля формы для настройки модуля. Индивидуально для каждого модуля, реализуется в каждом модуле
     abstract public function getModuleFormFildsConfig($dataArr = null);
 

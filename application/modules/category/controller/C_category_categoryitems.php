@@ -33,7 +33,7 @@ class C_category_categoryitems extends Controller
 
         if ($this->isEmpty($post))
         {
-            $this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('categoryitems', 'category');
 
             Core::app()->getTemplate()->setVar('title_page', 'Категории');
 
@@ -63,7 +63,7 @@ class C_category_categoryitems extends Controller
 
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
-            $this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('categoryitems', 'category');
             
             unset($post['id']);
 
@@ -83,7 +83,7 @@ class C_category_categoryitems extends Controller
         }
         else
         {
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModel('modules', 'admin');
 
             $dataArr = array();
             $dataArr['form_action'] = 'admin/categoryitems/create/';
@@ -115,7 +115,7 @@ class C_category_categoryitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('categoryitems', 'category');
 
             $id = $post['id'];
 
@@ -150,8 +150,8 @@ class C_category_categoryitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_category_categoryitems', 'category');
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModel('categoryitems', 'category');
+            $this->loadModel('modules', 'admin');
 
             $dataArr = $this->M_category_categoryitems->getCategoryItemById($post['id_item']);
 
@@ -184,7 +184,7 @@ class C_category_categoryitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('categoryitems', 'category');
 
             $this->M_category_categoryitems->deleteCategoryItemById($post['id_item']);
 
@@ -201,7 +201,7 @@ class C_category_categoryitems extends Controller
         {
             $dataArr['root'] = 'Корень модуля категории';
             
-            $this->loadModule('M_category_categoryitems', $this->getNameModule());
+            $this->loadModel('categoryitems', $this->getNameModule());
 
             $dataOptionArr = $this->M_category_categoryitems->getAllCategoryItems();
             

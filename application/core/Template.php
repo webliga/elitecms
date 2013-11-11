@@ -215,7 +215,7 @@ class Template extends Base
                 SD .
                 PFX_CONTROLLER .
                 $module['name_system'] .
-                SD_MODULE_NAME .
+                S_MODULE_NAME .
                 $module['name_controller'] . EXT_TEMPLATE_FILE;
 
 
@@ -223,7 +223,7 @@ class Template extends Base
         {
             require_once $path;
 
-            $className = PFX_CONTROLLER . $module['name_system'] . SD_MODULE_NAME . $module['name_controller'];
+            $className = PFX_CONTROLLER . $module['name_system'] . S_MODULE_NAME . $module['name_controller'];
             $mod = new $className;
             $mod->setNameModule($module['name_system']);
 

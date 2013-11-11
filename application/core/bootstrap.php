@@ -1,6 +1,6 @@
 <?php
 define('SD','/');
-define('SD_MODULE_NAME','_');
+define('S_MODULE_NAME','_');
 
 define('EXT_TEMPLATE_FILE','.php');
 

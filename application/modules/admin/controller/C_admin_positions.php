@@ -33,7 +33,7 @@ class C_admin_positions extends Controller
 
         if ($this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             Core::app()->getTemplate()->setVar('title_page', 'Список модулей');
 
@@ -62,7 +62,7 @@ class C_admin_positions extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             $dataArr['name'] = $post['name'];
             $dataArr['name_system'] = $post['name_system'];
@@ -92,7 +92,7 @@ class C_admin_positions extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             $id = $post['id_module'];
             unset($post['id_module']);
@@ -115,7 +115,7 @@ class C_admin_positions extends Controller
             //Core::app()->echoPre($post);
 
 
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
             $dataArr['form_action'] = 'admin/modules/update/';
@@ -139,7 +139,7 @@ class C_admin_positions extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_admin_modules', $this->getNameModule());
+            $this->loadModel('modules', $this->getNameModule());
 
             $this->M_admin_modules->deleteModuleById($post['id_module']);
 

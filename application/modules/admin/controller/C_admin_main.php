@@ -25,12 +25,12 @@ class C_admin_main extends Controller
     public function index($dataArr = NULL)
     {
         
-        $this->loadModule('M_admin_main', $this->getNameModule());
+        $this->loadModel('main', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
 
         Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
-            контроллером с адресной строки. Сейчас находимся в админке');
+            контроллером с адресной строки. Сейчас находимся в админке 2');
     }
 
         
@@ -48,8 +48,8 @@ class C_admin_main extends Controller
 
     public function write()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница записи новости. Отображается форма записи');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -58,8 +58,8 @@ class C_admin_main extends Controller
 
     public function edite()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);

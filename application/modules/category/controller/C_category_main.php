@@ -117,16 +117,16 @@ class C_category_main extends Controller
 
     public function create()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
     }
 
     public function write()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница записи новости. Отображается форма записи');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -135,8 +135,8 @@ class C_category_main extends Controller
 
     public function edite()
     {
-        $this->loadModule('M_main', $this->getNameModule());
-        $this->loadModule('M_shop', $this->getNameModule());
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
         Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
         //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
@@ -150,7 +150,7 @@ class C_category_main extends Controller
         {//$this->echoPre($dataArr);
             $content = '';
 
-            $this->loadModule('M_category_main', $this->getNameModule());
+            $this->loadModel('main', $this->getNameModule());
 
             $dataArr = $this->M_category_main->getCategorySettingsByModuleId($dataArr['id']);
             $dataArr = $this->getDefaultCategoryData($dataArr);
@@ -239,7 +239,7 @@ class C_category_main extends Controller
 
     public function updateModuleFormFildsConfig($dataArr)
     {
-        $this->loadModule('M_category_main', $this->getNameModule());
+        $this->loadModel('main', $this->getNameModule());
 
         $result = $this->M_category_main->updateCtegorySettingsByModuleId($dataArr);
     }
@@ -247,8 +247,8 @@ class C_category_main extends Controller
     public function deleteModuleDataById($dataArr)
     {
         $id = $dataArr['id'];
-        $this->loadModule('M_category_main', $this->getNameModule());
-        $this->loadModule('M_category_categoryitems', $this->getNameModule());
+        $this->loadModel('main', $this->getNameModule());
+        $this->loadModel('categoryitems', $this->getNameModule());
 
         $result = $this->M_category_main->deleteCategorySettingsByModuleId($id);
         $result = $this->M_category_categoryitems->deleteAllCategoryItemsByModuleId($id);

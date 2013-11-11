@@ -33,7 +33,7 @@ class C_news_newsitems extends Controller
 
         if ($this->isEmpty($post))
         {
-            $this->loadModule('M_news_newsitems', 'news');
+            $this->loadModel('newsitems', 'news');
 
             Core::app()->getTemplate()->setVar('title_page', 'Новости / статьи');
 
@@ -63,13 +63,13 @@ class C_news_newsitems extends Controller
     {
         $post = Core::app()->getRequest()->getPost();
 
-        $this->loadModule('M_category_categoryitems', 'category');
+        $this->loadModel('categoryitems', 'category');
 
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
             // http://spuzom.ru/detail.php?id=249
             // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
-            $this->loadModule('M_news_newsitems', 'news');
+            $this->loadModel('newsitems', 'news');
 
             unset($post['id']);
 
@@ -82,7 +82,7 @@ class C_news_newsitems extends Controller
         }
         else
         {
-            $this->loadModule('M_admin_modules', 'admin');
+            $this->loadModel('modules', 'admin');
 
             $dataArr = array();
 
@@ -116,7 +116,7 @@ class C_news_newsitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_news_newsitems', 'news');
+            $this->loadModel('newsitems', 'news');
 
             $id = $post['id'];
             unset($post['id']);
@@ -138,8 +138,8 @@ class C_news_newsitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_news_newsitems', 'news');
-            $this->loadModule('M_category_categoryitems', 'category');
+            $this->loadModel('newsitems', 'news');
+            $this->loadModel('categoryitems', 'category');
 
             $dataArr = $this->M_news_newsitems->getNewsItemById($post['id_item']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование статьи / новости');
@@ -174,7 +174,7 @@ class C_news_newsitems extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_news_newsitems', 'news');
+            $this->loadModel('newsitems', 'news');
 
             $this->M_news_newsitems->deleteNewsItemById($post['id_item']);
 

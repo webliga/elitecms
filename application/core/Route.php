@@ -57,7 +57,7 @@ class Route extends Base
                 SD .
                 PFX_CONTROLLER .
                 $request->getModuleName() .
-                SD_MODULE_NAME .
+                S_MODULE_NAME .
                 $request->getController() . '.php';
 
 // Получаем язык отображения                  
@@ -76,7 +76,7 @@ class Route extends Base
             $controllerClass =
                     PFX_CONTROLLER .
                     $request->getModuleName() .
-                    SD_MODULE_NAME .
+                    S_MODULE_NAME .
                     $request->getController();
 
             if (!class_exists($controllerClass))

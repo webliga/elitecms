@@ -35,7 +35,7 @@ class C_crm_tasks extends Controller
         {
             $id_task = $get['id'];
 
-            $this->loadModule('M_crm_tasks', 'crm');
+            $this->loadModel('tasks', 'crm');
 
             $dataArr = $this->M_crm_tasks->getTaskById($id_task);
 
@@ -65,74 +65,70 @@ class C_crm_tasks extends Controller
         
     }
 
+    private function changeParentStatus($id_parent, $allTasks)
+    {
+        $this->loadModel('tasks', 'crm');
+        $this->loadModel('main', 'crm');
+        for ($i = 0; $i < count($allTasks); $i++)
+        {
+            if ($id_parent == $allTasks[$i]['id'])
+            {
+                $parentTask = $allTasks[$i];
+                $moduleSetting = $this->M_crm_main->getCrmSettingsByModuleId($parentTask['id_module']);
+                // Пробегаемся по всем родителям и меняем их статус в зависимости от условий
+                // до того момента, пока $id_parent станет равным 0
+                for ($y = 0; $y < count($allTasks); $y++)
+                {// Если это наш родитель
+                    if ($id_parent == $allTasks[$y]['id'])
+                    {
+                        $parentTask = $allTasks[$y];
+                        $y = 0; //что б не пропустить вышестоящего родителя, будем начинать цикл сначала, пока не встретим id_parent == 0
+                        // Получаем id слудующего родителя  (родителя над родителем)
+                        $id_parent = $parentTask['id_parent'];
+
+                        if ($parentTask['crm_statuses_is_complete'] == 1)
+                        {// Если есть тот кто отвечает за проэкт
+                            if ($parentTask['id_responsible'] != 0)
+                            {
+                                $parentTaskUpdateData['id_status'] = $moduleSetting['id_status_work'];
+                            }
+                            else
+                            {
+                                $parentTaskUpdateData['id_status'] = 0;
+                            }
+
+                            $this->M_crm_tasks->updateTaskById($parentTask['id'], $parentTaskUpdateData);
+                        }
+                        // Если нет следующего родителя, то завершаем цикл                       
+                        if ($id_parent == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
 
         $get = Core::app()->getRequest()->getGet();
-        $this->loadModule('M_crm_tasks', 'crm');
+        $this->loadModel('tasks', 'crm');
 
         if (!$this->isEmpty($post))
-        {// Сделать проверку на валидность и пустоту
-            // http://spuzom.ru/detail.php?id=249
-            // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
-            $this->loadModule('M_crm_tasks', 'crm');
-            $this->loadModule('M_crm_main', 'crm');
+        {
+            $this->loadModel('tasks', 'crm');
+            $this->loadModel('main', 'crm');
             $allTasks = $this->M_crm_tasks->getAllTasks();
 
             $id_parent = $post['id_parent'];
 
+            $this->changeParentStatus($id_parent, $allTasks);
 
-            for ($i = 0; $i < count($allTasks); $i++)
-            {
-                if ($id_parent == $allTasks[$i]['id'])
-                {
-                    $parentTask = $allTasks[$i];
-                    $moduleSetting = $this->M_crm_main->getCrmSettingsByModuleId($parentTask['id_module']);
-                    // Пробегаемся по всем родителям и меняем их статус в зависимости от условий
-                    // до того момента, пока $id_parent станет равным 0
-                    for ($y = 0; $y < count($allTasks); $y++)
-                    {// Если это наш родитель
-                        if ($id_parent == $allTasks[$y]['id'])
-                        {
-                            $parentTask = $allTasks[$y];
-                            $y = 0; //что б не пропустить вышестоящего родителя, будем начинать цикл сначала, пока не встретим id_parent == 0
-                            // Получаем id слудующего родителя  (родителя над родителем)
-                            $id_parent = $parentTask['id_parent'];
-
-                            if ($parentTask['crm_statuses_is_complete'] == 1)
-                            {
-                                if ($parentTask['id_responsible'] != 0)
-                                {
-                                    $parentTaskUpdateData['id_status'] = $moduleSetting['id_status_work'];
-                                }
-                                else
-                                {
-                                    $parentTaskUpdateData['id_status'] = 0;
-                                }
-
-                                $this->M_crm_tasks->updateTaskById($parentTask['id'], $parentTaskUpdateData);
-                            }
-                            // Если нет следующего родителя, то завершаем цикл                       
-                            if ($id_parent == 0)
-                            {
-                                break;
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            /*
-              $this->echoPre($post);
-
-              $this->echoPre($moduleSetting);
-              $this->echoPre($parentTask);
-
-              $this->appExit('Выход');
-             */
             unset($post['id']);
 
             $post = $this->getDefaultTaskItemData($post);
@@ -144,7 +140,7 @@ class C_crm_tasks extends Controller
         }
         else
         {
-            $this->loadModule('M_crm_status', 'crm');
+            $this->loadModel('status', 'crm');
 
             $dataArr = array();
             $id_parent = 0;
@@ -180,24 +176,24 @@ class C_crm_tasks extends Controller
         if (!$this->isEmpty($post))
         {
             $id = $post['id'];
-            $this->loadModule('M_crm_tasks', 'crm');
+            $this->loadModel('tasks', 'crm');
 
             $canChange = true;
             $allTasks = $this->M_crm_tasks->getAllTasks();
-            
-            
+
+
 // Проверяем все ли подзадачи имеют статус закрытого типа
             for ($i = 0; $i < count($allTasks); $i++)
-            {
-                if($id == $allTasks[$i]['id_parent'] && $allTasks[$i]['crm_statuses_is_complete'] != 1)
+            {// Если это подзадача и у нее не закрытого типа статус
+                if ($id == $allTasks[$i]['id_parent'] && $allTasks[$i]['crm_statuses_is_complete'] != 1)
                 {
                     $canChange = false;
-                    $this->loadModule('M_crm_status', 'crm');
+                    $this->loadModel('status', 'crm');
                     $allStatuses = $this->M_crm_status->getAllStatuses();
                     // Проверяем, а вдру мы меняем не на закрытый а на открытый статус
                     for ($y = 0; $y < count($allStatuses); $y++)
                     {
-                        if($post['id_status'] == $allStatuses[$y]['id'] && $allStatuses[$y]['is_complete'] != 1 || $post['id_status'] == 0)
+                        if ($post['id_status'] == $allStatuses[$y]['id'] && $allStatuses[$y]['is_complete'] != 1 || $post['id_status'] == 0)
                         {
                             $canChange = true;
                             break;
@@ -211,13 +207,16 @@ class C_crm_tasks extends Controller
             {
                 unset($post['id']);
 
+
                 if ($post['id_parent'] == $id)
                 {
                     $post['id_parent'] = 0;
                 }
 
-                $post = $this->getDefaultTaskItemData($post);
+                $id_parent = $post['id_parent'];
+                $this->changeParentStatus($id_parent, $allTasks);
 
+                $post = $this->getDefaultTaskItemData($post);
                 $this->M_crm_tasks->updateTaskById($id, $post);
 
                 $url = Core::app()->getHtml()->createUrl('crm');
@@ -226,8 +225,8 @@ class C_crm_tasks extends Controller
             else
             {
                 $content = 'Изменение статуса для задачи не возможно. <br />Причина: Не все подзадачи имеют закрытый тип статуса';
-                
-                
+
+
                 Core::app()->getTemplate()->setVar('content', $content);
             }
         }
@@ -239,8 +238,8 @@ class C_crm_tasks extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModule('M_crm_tasks', 'crm');
-            $this->loadModule('M_crm_status', 'crm');
+            $this->loadModel('tasks', 'crm');
+            $this->loadModel('status', 'crm');
 
             $dataArr = $this->M_crm_tasks->getTaskById($post['id']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
@@ -276,7 +275,7 @@ class C_crm_tasks extends Controller
 
         if (!$this->isEmpty($get))
         {
-            $this->loadModule('M_crm_tasks', 'crm');
+            $this->loadModel('tasks', 'crm');
 
             $this->M_crm_tasks->deleteTaskById($get['id']);
 

@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_Crm_main extends Controller
+class C_user_main extends Controller
 {
 
     function __construct()
@@ -27,38 +27,11 @@ class C_Crm_main extends Controller
     // $dataArr - get параметры, передаваемые в строке браузера
     public function index($dataArr = null)
     {
-        //$this->echoPre(phpinfo());
-        $content = '';
-        // Если существуют GET данные - $dataArr
-        // показываем статью по id
-        // Если нету GET данных, значит неправильно набран URL или без параметров
 
-        $get = Core::app()->getRequest()->getGet();
-
-        $this->loadModel('main', 'crm');
-
-        $classArr['menu_ul'] = 'menu_ul';
-        $classArr['menu_ul_level'] = 'level';
-        $classArr['menu_li'] = 'menu_li';
-        $classArr['menu_a'] = 'menu_span';
-        $classArr['menu_span'] = 'task_menu_a';
-
-        $tree = $this->buildTree($this->M_crm_main->getAllTasks());
+        $content = 'А тут все пользователи';
 
 
-        $dataArr['tasks'] = $this->createTreeView($tree, 1, $classArr);
-        $dataArr['path'] = '';
-        $dataArr['name_module'] = $this->getNameModule();
-        $dataArr['file_content_view'] = 'mod_tasks_list.php';
-        $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
-
-        $content .= Core::app()->getTemplate()->moduleContentView($dataArr, false);
-
-        // Третий параметр указывает, что виджет нужно искать в папке с шаблоном    
-        $content .= Core::app()->getTemplate()->getWidget('crm_view_js', null, true);
-
-
-        Core::app()->getTemplate()->setVar('title_page', 'Список задач');
+        Core::app()->getTemplate()->setVar('title_page', 'Список Пользователей');
 
         Core::app()->getTemplate()->setVar('content', $content);
     }
@@ -260,10 +233,13 @@ class C_Crm_main extends Controller
 
     public function create()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
-
-        Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
+        $content = 'Создаем пользователя';
+        
+        
+        
+        
+        Core::app()->getTemplate()->setVar('title_page', 'Страница создания пользователя');
+        Core::app()->getTemplate()->setVar('content', $content);
     }
 
     public function write()
@@ -325,12 +301,12 @@ class C_Crm_main extends Controller
             }
 
             $content .= Core::app()->getHtml()->createSelect($dataArr);
-/*
-            $dataArr['input_name'] = 'count_elements';
-            $dataArr['input_value'] = $dataArr['count_elements'];
-            $dataArr['input_lable'] = 'К-ство элементов';
-            $content .= Core::app()->getHtml()->createInput($dataArr);
-*/
+            /*
+              $dataArr['input_name'] = 'count_elements';
+              $dataArr['input_value'] = $dataArr['count_elements'];
+              $dataArr['input_lable'] = 'К-ство элементов';
+              $content .= Core::app()->getHtml()->createInput($dataArr);
+             */
             return $content;
         }
     }
