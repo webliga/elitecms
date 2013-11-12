@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_user_main extends Controller
+class C_user_register extends Controller
 {
 
     function __construct()
@@ -27,20 +27,13 @@ class C_user_main extends Controller
     // $dataArr - get параметры, передаваемые в строке браузера
     public function index($dataArr = null)
     {
-        $this->loadModel('main', 'user');
 
-        Core::app()->getTemplate()->setVar('title_page', 'Новости / статьи');
+        $content = 'А тут все пользователи';
 
-        $dataArr = $this->M_user_main->getAllUsers();
-        $dataArr['form_action_edite'] = 'admin/user/edite';
-        $dataArr['form_action_delete'] = 'admin/user/delete';
-        $dataArr['name_hidden'] = 'id_user';
 
-        $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+        Core::app()->getTemplate()->setVar('title_page', 'Список Пользователей');
 
         Core::app()->getTemplate()->setVar('content', $content);
-
-        return 'index.tpl.php';
     }
 
     function buildTree($array_items)
@@ -235,7 +228,7 @@ class C_user_main extends Controller
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-        // этот модуль вызывается только через url
+
     }
 
     public function create()
@@ -254,7 +247,7 @@ class C_user_main extends Controller
 
             $this->M_user_register->setUser($dataArr);
 
-            $url = Core::app()->getHtml()->createUrl('admin/user/create');
+            $url = Core::app()->getHtml()->createUrl('');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
@@ -262,7 +255,7 @@ class C_user_main extends Controller
             $dataArr = array();
 
             $dataArr['id'] = 0;
-            $dataArr['form_action'] = 'admin/user/create/';
+            $dataArr['form_action'] = 'register/create/';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'user'; // папка где брать файл
             $dataArr['file_content_view'] = 'mod_user_create.php';
@@ -278,62 +271,17 @@ class C_user_main extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
 
-        if (!$this->isEmpty($post))
-        {
-            $this->loadModel('register', 'user');
-
-            $this->M_user_register->deleteUserById($post['id_user']);
-
-            $url = Core::app()->getHtml()->createUrl('admin/user');
-            Core::app()->getRequest()->redirect($url, true, 302);
-        }
     }
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $this->loadModel('M_main', $this->getNameModule());
+        $this->loadModel('M_shop', $this->getNameModule());
 
-        if (!$this->isEmpty($post))
-        {
-            $this->loadModel('register', 'user');
-
-            $dataArr = $this->M_user_register->getUserById($post['id_user']);
-            Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
-
-            //$dataArr['root'] = 'Это проект';
-            //$dataArr['rootStatus'] = 'Открытая';
-            $dataArr['form_action'] = 'admin/user/update/';
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = 'user';
-            $dataArr['file_content_view'] = 'mod_user_create.php';
-            $dataArr['return'] = true;
-
-            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
-
-            $dataArr['content'] = $content;
-
-            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
-            Core::app()->getTemplate()->setVar('content', $content);
-        }
-    }
-
-    public function update()
-    {
-        $post = Core::app()->getRequest()->getPost();
-
-        if (!$this->isEmpty($post))
-        {
-            $id = $post['id'];
-            unset($post['id']);
-            unset($post['confirm_password']);            
-            
-            $this->loadModel('register', 'user');
-            $this->M_user_register->updateUserById($id, $post);
-            $url = Core::app()->getHtml()->createUrl('admin/user/');
-            Core::app()->getRequest()->redirect($url, true, 302);
-        }
+        Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
+        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
+        //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
     }
 
     public function getModuleFormFildsConfig($dataArr = null)

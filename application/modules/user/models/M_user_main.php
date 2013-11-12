@@ -23,12 +23,12 @@ class M_user_main extends Model
         
     }
 
-    function getAllTasks($limit = null)
-    {
-        $filds = 'crm_tasks.*, 
-            crm_statuses.name as crm_statuses_name, 
-            crm_statuses. description as crm_statuses_description, 
-            crm_statuses.is_complete as crm_statuses_is_complete ';
+    function getAllUsers($limit = null)
+    {/*
+        $filds = 'users.*, 
+            users.name as crm_statuses_name, 
+            users. description as crm_statuses_description, 
+            users.is_complete as crm_statuses_is_complete ';
 
         if (!$this->isEmpty($limit))
         {
@@ -38,8 +38,8 @@ class M_user_main extends Model
         {
             $join = $this->_db->parse('LEFT JOIN crm_statuses ON crm_tasks.id_status = crm_statuses.id ORDER BY date_create ASC');
         }
-
-        $data = $this->selectAllFromTable('crm_tasks', $filds, $join);
+*/
+        $data = $this->selectAllFromTable('users', null, null);
 
         return $data;
     }

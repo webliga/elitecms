@@ -42,9 +42,6 @@ class C_news_newsitems extends Controller
             $dataArr['form_action_delete'] = 'admin/newsitems/delete';
             $dataArr['name_hidden'] = 'id_item';
 
-
-
-
             $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
 
             Core::app()->getTemplate()->setVar('content', $content);

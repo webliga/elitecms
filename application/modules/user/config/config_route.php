@@ -34,7 +34,12 @@
 $config = array(
     '/user\/([0-9]+)/' => 'user/main/$1',
     '/user\/?$/' => 'user/main/index',
-    '/user\/([a-z]+)\/([0-9]+)/' => 'user/main/$2',    
-    '/user\/create/' => 'user/main/create',  
+    '/user\/([a-z]+)\/([0-9]+)/' => 'user/main/$2',
+    '/user\/create/' => 'user/main/create',
+    '/user\/edite/' => 'user/main/edite',
+    '/user\/update/' => 'user/main/update',
+    '/user\/delete/' => 'user/main/delete',    
+    '/register\/create/' => 'register/create',
+    '/register/' => 'user/register/create',
 );
 ?>
