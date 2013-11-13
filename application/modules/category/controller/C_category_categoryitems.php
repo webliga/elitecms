@@ -38,14 +38,24 @@ class C_category_categoryitems extends Controller
             Core::app()->getTemplate()->setVar('title_page', 'Категории');
 
             $dataArr = $this->M_category_categoryitems->getAllCategoryItems();
-            $dataArr['form_action_edite'] = 'admin/categoryitems/edite';
-            $dataArr['form_action_delete'] = 'admin/categoryitems/delete';
-            $dataArr['name_hidden'] = 'id_item';
 
 
+            for ($i = 0; $i < count($dataArr); $i++)
+            {
+                unset($dataArr[$i]['img']);
+
+                unset($dataArr[$i]['id_parent']);
+                unset($dataArr[$i]['id_module']);
+                unset($dataArr[$i]['is_active']);
+
+                unset($dataArr[$i]['show_name']);
+            }
 
 
-            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+            $dataArr['link_edite'] = 'categoryitems/edite/';
+            $dataArr['link_delete'] = 'categoryitems/delete/';
+            //$this->echoPre($dataArr['link_edite']);
+            $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -146,14 +156,14 @@ class C_category_categoryitems extends Controller
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('categoryitems', 'category');
             $this->loadModel('modules', 'admin');
 
-            $dataArr = $this->M_category_categoryitems->getCategoryItemById($post['id_item']);
+            $dataArr = $this->M_category_categoryitems->getCategoryItemById($get['id']);
 
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
 
@@ -180,13 +190,13 @@ class C_category_categoryitems extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('categoryitems', 'category');
 
-            $this->M_category_categoryitems->deleteCategoryItemById($post['id_item']);
+            $this->M_category_categoryitems->deleteCategoryItemById($get['id']);
 
             $url = Core::app()->getHtml()->createUrl('admin/categoryitems');
             Core::app()->getRequest()->redirect($url, true, 302);

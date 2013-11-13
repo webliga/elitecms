@@ -47,7 +47,9 @@ class C_menu_main extends Controller
             $classArr['menu_li'] = $settings['menu_li'];
             $classArr['menu_a'] = $settings['menu_span'];
             $classArr['menu_span'] = $settings['menu_a'];
-
+            
+            $dataArr['id'] = $settings['id'];            
+            $dataArr['name_menu'] = $settings['name_menu'];
             //Формируем HTML структуру меню
             $dataArr['menu_items'] = $this->createMenuTreeView($this->buildTree($dataArr['menu_items']), 1, $classArr);
 
@@ -231,32 +233,32 @@ class C_menu_main extends Controller
         {
             if ($this->isEmpty($dataArr['menu_ul']))
             {
-                $dataArr['menu_ul'] = 'nav-ul';
+                //$dataArr['menu_ul'] = 'nav-ul';
             }
 
             if ($this->isEmpty($dataArr['menu_ul_level']))
             {
-                $dataArr['menu_ul_level'] = 'nav-ul-level';
+                //$dataArr['menu_ul_level'] = 'nav-ul-level';
             }
 
             if ($this->isEmpty($dataArr['menu_li']))
             {
-                $dataArr['menu_li'] = 'nav-li';
+                //$dataArr['menu_li'] = 'nav-li';
             }
 
             if ($this->isEmpty($dataArr['menu_li_active']))
             {
-                $dataArr['menu_li_active'] = 'nav-li-active';
+                //$dataArr['menu_li_active'] = 'nav-li-active';
             }
 
             if ($this->isEmpty($dataArr['menu_a']))
             {
-                $dataArr['menu_a'] = 'nav-a';
+                //$dataArr['menu_a'] = 'nav-a';
             }
 
             if ($this->isEmpty($dataArr['menu_span']))
             {
-                $dataArr['menu_span'] = 'nav-span';
+                //$dataArr['menu_span'] = 'nav-span';
             }
         }
 

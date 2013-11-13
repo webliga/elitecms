@@ -29,14 +29,22 @@ class C_user_main extends Controller
     {
         $this->loadModel('main', 'user');
 
-        Core::app()->getTemplate()->setVar('title_page', 'Новости / статьи');
+        Core::app()->getTemplate()->setVar('title_page', 'Список пользователей');
 
         $dataArr = $this->M_user_main->getAllUsers();
-        $dataArr['form_action_edite'] = 'admin/user/edite';
-        $dataArr['form_action_delete'] = 'admin/user/delete';
-        $dataArr['name_hidden'] = 'id_user';
+        /*
+          for ($i = 0; $i < count($dataArr); $i++)
+          {
+          unset($dataArr[$i]['id_position']);
+          unset($dataArr[$i]['is_active']);
+          unset($dataArr[$i]['name_system_position']);
+          }
+         */
 
-        $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+        $dataArr['link_edite'] = 'user/edite/';
+        $dataArr['link_delete'] = 'user/delete/';
+        //$this->echoPre($dataArr['link_edite']);
+        $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
         Core::app()->getTemplate()->setVar('content', $content);
 
@@ -254,7 +262,7 @@ class C_user_main extends Controller
 
             $this->M_user_register->setUser($dataArr);
 
-            $url = Core::app()->getHtml()->createUrl('admin/user/create');
+            $url = Core::app()->getHtml()->createUrl('admin/user');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
@@ -262,7 +270,7 @@ class C_user_main extends Controller
             $dataArr = array();
 
             $dataArr['id'] = 0;
-            $dataArr['form_action'] = 'admin/user/create/';
+            $dataArr['form_action'] = 'admin/user/create';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'user'; // папка где брать файл
             $dataArr['file_content_view'] = 'mod_user_create.php';
@@ -278,13 +286,13 @@ class C_user_main extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('register', 'user');
 
-            $this->M_user_register->deleteUserById($post['id_user']);
+            $this->M_user_register->deleteUserById($get['id']);
 
             $url = Core::app()->getHtml()->createUrl('admin/user');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -293,18 +301,18 @@ class C_user_main extends Controller
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('register', 'user');
 
-            $dataArr = $this->M_user_register->getUserById($post['id_user']);
+            $dataArr = $this->M_user_register->getUserById($get['id']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
 
             //$dataArr['root'] = 'Это проект';
             //$dataArr['rootStatus'] = 'Открытая';
-            $dataArr['form_action'] = 'admin/user/update/';
+            $dataArr['form_action'] = 'admin/user/update';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'user';
             $dataArr['file_content_view'] = 'mod_user_create.php';
@@ -327,11 +335,11 @@ class C_user_main extends Controller
         {
             $id = $post['id'];
             unset($post['id']);
-            unset($post['confirm_password']);            
-            
+            unset($post['confirm_password']);
+
             $this->loadModel('register', 'user');
             $this->M_user_register->updateUserById($id, $post);
-            $url = Core::app()->getHtml()->createUrl('admin/user/');
+            $url = Core::app()->getHtml()->createUrl('admin/user');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }

@@ -1,16 +1,16 @@
 <?php
-if (!isset($dataArr['form_action_edite']))
-    $dataArr['form_action_edite'] = '';
+if (!isset($dataArr['link_edite']))
+    $dataArr['link_edite'] = '';
 
-if (!isset($dataArr['form_action_delete']))
-    $dataArr['form_action_delete'] = '';
+if (!isset($dataArr['link_delete']))
+    $dataArr['link_delete'] = '';
 
-$form_action_edite = $dataArr['form_action_edite'];
-$form_action_delete = $dataArr['form_action_delete'];
+$link_edite = $dataArr['link_edite'];
+$link_delete = $dataArr['link_delete'];
 $name_hidden = $dataArr['name_hidden'];
 
-unset($dataArr['form_action_edite']);
-unset($dataArr['form_action_delete']);
+unset($dataArr['link_edite']);
+unset($dataArr['link_delete']);
 unset($dataArr['name_hidden']);
 unset($dataArr['btn_title']);
 ?>
@@ -44,8 +44,8 @@ unset($dataArr['btn_title']);
 
             echo '<td>';
 
-            echo Core::app()->getHtml()->createBtn($form_action_edite, 'tools.png', $dataArr[$i]['id'], $name_hidden);
-            echo Core::app()->getHtml()->createBtn($form_action_delete, 'delete.png', $dataArr[$i]['id'], $name_hidden);
+            echo Core::app()->getHtml()->createBtn($link_edite, 'tools.png', $dataArr[$i]['id'], $name_hidden);
+            echo Core::app()->getHtml()->createBtn($link_delete, 'delete.png', $dataArr[$i]['id'], $name_hidden);
 
             echo '</td></tr>';
         }

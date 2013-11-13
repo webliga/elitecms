@@ -8,6 +8,7 @@
  */
 class C_menu_menuitems extends Controller
 {
+
     function __construct()
     {
         parent::__construct();
@@ -37,27 +38,36 @@ class C_menu_menuitems extends Controller
             Core::app()->getTemplate()->setVar('title_page', 'Пункты меню');
 
             $dataArr = $this->M_menu_menuitems->getAllMenuItems();
-            $dataArr['form_action_edite'] = 'admin/menuitems/edite';
-            $dataArr['form_action_delete'] = 'admin/menuitems/delete';
-            $dataArr['name_hidden'] = 'id_item';
 
 
+            for ($i = 0; $i < count($dataArr); $i++)
+            {
+                unset($dataArr[$i]['id_parent']);
+                unset($dataArr[$i]['id_module']);
+                unset($dataArr[$i]['is_active']);
+                unset($dataArr[$i]['priority']);
+                unset($dataArr[$i]['class_li']);
+                unset($dataArr[$i]['name_system_module']);
+            }
 
 
-            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+            $dataArr['link_edite'] = 'menuitems/edite/';
+            $dataArr['link_delete'] = 'menuitems/delete/';
+
+            $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
             Core::app()->getTemplate()->setVar('content', $content);
-            
+
             return 'index.tpl.php';
         }
     }
-    
+
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
-    
+
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
@@ -65,7 +75,7 @@ class C_menu_menuitems extends Controller
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
             $this->loadModel('menuitems', 'menu');
-            
+
             unset($post['id']);
 
             if (isset($post['is_active']))
@@ -147,14 +157,14 @@ class C_menu_menuitems extends Controller
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('menuitems', 'menu');
             $this->loadModel('modules', 'admin');
 
-            $dataArr = $this->M_menu_menuitems->getMenuItemById($post['id_item']);
+            $dataArr = $this->M_menu_menuitems->getMenuItemById($get['id']);
 
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
 
@@ -181,13 +191,13 @@ class C_menu_menuitems extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('menuitems', 'menu');
 
-            $this->M_menu_menuitems->deleteMenuItemById($post['id_item']);
+            $this->M_menu_menuitems->deleteMenuItemById($get['id']);
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -201,7 +211,7 @@ class C_menu_menuitems extends Controller
         if ($dataArr != null)
         {
             $dataArr['root'] = 'Корень меню';
-            
+
             $this->loadModel('menuitems', $this->getNameModule());
 
             $dataOptionArr = $this->M_menu_menuitems->getAllMenuItems();
@@ -219,7 +229,7 @@ class C_menu_menuitems extends Controller
             $dataArr['select_data'][$y]['option_value'] = 0;
             $dataArr['select_data'][$y]['option_text'] = $dataArr['root'];
             $y++;
-            
+
             // Формируем текущий список родительских пунктов меню
             for ($i = 0; $i < count($dataOptionArr); $i++)
             {
@@ -243,8 +253,8 @@ class C_menu_menuitems extends Controller
             $dataArr['input_value'] = $dataArr['class_li'];
             $dataArr['input_lable'] = 'Индивидуальный класс для пункта меню (li)';
             $content .= Core::app()->getHtml()->createInput($dataArr);
-            
-            
+
+
             // Третий параметр указывает, что виджет нужно искать в папке с шаблоном    
             $content .= Core::app()->getTemplate()->getWidget('menuitems_js', $dataArr, true);
         }
@@ -279,7 +289,7 @@ class C_menu_menuitems extends Controller
             if (!isset($dataArr['class_li']) || $this->isEmpty($dataArr['class_li']))
             {
                 $dataArr['class_li'] = '';
-            }                         
+            }
         }
 
         return $dataArr;

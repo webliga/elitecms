@@ -38,24 +38,47 @@ class C_news_newsitems extends Controller
             Core::app()->getTemplate()->setVar('title_page', 'Новости / статьи');
 
             $dataArr = $this->M_news_newsitems->getAllNewsItems();
-            $dataArr['form_action_edite'] = 'admin/newsitems/edite';
-            $dataArr['form_action_delete'] = 'admin/newsitems/delete';
-            $dataArr['name_hidden'] = 'id_item';
 
-            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);
+
+            for ($i = 0; $i < count($dataArr); $i++)
+            {
+                unset($dataArr[$i]['preview']);
+                unset($dataArr[$i]['text']);
+                unset($dataArr[$i]['img']);
+
+                unset($dataArr[$i]['id_category_items']);
+                unset($dataArr[$i]['id_author']);
+                unset($dataArr[$i]['date_create']);
+
+                unset($dataArr[$i]['from_source']);
+                unset($dataArr[$i]['is_active']);
+                unset($dataArr[$i]['show_title']);
+
+                unset($dataArr[$i]['show_preview']);
+                unset($dataArr[$i]['show_img']);
+                unset($dataArr[$i]['show_date']);
+
+                unset($dataArr[$i]['show_author']);
+            }
+
+
+            $dataArr['link_edite'] = 'newsitems/edite/';
+            $dataArr['link_delete'] = 'newsitems/delete/';
+            //$this->echoPre($dataArr['link_edite']);
+            $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
             Core::app()->getTemplate()->setVar('content', $content);
-            
+
             return 'index.tpl.php';
         }
     }
-    
+
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
-    
+
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
@@ -87,8 +110,8 @@ class C_news_newsitems extends Controller
             $dataArr['form_action'] = 'admin/newsitems/create/';
             $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'admin';
-            $dataArr['file_content_view'] = 'mod_admin_newsitem_create.php';
+            $dataArr['name_module'] = 'news';
+            $dataArr['file_content_view'] = 'admin_newsitem_create.php';
             $dataArr['return'] = true;
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
@@ -131,14 +154,14 @@ class C_news_newsitems extends Controller
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('newsitems', 'news');
             $this->loadModel('categoryitems', 'category');
 
-            $dataArr = $this->M_news_newsitems->getNewsItemById($post['id_item']);
+            $dataArr = $this->M_news_newsitems->getNewsItemById($get['id']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование статьи / новости');
 
 
@@ -146,8 +169,8 @@ class C_news_newsitems extends Controller
             $dataArr['form_action'] = 'admin/newsitems/update/';
             $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'admin';
-            $dataArr['file_content_view'] = 'mod_admin_newsitem_create.php';
+            $dataArr['name_module'] = 'news';
+            $dataArr['file_content_view'] = 'admin_newsitem_create.php';
             $dataArr['return'] = true;
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
@@ -167,13 +190,13 @@ class C_news_newsitems extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('newsitems', 'news');
 
-            $this->M_news_newsitems->deleteNewsItemById($post['id_item']);
+            $this->M_news_newsitems->deleteNewsItemById($get['id']);
 
             $url = Core::app()->getHtml()->createUrl('admin/newsitems');
             Core::app()->getRequest()->redirect($url, true, 302);

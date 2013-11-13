@@ -42,12 +42,20 @@ class C_admin_modules extends Controller
 
             $dataArr = $this->M_admin_modules->getAllModules();
 
-            $dataArr['form_action_edite'] = 'admin/modules/edite';
-            $dataArr['form_action_delete'] = 'admin/modules/delete';
-            $dataArr['name_hidden'] = 'id_module';
+//$this->echoPre($dataArr);
 
-            // Переделать под метод createTable
-            $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, false);
+            for ($i = 0; $i < count($dataArr); $i++)
+            {
+                unset($dataArr[$i]['id_position']);
+                unset($dataArr[$i]['is_active']);
+                unset($dataArr[$i]['name_system_position']);
+            }
+
+
+            $dataArr['link_edite'] = 'modules/edite/';
+            $dataArr['link_delete'] = 'modules/delete/';
+
+            $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 //$this->echoPre($content);
             Core::app()->getTemplate()->setVar('content', $content);
         }
@@ -175,14 +183,14 @@ class C_admin_modules extends Controller
 
     public function edite()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('modules', $this->getNameModule());
             $this->loadModel('position', $this->getNameModule());
 
-            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
+            $dataArr = $this->M_admin_modules->getModuleById($get['id']);
             //Core::app()->echoPre($dataArr);
             $dataArr['form_action'] = 'admin/modules/update/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();
@@ -212,18 +220,18 @@ class C_admin_modules extends Controller
 
     public function delete()
     {
-        $post = Core::app()->getRequest()->getPost();
+        $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($post))
+        if (!$this->isEmpty($get))
         {
             $this->loadModel('modules', $this->getNameModule());
 
-            $dataArr = $this->M_admin_modules->getModuleById($post['id_module']);
+            $dataArr = $this->M_admin_modules->getModuleById($get['id']);
             $dataArr['return'] = false;
             $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM_DELETE;
 
             // Удаляем модуль из общей таблицы
-            $this->M_admin_modules->deleteModuleById($post['id_module']);
+            $this->M_admin_modules->deleteModuleById($get['id']);
             // Удаляем модуль из его собственных таблиц (у модуля есть собственный метод по удалению самого себя из БД)
             Core::app()->getTemplate()->moduleContentView($dataArr, true);
 

@@ -130,7 +130,7 @@ class C_news_main extends Controller
             $this->loadModel('main', $this->getNameModule());
 
             $dataArr = $this->M_news_main->getNewsSettingsByModuleId($dataArr['id']);
-            $this->echoPre($dataArr);
+            //$this->echoPre($dataArr);
 
             $dataArr = $this->getDefaultNewsData($dataArr);
 

@@ -8,10 +8,10 @@
  */
 class Template extends Base
 {
+
     public $_data;
     private $_nameTemplate = '';
     private $_nameAdminTemplate = '';
-
 
     function __construct()
     {
@@ -32,9 +32,9 @@ class Template extends Base
 
         if (!$system)
         {
-            $path = 
-                    NAME_FOLDER_TEMPLATES . 
-                    '/' . 
+            $path =
+                    NAME_FOLDER_TEMPLATES .
+                    '/' .
                     $templateName;
         }
         else
@@ -293,35 +293,29 @@ class Template extends Base
         }
     }
 
-    public function getWidget($nameWidget, $dataArr, $inTemplate = false)
+    public function getWidget($nameWidget, $dataArr)
     {
-        //$dataArr обработка этого масива идет в подключенном файле
-        // Шаблоны виджетов можно переопределять в своем шаблоне
-        // Достаточно в папку html/widgets  шаблона поместить файлы нужного виджета
-        // и указать $inTemplate = true, метод будет искать уже в папке с текущим шаблоном
+                
+        //Первым делом ищем в папке текущего шаблона, если такого нету виджета, то ищем в папке по умолчанию
 
         $content = '';
 
-        $path = '';
+        $path =
+                $this->getCurrentTemplatePath(true) .
+                SD .
+                NAME_FOLDER_HTML .
+                SD .
+                NAME_FOLDER_WIDGETS .
+                SD .
+                $nameWidget . EXT_TEMPLATE_FILE;
 
-        if (!$inTemplate)
+        if (!$this->issetFile($path))
         {
             $path =
                     PATH_TO_DEFAULT_WIDGETS .
                     SD .
                     $nameWidget .
                     EXT_TEMPLATE_FILE;
-        }
-        else
-        {
-            $path =
-                    $this->getCurrentTemplatePath(true) .
-                    SD .
-                    NAME_FOLDER_HTML .
-                    SD .
-                    NAME_FOLDER_WIDGETS .
-                    SD .
-                    $nameWidget . EXT_TEMPLATE_FILE;
         }
 
         $content = $this->getRenderedHtml($path, $dataArr, false);

@@ -40,8 +40,8 @@ class C_admin_positions extends Controller
             $dataArr = $this->M_admin_modules->getAllModules();
 
             
-            $dataArr['form_action_edite'] = 'admin/modules/edite';
-            $dataArr['form_action_delete'] = 'admin/modules/delete';
+            $dataArr['link_edite'] = 'admin/modules/edite';
+            $dataArr['link_delete'] = 'admin/modules/delete';
             $dataArr['name_hidden'] = 'id_module'; 
             
             $content = Core::app()->getTemplate()->getWidget('listview_table', $dataArr, null);

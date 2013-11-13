@@ -33,6 +33,7 @@ class M_menu_menuitems extends Model
         return $this->selectAllFromTable('menu_items', $fildsSelect, $leftJoin);
     }
 
+    
     function getMenuItemById($id)
     {
 
