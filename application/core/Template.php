@@ -271,6 +271,21 @@ class Template extends Base
                     $dataArr['name_module'] . // Скорее всего нужно переименовать в name_system, что б небыло путаницы
                     SD .
                     $dataArr['file_content_view'];
+
+
+            if (!$this->issetFile($dataArr['path']))
+            {// Если в шаблоне файла нету, то идем в папку с модулем за дефолтным файлом 
+                $dataArr['path'] =
+                        PATH_SITE_ROOT .
+                        SD .
+                        PATH_TO_MODULES .
+                        SD .
+                        $dataArr['name_module'] .
+                        SD .
+                        'templates' .
+                        SD .
+                        $dataArr['file_content_view'];
+            }
         }
 
         if (isset($dataArr['return']) && $dataArr['return'])
@@ -295,7 +310,7 @@ class Template extends Base
 
     public function getWidget($nameWidget, $dataArr)
     {
-                
+
         //Первым делом ищем в папке текущего шаблона, если такого нету виджета, то ищем в папке по умолчанию
 
         $content = '';

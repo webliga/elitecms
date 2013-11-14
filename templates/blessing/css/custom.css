@@ -1,0 +1,47 @@
+a.menu_span
+{
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.control-group
+{
+    margin-bottom: 10px; 
+}
+.control-group select
+{
+    width: 250px; 
+}
+
+
+.menu_li 
+{
+    margin-bottom: 20px;
+    padding-left: 25px;
+}
+
+.displaynone
+{
+    display: none;
+}
+
+.img_arrow
+{
+
+}
+
+.img_arrow:hover
+{
+    cursor: pointer;
+}
+
+article.entry .entry-body 
+{
+    width: 100%;
+}
+
+#logo h1 
+{
+    font-family: Arial;
+}

@@ -127,7 +127,7 @@ class C_crm_status extends Controller
             $dataArr['content'] = Core::app()->getTemplate()->moduleContentView($dataArr);
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
 
-            Core::app()->getTemplate()->setVar('title_page', 'Создание задания');
+            Core::app()->getTemplate()->setVar('title_page', 'Создание статуса');
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
