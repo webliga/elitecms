@@ -235,7 +235,7 @@ class C_crm_tasks extends Controller
     public function edite()
     {
         $post = Core::app()->getRequest()->getGet();
-
+$this->echoPre($post);
         if (!$this->isEmpty($post))
         {
             $this->loadModel('tasks', 'crm');

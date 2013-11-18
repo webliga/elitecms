@@ -39,11 +39,16 @@ class C_user_register extends Controller
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
 
     public function create()
     {
+        $user = Core::app()->getUser();
+
+        $this->echoPre($user->getField('id'));
+        Core::app()->echoPre($user->getUserSession());
+
         $post = Core::app()->getRequest()->getPost();
 
         $get = Core::app()->getRequest()->getGet();
@@ -82,7 +87,7 @@ class C_user_register extends Controller
 
     public function delete()
     {
-
+        
     }
 
     public function edite()

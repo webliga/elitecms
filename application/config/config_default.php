@@ -53,7 +53,11 @@ $config = array(
         'html' => array(
             'name' => 'Html',
             'path' => 'application/core'
-        ),          
+        ),  
+        'session' => array(
+            'name' => 'Session',
+            'path' => 'application/core'
+        ),         
     ),
     'default_role' => array(
         'user_group' => 'superadmin',

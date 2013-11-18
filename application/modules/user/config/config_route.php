@@ -41,5 +41,7 @@ $config = array(
     '/user\/delete/' => 'user/main/delete',    
     '/register\/create/' => 'register/create',
     '/register/' => 'user/register/create',
+    '/auth/' => 'user/auth',   
+    '/logout/' => 'user/auth/logout',    
 );
 ?>

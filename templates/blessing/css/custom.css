@@ -1,6 +1,6 @@
 a.menu_span
 {
-    font-size: 16px;
+    font-size: 13px;
     margin-bottom: 10px;
     display: inline-block;
 }
@@ -45,3 +45,13 @@ article.entry .entry-body
 {
     font-family: Arial;
 }
+
+.auth
+{
+    width: 200px;
+    float: right;
+    display: inline;    
+}
+
+
+

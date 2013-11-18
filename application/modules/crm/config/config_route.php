@@ -32,9 +32,12 @@
 //Права доступа к модулю main
 //
 $config = array(
-    '/crm\/([0-9]+)/' => 'crm/main/$1',
-    '/crm\/([a-z]+)\/([0-9]+)/' => 'crm/main/$2',    
-    '/crm\/create/' => 'crm/Crmitems/create',
-    '/crmitems/' => 'crm/Crmitems',    
+    '/crm\/([0-9]+)/' => 'crm/main/index/$1',
+    '/crm\/([a-z]+)\/([0-9]+)/' => 'crm/main/index/$2',    
+    '/crm\/tasks/' => 'crm/tasks/index', 
+    '/crm\/tasks\/index\/create/' => 'crm/tasks/create',
+    '/crm\/tasks\/index\/edite/' => 'crm/tasks/edite',
+    '/crm\/tasks\/index\/update/' => 'crm/tasks/update',   
+    '/crm\/tasks\/index\/delete/' => 'crm/tasks/delete',    
 );
 ?>

@@ -14,7 +14,7 @@ class Core extends Base
     private $_loader;
     private $_template;
     private $_html;
-
+    private $_session;
 
     public function __construct()
     {
@@ -145,8 +145,21 @@ class Core extends Base
 
         return self::app()->_html;
     }   
-    
+ 
+    public function getSession()
+    {
+        if (is_null(self::app()->_session))
+        {
+            $class = self::app()->getClassNameForCreate('session');
+
+            self::app()->_session = new $class;
+        }
+
+        return self::app()->_session;
+    }      
         
+    
+    
 // Вытягиваем класс из дефолтных настроек 
 // (Дефолтный класс можно переопределить                                                           
 // в любом модуле и прописать путь к нему) 

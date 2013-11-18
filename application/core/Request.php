@@ -9,6 +9,7 @@
 class Request extends Base
 {
 
+    private $_allLang = null;
     private $_lang = null;
     private $_module = null;
     private $_controller = null;
@@ -66,13 +67,14 @@ class Request extends Base
     {
         if (isset($_POST))
         {// Можно проверку сделать
-            $this->_post = $_POST;
+            
+            $this->_post = Core::app()->getSecure()->checkGetPost($_POST);
             $_POST = null;
         }
 
         if (isset($_GET))
         {// Можно проверку сделать
-            $this->_get = $_GET;
+            $this->_get = Core::app()->getSecure()->checkGetPost($_GET);
             $_GET = null;
         }
 
@@ -93,16 +95,36 @@ class Request extends Base
 
     private function setCallFromAdmin($url)
     {
-        $this->parse($url);
+        $routes = explode('/', $url);
 
-        if (!$this->isEmpty($this->_module))
+        $module = '';
+
+        if (isset($routes[1]))
+        {
+            // Если первый параметр язык, тогда проверяем второй
+            // если он есть, то это модуль
+            // если его нету, то значит это не админка
+            if (in_array(mb_strtolower($routes[1]), $this->_allLang))
+            {
+                if(isset($routes[2]))
+                {
+                    $module = $routes[2];
+                }
+            }
+            else
+            {
+                $module = $routes[1];
+            }
+        }
+
+        if (!$this->isEmpty($module))
         {
             $path_module_config =
                     PATH_SITE_ROOT .
                     SD .
                     PATH_TO_MODULES .
                     SD .
-                    $this->_module .
+                    $module .
                     SD .
                     NAME_FOLDER_MODULES_CONFIG .
                     SD .
@@ -121,7 +143,7 @@ class Request extends Base
     {
         $configDefaultUrl = Core::app()->getConfig()->getConfigItem('default_module');
         $configDefaultLang = Core::app()->getConfig()->getConfigItem('default_lang');
-
+        $this->_allLang = Core::app()->getConfig()->getAllLang();
 
         // Ставим путь по умолчанию
         $this->_url = $url;
@@ -131,9 +153,8 @@ class Request extends Base
         $this->_action = $configDefaultUrl['action'];
 
         $routes = explode('?', $url); //если в строке есть get параметры через ?
-        
         // Если наш модуль административный
-        $this->setCallFromAdmin($routes[0]);
+        $this->setCallFromAdmin($url);
 
         if (isset($this->_routeRuleArr) && is_array($this->_routeRuleArr))
         {
@@ -148,15 +169,20 @@ class Request extends Base
 
             $routes[0] = preg_replace($patternArr, $replacementArr, $routes[0]);
         }
-        
+
         $this->parse($routes[0]);
     }
 
     private function parse($url)
     {
-        //Core::app()->echoPre($url);
-        
+
         $routes = explode('/', $url);
+
+        $moduleInstall = false;
+        $controllerInstall = false;
+        $actionInstall = false;
+        $canGetParameters = false;
+        $keyParam = true;
 
         //Core::app()->echoPre($routes);
         // Скорее всего нужно получить все языки, которые у нас установленны
@@ -164,30 +190,89 @@ class Request extends Base
         // нет, значит ищем в сессии и куках, если там нет, то ставим по умолчанию и расцениваем, что это у нас модуль
         // Аналогичные проверки делаем для модуля
         // lang
-        if (isset($routes[1]) && strlen($routes[1]) < 3 && count($routes) >= 4)
-        {
-            $this->_lang = $routes[1];
-        }
 
-        // module
-        if (isset($routes[2]) && !$this->isEmpty($routes[2]))
+        for ($i = 1; $i < count($routes); $i++)
         {
-            $this->_module = $routes[2];
+            // Если это первый параметр
+            if ($i == 1 && !$this->isEmpty($routes[$i]))
+            {// Если нашли наш язык
+                if (in_array(mb_strtolower($routes[$i]), $this->_allLang))
+                {
+                    $this->_lang = $routes[$i];
+                }
+                else
+                {
+                    // Если язык не нашли, то значит это модуль,
+                    // по умолчанию язык уже установлен
+                    $this->_module = $routes[$i];
+                    $moduleInstall = true;
+                }
+            }
+
+            if ($i == 2 && !$this->isEmpty($routes[$i]))
+            {
+                if (!$moduleInstall)
+                {
+                    $this->_module = $routes[$i];
+                    $moduleInstall = true;
+                }
+                else
+                {
+                    $this->_controller = $routes[$i];
+                    $controllerInstall = true;
+                }
+            }
+
+            if ($i == 3 && !$this->isEmpty($routes[$i]))
+            {
+                if (!$controllerInstall)
+                {
+                    $this->_controller = $routes[$i];
+                    $controllerInstall = true;
+                }
+                else
+                {
+                    $this->_action = $routes[$i];
+                    $actionInstall = true;
+                }
+            }
+
+            if ($i == 4 && !$this->isEmpty($routes[$i]))
+            {
+                $canGetParameters = true;
+
+                if (!$actionInstall)
+                {
+                    $this->_action = $routes[$i];
+                    continue;
+                }
+            }
+
+            if ($canGetParameters)
+            {
+                if ($keyParam)
+                {
+                    if($this->isEmpty($routes[$i]))
+                    {
+                        break;
+                    }
+
+                    $this->_params[$routes[$i]] = '';
+                    $keyParam = false;
+                }
+                else
+                {
+                    $this->_params[$routes[$i - 1]] = $routes[$i];
+                    $keyParam = true;
+                }
+            }
         }
-        // controller
-        if (isset($routes[3]) && !$this->isEmpty($routes[3]))
-        {
-            $this->_controller = $routes[3];
-        }
-        // action       
-        if (isset($routes[4]) && !$this->isEmpty($routes[4]))
-        {
-            $this->_action = $routes[4];
-        }
-        else
-        {
-            $this->_action = DEFAULT_ACTION;
-        }
+/*
+        Core::app()->echoPre($this->_lang);
+        Core::app()->echoPre($this->_module);
+        Core::app()->echoPre($this->_controller);        
+        Core::app()->echoPre($this->_action);
+        Core::app()->echoPre($this->_params);*/
     }
 
     public function getLang($lang = null)

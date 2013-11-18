@@ -138,7 +138,7 @@ class Route extends Base
                     $action = $request->getAction();
 // Отрабатываем модуль, который выводит главное содержание страницы
 // и получаем страницу отображения контента
-                    $page = $module_controller->$action();
+                    $page = $module_controller->$action($request->getParams());
 
                     Core::app()->getTemplate()->show($page);
                 }

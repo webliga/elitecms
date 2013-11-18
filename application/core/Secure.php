@@ -29,7 +29,50 @@ class Secure extends Base
     {
         return $url;
     }
+    
+    public function checkGetPost($dataArr)
+    {
+        $arr = array();
+        
+        foreach ($dataArr as $key => $value)
+        {
+            $key = mb_strtolower($key);
+            
+            if($key == 'id')
+            {
+                $value = (int)$value;
+            }
 
+            //  тут проверка стандартных переменных 
+            // например проверяем id, является ли оно числом
+            // так как мы заранее знаем что оно должно быть только числом
+            // иначе мы его просто не запишем или вызовем ошибку
+            $arr[$key] = $value;
+            
+        }
+
+        return $arr;
+    }    
+    
+    public function checkInt($int)
+    {
+        return preg_match("/[0-9]+/", $int);
+    }
+    
+    public function checkEmail($email)
+    {
+        return preg_match("/@/", $email);
+    }
+    
+    public function checkString($string)
+    {
+        return preg_match("/^[A-Za-zА-Яа-я]+$/", $string);
+    } 
+    
+    public function checkPassword($password)
+    {
+        return preg_match("/^[A-Za-zА-Яа-я0-9]+$/", $password);
+    }     
 }
 
 ?>

@@ -32,8 +32,9 @@
 //Права доступа к модулю main
 //
 $config = array(
-    '/news\/([0-9]+)/' => 'news/main/$1',
-    '/news\/([a-z]+)\/([0-9]+)/' => 'news/main/$2',    
+    '/news\/?$/' => 'news/main/index/',    
+    '/news\/([0-9]+)/' => 'news/main/index/id/$1',
+    '/news\/([a-z]+)\/([0-9]+)/' => 'news/main/index/$1/$2',    
     '/news\/create/' => 'news/newsitems/create',
     '/newsitems/' => 'news/newsitems',    
 );

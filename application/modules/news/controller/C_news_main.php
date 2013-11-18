@@ -25,25 +25,24 @@ class C_news_main extends Controller
      */
     // Загружаем этот метод только из строки браузера
     // $dataArr - get параметры, передаваемые в строке браузера
-    public function index($dataArr = null)
+    public function index($paramsArr = null)
     {
         // Если существуют GET данные - $dataArr
         // показываем статью по id
         // Если нету GET данных, значит неправильно набран URL или без параметров
 
-        $get = Core::app()->getRequest()->getGet();
-
-        if ($get != null)
+        if($paramsArr == null || $this->isEmpty($paramsArr) || !is_array($paramsArr) || count($paramsArr) == 0)
         {
-            $id_news = $get['id'];
+            $paramsArr = Core::app()->getRequest()->getGet();
+        }
+
+        if ($paramsArr != null || !$this->isEmpty($paramsArr) || (is_array($paramsArr) && count($paramsArr) > 0))
+        {
+            $id_news = $paramsArr['id'];
 
             $this->loadModel('main', 'news');
 
             $dataArr = $this->M_news_main->getNewsById($id_news);
-
-            //$this->M_news_main->test();
-
-
 
             $dataArr['path'] = '';
             $dataArr['name_module'] = $this->getNameModule();

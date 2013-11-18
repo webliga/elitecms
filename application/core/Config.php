@@ -120,8 +120,8 @@ class Config extends Base
         {
             Core::app()->getTemplate()->setAdminTemplateName($result['settings']['template_admin']);
         }
-        
-        
+
+
         $this->setConfigItem('modules', $result['modules']);
         $this->setConfigItem('settings', $result['settings']);
 
@@ -156,6 +156,34 @@ class Config extends Base
         }
 
         return $result;
+    }
+
+    public function getAllLang()
+    {
+        $langArr = array();
+        $path_to_lang =
+                PATH_SITE_ROOT .
+                SD .
+                PATH_TO_LANG;
+
+        if (is_dir($path_to_lang))
+        {
+            $arr = scandir($path_to_lang);
+
+            for ($i = 0; $i < count($arr); $i++)
+            {
+                $dir = $path_to_lang . 
+                        SD .
+                        $arr[$i];
+                
+                if (is_dir($dir) && $arr[$i] != '.' && $arr[$i] != '..')
+                {
+                    $langArr[] = $arr[$i];
+                }
+            }
+        }
+
+        return $langArr;
     }
 
 }

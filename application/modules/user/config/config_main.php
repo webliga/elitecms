@@ -55,6 +55,33 @@ $config = array(
             ),
             'desc' => 'Управление задачами',
         ),
+        'auth' => array(
+            'action' => array(
+                'index' => array(
+                    'desc' => 'Создание задания',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),
+                'login' => array(
+                    'desc' => 'Создание задания',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),  
+                'logout' => array(
+                    'desc' => 'Создание задания',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => false,
+                ),                 
+            ),
+            'desc' => 'Управление задачами',
+        ),        
+        
     ),
 );
 ?>

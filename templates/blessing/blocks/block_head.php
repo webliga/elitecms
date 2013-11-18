@@ -24,6 +24,7 @@
 
     <!-- HTML5 SHIV + DETECT TOUCH EVENTS -->
     <script type="text/javascript" src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/modernizr.custom.js"></script>
+    <script src="/lib/texteditors/ckeditor/ckeditor.js"></script>
 
 </head>
 

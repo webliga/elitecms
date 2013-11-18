@@ -64,8 +64,13 @@ abstract class Controller extends Base
         }
     }
 
-    public function loadModel($modelName, $module_name)
+    public function loadModel($modelName, $module_name = null)
     {
+        if($module_name == null)
+        {
+            $module_name = $this->_name_module;
+        }
+        
         $model_path = '';
         $className =
                 PFX_MODEL .
