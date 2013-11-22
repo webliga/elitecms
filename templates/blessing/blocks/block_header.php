@@ -6,6 +6,7 @@
         
         <?php
         Core::app()->getTemplate()->getModulesByPosition('header_auth');
+        Core::app()->getTemplate()->getModulesByPosition('header_auth2');
         ?>
 
         <div class="clear"></div>

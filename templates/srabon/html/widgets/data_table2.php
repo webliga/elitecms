@@ -9,6 +9,8 @@ $link_edite = $dataArr['link_edite'];
 $link_delete = $dataArr['link_delete'];
 $link_access = $dataArr['link_access'];
 
+
+unset($dataArr['link_access']);
 unset($dataArr['link_edite']);
 unset($dataArr['link_delete']);
 unset($dataArr['name_hidden']);
@@ -51,7 +53,8 @@ unset($dataArr['btn_title']);
 
                     
                     
-                    echo Core::app()->getTemplate()->getWidget('link_btn', array(
+                    echo Core::app()->getTemplate()->getWidget('link_btn2', array(
+                        'access' => $link_access.'?id='.$dataArr[$i]['id'],
                         'edite' => $link_edite.'?id='.$dataArr[$i]['id'],
                         'delete' => $link_delete.'?id='.$dataArr[$i]['id'],
                     ) );
