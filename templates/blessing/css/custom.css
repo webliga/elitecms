@@ -53,5 +53,12 @@ article.entry .entry-body
     display: inline;    
 }
 
+.checkbox input
+{
+    width: 25px;
+}
 
-
+.checkbox
+{
+    margin-bottom: 20px;
+}

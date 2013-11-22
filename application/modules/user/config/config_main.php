@@ -80,8 +80,55 @@ $config = array(
                 ),                 
             ),
             'desc' => 'Управление задачами',
-        ),        
-        
+        ),
+        'groups' => array(
+            'action' => array(
+                'index' => array(
+                    'desc' => 'Просмотр списка групп',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+                'edite' => array(
+                    'desc' => 'Редактирование группы',
+                    'accessType' => array(
+                        'e' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+                'update' => array(
+                    'desc' => 'Редактирование группы',
+                    'accessType' => array(
+                        'e' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+                'create' => array(
+                    'desc' => 'Создание группы',
+                    'accessType' => array(
+                        'c' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+                'delete' => array(
+                    'desc' => 'Удаление группы',
+                    'accessType' => array(
+                        'd' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+                'access' => array(
+                    'desc' => 'Права группы',
+                    'accessType' => array(
+                        'r' => true,
+                    ),
+                    'callFromAdmin' => true,
+                ),
+            ),
+            'desc' => 'Управление задачами',
+        ),
+
     ),
 );
 ?>

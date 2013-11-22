@@ -42,6 +42,7 @@ $config = array(
     '/register\/create/' => 'register/create',
     '/register/' => 'user/register/create',
     '/auth/' => 'user/auth',   
-    '/logout/' => 'user/auth/logout',    
+    '/logout/' => 'user/auth/logout',
+    '/groups/' => 'user/groups',
 );
 ?>
