@@ -45,7 +45,7 @@ class Access extends Base
         return $arr_actions;
     }
 
-    public function checkByUserGroupAccess($userRoleAcces, $arrAccessAction)
+    public function checkByUserGroupAccess($userRoleAcces, $moduleAccessAction)
     {
         $bool = false;
 
@@ -78,7 +78,7 @@ class Access extends Base
             }
         }
 
-       // Core::app()->echoPre($access_user_group);
+        // Core::app()->echoPre($access_user_group);
 
         if (!is_null($userRoleAcces) && is_array($userRoleAcces))
         {
@@ -88,38 +88,38 @@ class Access extends Base
             foreach ($access_user_group['access'] as $key_module => $value_controllers_arr)
             {
                 // Если это наш модуль
-                if ($key_module == $arrAccessAction['module'] || $key_module == '*')
+                if ($key_module == $moduleAccessAction['module'] || $key_module == '*')
                 {
 
                     foreach ($value_controllers_arr as $key_controller => $value_action_arr)
                     {
                         // Если это наш контроллер
-                        if ($key_controller == $arrAccessAction['controller'] || $key_controller == '*')
+                        if ($key_controller == $moduleAccessAction['controller'] || $key_controller == '*')
                         {
                             foreach ($value_action_arr as $key_action => $action_role_arr)
                             {
                                 // Если это наш екшн
-                                if ($key_action == $arrAccessAction['action'] || $key_action == '*')
+                                if ($key_action == $moduleAccessAction['action'] || $key_action == '*')
                                 {
-                                    //Core::app()->echoPre($access_user_group);
-                                
-                                
                                     // Реализовать проверку доступа  конкретного пользователя
                                     // Например, редактор только тот, кто создал статью и модератор
                                     // Скорее всего проверка на id пользователя и id статьи или в базе булево значение прописать 
                                     if (
+                                            isset($moduleAccessAction['access']['access_type']) &&
+                                            (
                                             // Если доступ групы позволяет доступ екшена (доступ пользователя здесь не проверяется)
-                                            (isset($arrAccessAction['access']['accessType']['d']) && $arrAccessAction['access']['accessType']['d'] && $value_action_arr[$key_action]['d']) ||
-                                            (isset($arrAccessAction['access']['accessType']['e']) && $arrAccessAction['access']['accessType']['e'] && $value_action_arr[$key_action]['e']) ||
-                                            (isset($arrAccessAction['access']['accessType']['w']) && $arrAccessAction['access']['accessType']['w'] && $value_action_arr[$key_action]['w']) ||
-                                            (isset($arrAccessAction['access']['accessType']['c']) && $arrAccessAction['access']['accessType']['c'] && $value_action_arr[$key_action]['c']) ||
-                                            (isset($arrAccessAction['access']['accessType']['r']) && $arrAccessAction['access']['accessType']['r'] && $value_action_arr[$key_action]['r'])
+                                                ($moduleAccessAction['access']['access_type'] == 'd' && $value_action_arr[$key_action]['d']) ||
+                                                ($moduleAccessAction['access']['access_type'] == 'e' && $value_action_arr[$key_action]['e']) ||
+                                                ($moduleAccessAction['access']['access_type'] == 'w' && $value_action_arr[$key_action]['w']) ||
+                                                ($moduleAccessAction['access']['access_type'] == 'c' && $value_action_arr[$key_action]['c']) ||
+                                                ($moduleAccessAction['access']['access_type'] == 'r' && $value_action_arr[$key_action]['r'])
+                                            )
                                     )
                                     {
                                         $bool = true;
-                                        
-                                        
-                                        
+
+
+
 
                                         return $bool;
                                     }
@@ -128,14 +128,14 @@ class Access extends Base
                         }
                     }
                 }/*
-                else
-                { 
-                    Core::app()->echoPre('333');
-                    Core::app()->echoPre($key_module);    
-                    Core::app()->echoPre($arrAccessAction['module']);                    
-                    Core::app()->echoPre($access_user_group['actions'][$key_module]);
-                    Core::app()->echoPre($arrAccessAction['module']);
-                }*/
+                  else
+                  {
+                  Core::app()->echoPre('333');
+                  Core::app()->echoPre($key_module);
+                  Core::app()->echoPre($arrAccessAction['module']);
+                  Core::app()->echoPre($access_user_group['actions'][$key_module]);
+                  Core::app()->echoPre($arrAccessAction['module']);
+                  } */
             }
         }
 

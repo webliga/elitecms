@@ -133,7 +133,7 @@ class Template extends Base
             }
             else
             {
-                require $path;
+               require $path;
             }
 
             $content = ob_get_contents();

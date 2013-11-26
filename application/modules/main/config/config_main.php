@@ -7,10 +7,8 @@ $config = array(
             'action' => array(// Настройки экшна
                 'index' => array(// Имя экшна
                     'desc' => 'Просмотр новости', //Описание экшна 
-                    'accessType' => array(//Доступ к экшну для пользователя по url
-                        'r' => true,
-                    ), 
-                    'callFromAdmin' => false, // Доступ только из админки по url?
+                    'access_type' => 'r', 
+                    'call_from_admin' => false, // Доступ только из админки по url?
                 ),
             ),
             'desc' => 'Просмотр новостей', //Описание контроллера 

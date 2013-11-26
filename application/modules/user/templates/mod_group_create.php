@@ -8,7 +8,7 @@
     </div>
     <div class="both"></div>
     <div class="control-group news-select">
-        <label class="control-label" for="inputPassword">Родительская группа:</label>
+        <label class="control-label" for="inputPassword">Унаследовать права от группы:</label>
         <div class="controls">
             <select name="id_parent" class="form-control" id="id_parent">
                 <?php

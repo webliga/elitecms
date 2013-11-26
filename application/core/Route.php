@@ -39,7 +39,7 @@ class Route extends Base
         $request = Core::app()->getRequest();
 
 // Масив с правилами роутинга, будет создаваться из файлов модулей    
-        $routeRuleArr = Core::app()->getConfig()->getModuleRouteRule();
+        $routeRuleArr = Core::app()->getConfig()->getAllModulesRouteRule();
 
         $request->setRouteRule($routeRuleArr);
         $request->setGlobalVars(); // Получаем get post данные (глобальные обнулятся)
@@ -65,10 +65,8 @@ class Route extends Base
                 SD .
                 PATH_TO_LANG .
                 SD .
-                $request->getLang() .
-                SD .
                 $request->getLang() . '.php';
-
+        //Core::app()->echoPre($path_controller);
         if ($this->issetFile($path_controller))
         {
             Core::app()->getLoader()->loadFile($path_controller);
@@ -91,7 +89,7 @@ class Route extends Base
             {
                 // вызываем действие контроллера и включаем язык
                 // проверяем доступ пользователя к екшену
-                $arrAccessAction = array(
+                $moduleAccessAction = array(
                     'module' => $request->getModuleName(),
                     'controller' => $request->getController(),
                     'action' => $request->getAction(),
@@ -113,11 +111,10 @@ class Route extends Base
                 $configModule = Core::app()->getLoader()->loadFile($path_module_config, true, false);
 
                 // Доступ екшена
-                $arrAccessAction['access'] = $configModule['controller'][$request->getController()]['action'][$request->getAction()];
+                $moduleAccessAction['access'] = $configModule['controller'][$request->getController()]['action'][$request->getAction()];
 
-                //Core::app()->echoPre($arrAccessAction);
 //Сначала проверяем доступен ли данный экшн только из админки? А потом уже груповой доступ
-                if ($arrAccessAction['access']['callFromAdmin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($arrAccessAction))
+                if ($moduleAccessAction['access']['call_from_admin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($moduleAccessAction))
                 {
                     if (!file_exists($path_lang))
                     {
@@ -139,7 +136,12 @@ class Route extends Base
 // Отрабатываем модуль, который выводит главное содержание страницы
 // и получаем страницу отображения контента
                     $page = $module_controller->$action($request->getParams());
-
+/*
+                    $this->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+                    
+                    $this->appExit();
+                    
+                    */
                     Core::app()->getTemplate()->show($page);
                 }
                 else

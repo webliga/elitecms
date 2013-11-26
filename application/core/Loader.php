@@ -19,7 +19,7 @@ class Loader extends Base
     {
         if ($this->issetFile($path))
         {
-            if($once)
+            if ($once)
             {
                 require_once $path;
             }
@@ -30,19 +30,26 @@ class Loader extends Base
 
             if ($returnConfig)
             {
-                return $config;
+                if(isset($config))
+                {
+                    return $config;
+                }
+                else
+                {
+                    return array();
+                }
             }
         }
         else
         {
             // Если возвращаем масив конфигураций и файла конфигураций небыло, то ошибку не выводим
-            if(!$returnConfig)
+            if (!$returnConfig)
             {
                 Core::app()->getError()->errorFileNotExist('Файл ' . $path . ' не существует!');
             }
         }
-    }      
-    
+    }
+
     public function loadTemplateBlock($nameBlock)
     {
         $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true);
@@ -52,7 +59,7 @@ class Loader extends Base
                 SD .
                 'blocks' .
                 SD .
-                PFX_BLOCK . 
+                PFX_BLOCK .
                 $nameBlock . EXT_TEMPLATE_FILE;
 
         if ($this->issetFile($path))
@@ -73,9 +80,9 @@ class Loader extends Base
 
     public function loadTemplate($page = null)
     {
-        $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true); 
-        
-        if(!isset($page) || $this->isEmpty($page))
+        $templateName = Core::app()->getTemplate()->getCurrentTemplatePath(true);
+
+        if (!isset($page) || $this->isEmpty($page))
         {
             $page = DEFAULT_PAGE_MAIN;
         }
@@ -86,8 +93,8 @@ class Loader extends Base
                 'pages' .
                 SD .
                 $page;
-        
-        
+
+
         if ($this->issetFile($path))
         {
             require_once $path;
@@ -97,7 +104,6 @@ class Loader extends Base
             Core::app()->getError()->errorFileNotExist('Блок ' . $nameBlock . ' не существует!');
         }
     }
-
 
 }
 

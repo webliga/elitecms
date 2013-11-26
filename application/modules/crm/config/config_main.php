@@ -7,10 +7,8 @@ $config = array(
             'action' => array(// Настройки экшна
                 'index' => array(// Имя экшна
                     'desc' => 'Просмотр новости', //Описание экшна 
-                    'accessType' => array(//Доступ к экшну для пользователя по url
-                        'r' => true,
-                    ),
-                    'callFromAdmin' => false, // Доступ только из админки по url?
+                    'access_type' => 'r',
+                    'call_from_admin' => false, // Доступ только из админки по url?
                 ),
             ),
             'desc' => 'Просмотр новостей', //Описание контроллера 
@@ -19,38 +17,28 @@ $config = array(
             'action' => array(
                 'index' => array(
                     'desc' => 'Просмотр списка заданий',
-                    'accessType' => array(
-                        'r' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'r',
+                    'call_from_admin' => false,
                 ),
                 'create' => array(
                     'desc' => 'Создание задания',
-                    'accessType' => array(
-                        'c' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'c',
+                    'call_from_admin' => false,
                 ),
                 'edite' => array(
                     'desc' => 'Редактирование задания',
-                    'accessType' => array(
-                        'e' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'e',
+                    'call_from_admin' => false,
                 ),
                 'update' => array(
                     'desc' => 'Редактирование задания',
-                    'accessType' => array(
-                        'e' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'e',
+                    'call_from_admin' => false,
                 ),
                 'delete' => array(
                     'desc' => 'Удаление задания',
-                    'accessType' => array(
-                        'd' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'd',
+                    'call_from_admin' => false,
                 ),
             ),
             'desc' => 'Управление задачами',
@@ -59,38 +47,28 @@ $config = array(
             'action' => array(
                 'index' => array(
                     'desc' => 'Просмотр всех статусов',
-                    'accessType' => array(
-                        'r' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'r',
+                    'call_from_admin' => false,
                 ),
                 'create' => array(
                     'desc' => 'Создание статуса',
-                    'accessType' => array(
-                        'c' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'c',
+                    'call_from_admin' => false,
                 ),
                 'edite' => array(
                     'desc' => 'Редактирование статуса',
-                    'accessType' => array(
-                        'e' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'e',
+                    'call_from_admin' => false,
                 ),
                 'update' => array(
                     'desc' => 'Редактирование статуса',
-                    'accessType' => array(
-                        'e' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'e',
+                    'call_from_admin' => false,
                 ),
                 'delete' => array(
                     'desc' => 'Удаление статуса',
-                    'accessType' => array(
-                        'd' => true,
-                    ),
-                    'callFromAdmin' => false,
+                    'access_type' => 'd',
+                    'call_from_admin' => false,
                 ),
             ),
             'desc' => 'Управление статусами',

@@ -62,10 +62,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ru.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ru.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/modules/admin/lang/ru.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="374">
+            <state line="7" column="42" selection-start="255" selection-end="265" vertical-scroll-proportion="0.1374134" vertical-offset="0" max-vertical-offset="866">
               <folding />
             </state>
           </provider>
@@ -80,10 +80,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="en.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="en.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/lang/en.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="0.09815242" vertical-offset="0" max-vertical-offset="866">
+            <state line="5" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="-3.2692308" vertical-offset="0" max-vertical-offset="306">
               <folding />
             </state>
           </provider>
@@ -343,7 +343,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1288" height="1002" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -447,13 +447,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/modules/admin/lang/ru.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="892">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/lang/ru.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="-3.2692308" vertical-offset="0" max-vertical-offset="306">
@@ -463,7 +456,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/lang/en.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="0.09815242" vertical-offset="0" max-vertical-offset="866">
+        <state line="5" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="-3.2692308" vertical-offset="0" max-vertical-offset="306">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/admin/lang/ru.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="42" selection-start="255" selection-end="265" vertical-scroll-proportion="0.1374134" vertical-offset="0" max-vertical-offset="866">
           <folding />
         </state>
       </provider>

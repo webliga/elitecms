@@ -61,7 +61,7 @@ abstract class Base
      * 
      * @param arr
      */
-    public function echoPre($dataArr, $return = false)
+    public function echoPre($dataArr, $return = false, $exit = false)
     {
         if (!$return)
         {
@@ -75,6 +75,11 @@ abstract class Base
             $data .= print_r($dataArr, $return);
             $data .= '</pre>';
             return $data;
+        }
+        
+        if($exit)
+        {
+            $this->appExit();
         }
     }
 

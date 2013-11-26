@@ -7,7 +7,6 @@ if (!isset($dataArr['link_edite']))
 
 $link_edite = $dataArr['link_edite'];
 $link_delete = $dataArr['link_delete'];
-$link_access = $dataArr['link_access'];
 
 unset($dataArr['link_edite']);
 unset($dataArr['link_delete']);

@@ -13,3 +13,20 @@
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/mediaelement-and-player.min.js"></script>
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/fancybox/jquery.fancybox.pack.js"></script>
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/custom.js"></script>
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://html-css.org/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "6"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+

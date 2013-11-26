@@ -21,7 +21,7 @@ class Request extends Base
     private $_file;
     private $_host;
     private $_routeRuleArr;
-    private $_callFromAdmin = false;
+    private $_call_from_admin = false;
 
     function __construct()
     {
@@ -134,7 +134,7 @@ class Request extends Base
 
             if (isset($configModule['is_admin']) && $configModule['is_admin'])
             {
-                $this->_callFromAdmin = $configModule['is_admin'];
+                $this->_call_from_admin = $configModule['is_admin'];
             }
         }
     }
@@ -314,7 +314,7 @@ class Request extends Base
 
     public function getCallFromAdmin()
     {
-        return $this->_callFromAdmin;
+        return $this->_call_from_admin;
     }
 
     public function redirect($url, $terminate = true, $statusCode = 302)

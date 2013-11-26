@@ -36,12 +36,10 @@ $config = array(
     'controller' => array(// Настройки контроллеров
         'main' => array(// Имя контроллера
             'action' => array(// Настройки экшна
-                'index' => array(// Имя экшна
-                    'desc' => 'Главная админки', //Описание экшна 
-                    'accessType' => array(
-                        'r' => true,
-                    ), //Доступ к экшну для пользователя по url
-                    'callFromAdmin' => true, // Доступ только из админки по url?
+                'showDataByPosition' => array(// Имя экшна
+                    'desc' => 'Показывать в позиции?', //Описание экшна 
+                    'access_type' => 'r', //Доступ к экшну для пользователя по url
+                    'call_from_admin' => true, // Доступ только из админки по url?
                 ),
             ),
             'desc' => 'Главная страница админки', //Описание контроллера 
@@ -50,38 +48,28 @@ $config = array(
             'action' => array(// Настройки экшна
                 'index' => array(
                     'desc' => 'Просмотр списка пунктов меню',
-                    'accessType' => array(
-                        'r' => true,
-                        ),
-                    'callFromAdmin' => true,
+                    'access_type' => 'r',
+                    'call_from_admin' => true,
                 ),
                 'create' => array(
                     'desc' => 'Создание пункта меню',
-                    'accessType' => array(
-                        'c' => true,
-                        ),
-                    'callFromAdmin' => true,
+                    'access_type' => 'c',
+                    'call_from_admin' => true,
                 ),
                 'edite' => array(
-                    'desc' => 'Редактирование  пункта меню',
-                    'accessType' => array(
-                        'e' => true,
-                        ),
-                    'callFromAdmin' => true,
+                    'desc' => 'Просмотр настройки пункта меню',
+                    'access_type' => 'e',
+                    'call_from_admin' => true,
                 ),
                 'update' => array(
-                    'desc' => 'Редактирование  пункта меню',
-                    'accessType' => array(
-                        'e' => true,
-                        ),
-                    'callFromAdmin' => true,
+                    'desc' => 'Редактирование/обновление  пункта меню',
+                    'access_type' => 'e',
+                    'call_from_admin' => true,
                 ),                
                 'delete' => array(
                     'desc' => 'Удаление  пункта меню',
-                    'accessType' => array(
-                        'd' => true,
-                        ),
-                    'callFromAdmin' => true,
+                    'access_type' => 'd',
+                    'call_from_admin' => true,
                 ),                
             ),
             'desc' => 'Главная страница списка пунктов меню', //Описание контроллера 

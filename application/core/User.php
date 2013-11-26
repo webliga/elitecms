@@ -18,9 +18,9 @@ class User extends Base
         parent::__destruct();
     }
 
-    public function checkUserAccess($arrAccessAction)
+    public function checkUserAccess($moduleAccessAction)
     {
-        if ($this->_access->checkByUserGroupAccess($this->_userRoleAcces, $arrAccessAction))
+        if ($this->_access->checkByUserGroupAccess($this->_userRoleAcces, $moduleAccessAction))
         {
             return true;
         }

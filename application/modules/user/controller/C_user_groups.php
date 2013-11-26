@@ -37,14 +37,13 @@ class C_user_groups extends Controller
 
         for ($i = 0; $i < count($dataArr); $i++)
         {
-           // unset($dataArr[$i]['preview']);
+            // unset($dataArr[$i]['preview']);
         }
 
-        $dataArr['link_access'] = 'groups/access/';
         $dataArr['link_edite'] = 'groups/edite/';
         $dataArr['link_delete'] = 'groups/delete/';
         //$this->echoPre($dataArr['link_edite']);
-        $content = Core::app()->getTemplate()->getWidget('data_table2', $dataArr);
+        $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
 
         Core::app()->getTemplate()->setVar('title_page', 'Список групп');
@@ -251,8 +250,8 @@ class C_user_groups extends Controller
     {
         $user = Core::app()->getUser();
 
-        $this->echoPre($user->getField('id'));
-        Core::app()->echoPre($user->getUserSession());
+        //$this->echoPre($user->getField('id'));
+        //Core::app()->echoPre($user->getUserSession());
 
         $post = Core::app()->getRequest()->getPost();
 
@@ -260,21 +259,31 @@ class C_user_groups extends Controller
 
         if (!$this->isEmpty($post))
         {
-            $dataArr = $this->getDefaultGroupData($post);
+            $dataArr['name'] = $post['name'];
+            $dataArr['description'] = $post['description'];
 
+            $id = $this->M_user_groups->setGroup($dataArr);
 
-            $this->M_user_groups->setGroup($dataArr);
+            for ($i = 0; $i < count($post['access']); $i++)
+            {
+                for ($y = 0; $y < count($post['access'][$i]); $y++)
+                {
+                    $post['access'][$i][$y]['id_group'] = $id['last_insert_id()'];
+                }
+            }
 
+            $this->accessupdate($post);
+            
+            
             $url = Core::app()->getHtml()->createUrl('admin/groups');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
         {
             $dataArr = array();
-            $dataArr['all_groups'] = $this->M_user_groups->getAllGroups();
-            $dataArr['root'] = 'Без родителя';
             $dataArr['id'] = 0;
-            $dataArr['id_parent'] = 0;
+            $dataArr['access'] = $this->access(0);
+
             $dataArr['form_action'] = 'admin/groups/create/';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'user'; // папка где брать файл
@@ -291,39 +300,38 @@ class C_user_groups extends Controller
 
     public function write()
     {
-
+        
     }
 
     public function edite()
     {
         $get = Core::app()->getRequest()->getGet();
 
-        if (!$this->isEmpty($get))
-        {
-            $this->loadModel('groups');
-            $dataArr = $this->M_user_groups->geGroupById($get['id']);
-            $dataArr['all_groups'] = $this->M_user_groups->getAllGroups();
-            $dataArr['root'] = 'Без родителя';
-            $dataArr['form_action'] = 'admin/groups/update/';
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = 'user';
-            $dataArr['file_content_view'] = 'mod_group_create.php';
-            $dataArr['return'] = true;
+        $this->loadModel('groups');
+        $dataArr = $this->M_user_groups->getGroupById($get['id']);
+        $dataArr['access'] = $this->access($get['id']);
 
-            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
+        $dataArr['form_action'] = 'admin/groups/update/';
+        $dataArr['path'] = '';
+        $dataArr['name_module'] = 'user';
+        $dataArr['file_content_view'] = 'mod_group_create.php';
+        $dataArr['return'] = true;
 
-            /*
-              $dataArr['name_controller'] = 'newsitems';
-              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-             */
-            //$this->echoPre($dataArr);
-            $dataArr['content'] = $content;
+        $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
-            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
-            Core::app()->getTemplate()->setVar('title_page', 'редактирование группы');
-            Core::app()->getTemplate()->setVar('content', $content);
-        }
+        /*
+          $dataArr['name_controller'] = 'newsitems';
+          $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+          $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+         */
+        //$this->echoPre($dataArr);
+        $dataArr['content'] = $content;
+
+        $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
+        
+        
+        Core::app()->getTemplate()->setVar('title_page', 'Редактирование группы: ' . $dataArr['name']);
+        Core::app()->getTemplate()->setVar('content', $content);
     }
 
     public function update()
@@ -333,10 +341,14 @@ class C_user_groups extends Controller
         if (!$this->isEmpty($post))
         {
             $id = $post['id'];
+            $access['access'] = $post['access'];
+
             unset($post['id']);
+            unset($post['access']);
 
             $this->loadModel('groups');
             $this->M_user_groups->updateGroupById($id, $post);
+            $this->accessupdate($access);
             $url = Core::app()->getHtml()->createUrl('admin/groups');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
@@ -350,52 +362,115 @@ class C_user_groups extends Controller
         {
             $this->loadModel('groups');
             $this->M_user_groups->deleteGroup($get['id']);
-
+            $this->M_user_groups->deleteGroupAccess($get['id']);
+            
             $url = Core::app()->getHtml()->createUrl('admin/groups');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }
 
-    public function access()
+    private function access($id)
     {
-        $get = Core::app()->getRequest()->getGet();
+        $content = '';
 
-        if (!$this->isEmpty($get))
+        $this->loadModel('groups');
+
+        $modulesConfig = Core::app()->getConfig()->getAllModulesConfig();
+
+
+        $dataArr['id_group'] = $id;
+
+        // список доступов к екшенам  модулей из БД
+        $group_access = $this->M_user_groups->getGroupAccess($id);
+        $dataArr['modules'] = Core::app()->getConfig()->getConfigItem('modules');
+
+        // пробегаемся по установленным модулям в системе
+        for ($i = 0; $i < count($dataArr['modules']); $i++)
         {
-            $this->loadModel('groups');
-            $dataArr = $this->M_user_groups->geGroupById($get['id']);
-            $dataArr['all_groups'] = $this->M_user_groups->getAllGroups();
-            $dataArr['root'] = 'Без родителя';
-            $dataArr['form_action'] = 'admin/groups/update/';
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = 'user';
-            $dataArr['file_content_view'] = 'mod_group_create.php';
-            $dataArr['return'] = true;
+            // дефолтные настройки модуля по умолчанию (из файла конфига модуля)
+            $module_default_access = $modulesConfig[$dataArr['modules'][$i]['name_system']];
 
-            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
+            // пробегаемся по доступам из БД
+            for ($y = 0; $y < count($group_access); $y++)
+            {
+                // если есть настройка прав доступа в БД к модулю
+                if ($group_access[$y]['id_module'] == $dataArr['modules'][$i]['id_module'])
+                {
+                    $id = $group_access[$y]['id'];
+                    $controller = $group_access[$y]['controller'];
+                    $action = $group_access[$y]['action'];
+                    $access_type = $group_access[$y]['access_type'];
+                    $access_type_value = $group_access[$y]['access_type_value'];
 
-            /*
-              $dataArr['name_controller'] = 'newsitems';
-              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-             */
-            //$this->echoPre($dataArr);
-            $dataArr['content'] = $content;
+                    // добавляем дефолтные настройки прав доступа с настроек прав доступа из БД если такие есть
+                    if (isset($module_default_access['controller'][$controller]['action'][$action]['access_type']) && $module_default_access['controller'][$controller]['action'][$action]['access_type'] == $access_type
+                    )
+                    {
+                        $module_default_access['controller'][$controller]['action'][$action]['id'] = $id;
+                        $module_default_access['controller'][$controller]['action'][$action]['access_type_value'] = $access_type_value;
+                    }
+                }
+            }
 
-            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
-            Core::app()->getTemplate()->setVar('title_page', 'редактирование группы');
-            Core::app()->getTemplate()->setVar('content', $content);
+
+            $dataArr['modules'][$i]['access'] = $module_default_access;
         }
+
+        //$this->echoPre($modulesConfig);
+        //$this->echoPre($dataArr, false, true);
+        $dataArr['form_action'] = 'admin/groups/accessupdate/';
+        $dataArr['path'] = '';
+        $dataArr['name_module'] = 'user';
+        $dataArr['file_content_view'] = 'mod_groups_access.php';
+        $dataArr['return'] = true;
+
+        $content .= Core::app()->getTemplate()->moduleContentView($dataArr);
+
+        return $content;
     }
 
-    public function accessupdate()
+    private function accessupdate($post)
     {
+        $this->loadModel('groups');
 
+
+        for ($i = 0; $i < count($post['access']); $i++)
+        {
+            for ($y = 0; $y < count($post['access'][$i]); $y++)
+            {
+                $actionAccess = $post['access'][$i][$y];
+
+                if (isset($actionAccess['access_type_value']) && $actionAccess['access_type_value'] == 'on')
+                {
+                    $actionAccess['access_type_value'] = 1;
+                }
+                else
+                {
+                    $actionAccess['access_type_value'] = 0;
+                }
+
+                if ($actionAccess['id'] == 0)
+                {
+                    unset($actionAccess['id']);
+
+                    $this->M_user_groups->setGroupAccess($actionAccess);
+                }
+                else
+                {
+                    $id = $actionAccess['id'];
+                    unset($actionAccess['id']);
+
+                    $this->M_user_groups->updateGroupAccessById($id, $actionAccess);
+                }
+            }
+        }
+
+        //$this->echoPre($post, false, true);
     }
 
     public function getModuleFormFildsConfig($dataArr = null)
     {
-
+        
     }
 
     private function getDefaultGroupData($dataArr)
@@ -405,7 +480,7 @@ class C_user_groups extends Controller
 
     public function updateModuleFormFildsConfig($dataArr = null)
     {
-
+        
     }
 
     public function deleteModuleDataById($dataArr)
@@ -417,5 +492,4 @@ class C_user_groups extends Controller
     }
 
 }
-
 ?>

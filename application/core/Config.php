@@ -128,7 +128,7 @@ class Config extends Base
         //$this->echoPre($this->_data);
     }
 
-    public function getModuleRouteRule()
+    public function getAllModulesRouteRule()
     {
         $result = null;
 
@@ -158,6 +158,33 @@ class Config extends Base
         return $result;
     }
 
+    public function getAllModulesConfig()
+    {
+        $result = null;
+
+        $dir = PATH_SITE_ROOT . SD . PATH_TO_MODULES;
+        $loader = Core::app()->getLoader();
+
+        $modulesDirArr = scandir($dir);
+
+
+        foreach ($modulesDirArr as $key => $value)
+        {
+            if ($value != '..' && $value != '.')
+            {
+                $mConfig = $dir . SD . $value . SD . 'config' . SD . PFX_CONFIG . 'main.php';
+                $arr = $loader->loadFile($mConfig, true, false);
+
+                if (isset($arr) && is_array($arr))
+                {
+                    $result[$value] = $arr;
+                }
+            }
+        }
+
+        return $result;
+    }
+    
     public function getAllLang()
     {
         $langArr = array();
@@ -172,13 +199,13 @@ class Config extends Base
 
             for ($i = 0; $i < count($arr); $i++)
             {
-                $dir = $path_to_lang . 
+                $dir = $path_to_lang .
                         SD .
                         $arr[$i];
-                
-                if (is_dir($dir) && $arr[$i] != '.' && $arr[$i] != '..')
-                {
-                    $langArr[] = $arr[$i];
+
+                if (!is_dir($dir) && $arr[$i] != '.' && $arr[$i] != '..')
+                {                   
+                    $langArr[] = substr($arr[$i], 0, strrpos($arr[$i], '.'));
                 }
             }
         }
