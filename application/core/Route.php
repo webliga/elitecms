@@ -31,6 +31,7 @@ class Route extends Base
         $this->_started = true;
 
 // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
+        // под вопросом
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
 
         Core::app()->getConfig()->selectSystemConfig($url);
@@ -89,7 +90,7 @@ class Route extends Base
             {
                 // вызываем действие контроллера и включаем язык
                 // проверяем доступ пользователя к екшену
-                $moduleAccessAction = array(
+                $accessModuleCurrent = array(
                     'module' => $request->getModuleName(),
                     'controller' => $request->getController(),
                     'action' => $request->getAction(),
@@ -108,13 +109,13 @@ class Route extends Base
 
                 // Получаем настройки модуля (разрешения екшенов)  
                 // Разработчик модуля прописывает тип  доступа к экшену
-                $configModule = Core::app()->getLoader()->loadFile($path_module_config, true, false);
+                $accessModuleDefault = Core::app()->getLoader()->loadFile($path_module_config, true, false);
 
                 // Доступ екшена
-                $moduleAccessAction['access'] = $configModule['controller'][$request->getController()]['action'][$request->getAction()];
+                $accessModuleCurrent['access'] = $accessModuleDefault['controller'][$request->getController()]['action'][$request->getAction()];
 
 //Сначала проверяем доступен ли данный экшн только из админки? А потом уже груповой доступ
-                if ($moduleAccessAction['access']['call_from_admin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($moduleAccessAction))
+                if ($accessModuleCurrent['access']['call_from_admin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($accessModuleCurrent))
                 {
                     if (!file_exists($path_lang))
                     {

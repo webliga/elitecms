@@ -99,7 +99,7 @@ class Config extends Base
 
         $result = $model->selectConfig();
 
-
+        
         if (!isset($result['settings']['template_main']) || $this->isEmpty($result['settings']['template_main']))
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -132,7 +132,11 @@ class Config extends Base
     {
         $result = null;
 
-        $dir = PATH_SITE_ROOT . SD . PATH_TO_MODULES;
+        $dir = 
+                PATH_SITE_ROOT . 
+                SD . 
+                PATH_TO_MODULES;
+        
         $loader = Core::app()->getLoader();
 
         $modulesDirArr = scandir($dir);

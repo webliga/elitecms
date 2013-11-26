@@ -51,8 +51,18 @@ class C_user_auth extends Controller
         if ($secure->checkPassword($post['password']) && $secure->checkString($post['login']))
         {
             $this->loadModel('auth');
-            $dataArr = $this->M_user_auth->searchUserByLogin($post['login']);
-
+            $this->loadModel('groups');
+            
+            $dataArr = $this->M_user_auth->getUserByLogin($post['login']);
+            
+            if($dataArr['id_group'] > 0)
+            {
+                $dataArr['user_group_access'] = $this->M_user_groups->getGroupAccess($dataArr['id_group']);
+            }
+            
+            //$this->echoPre($dataArr, false, true);
+            
+            
             if ($dataArr != null)
             {
                 if (!$user->isAuth())
@@ -64,6 +74,8 @@ class C_user_auth extends Controller
             {
                 $content = 'Секури прошли и логин не верен';
             }
+            
+            
         }
         else
         {

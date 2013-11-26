@@ -160,7 +160,7 @@ class Model extends Base
     public function selectConfig()
     {
         //Выбираем главные настройки
-         //Выбираем настройки модулей
+        //Выбираем настройки модулей
         $querySettings = "
             SELECT 
                   settings.*

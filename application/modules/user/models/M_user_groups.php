@@ -23,24 +23,6 @@ class M_user_groups extends Model
         
     }
 
-    function getAllGroups($limit = null)
-    {
-        $data = $this->selectAllFromTable('users_groups', null, null);
-
-        return $data;
-    }
-
-    function getGroupAccess($id_group)
-    {
-        $id_group = (int)$id_group;
-        
-        $join = $this->_db->parse('WHERE ?n = ?i','id_group' ,$id_group);
-        
-        $data = $this->selectAllFromTable('users_groups_access', null, $join);
-
-        return $data;
-    }    
-
     public function setGroup($dataArr)
     {
         return $this->insertTableRow('users_groups', $dataArr);
@@ -51,12 +33,35 @@ class M_user_groups extends Model
         $this->insertTableRow('users_groups_access', $dataArr);
     }
     
+    function getAllGroups($limit = null)
+    {
+        $data = $this->selectAllFromTable('users_groups', null, null);
+
+        return $data;
+    }
+    
     public function getGroupById($id)
     {
         $data = $this->selectAllByIdFromTable('users_groups', $id);
 
         return $data;
     }
+    
+    function getGroupAccess($id_group)
+    {
+        $id_group = (int)$id_group;
+        
+        $join = $this->_db->parse('
+            LEFT JOIN modules ON modules.id = users_groups_access.id_module 
+            WHERE ?n = ?i
+            ','id_group' ,$id_group);
+        
+        $fildsSelect = 'users_groups_access.*, modules.name_system as module';
+        
+        $data = $this->selectAllFromTable('users_groups_access', $fildsSelect, $join);
+
+        return $data;
+    }    
 
     public function updateGroupById($id, $dataArr)
     {

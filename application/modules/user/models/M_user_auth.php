@@ -22,7 +22,7 @@ class M_user_auth extends Model
     {
         
     }
-    
+
     function getUserById($id)
     {
         $sql = $this->_db->parse("
@@ -37,15 +37,20 @@ class M_user_auth extends Model
         return $data;
     }
 
-    public function searchUserByLogin($login)
-    {
-        $sql = $this->_db->parse('SELECT * FROM users WHERE ?n = ?s', 'login', $login);
+    public function getUserByLogin($login)
+    {        
+        $select = '
+            users.* 
+            ';
+
+
+        $sql = $this->_db->parse('SELECT ' . $select . '   FROM users  WHERE ?n = ?s  ', 'login', $login);
 
         $data = $this->_db->getRow($sql);
 
         return $data;
-    }    
-    
+    }
+
 }
 
 ?>

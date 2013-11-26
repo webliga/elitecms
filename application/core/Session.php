@@ -17,6 +17,7 @@ class Session extends Base
 
     private function sessionStart()
     {
+                
         if (!isset($_SESSION))
         {
             session_start();
