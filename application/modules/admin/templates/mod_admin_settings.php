@@ -62,7 +62,7 @@
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['desc'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['title'] . '</option>';
                             $selected = '';
                         }
 
@@ -88,7 +88,7 @@
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['desc'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['title'] . '</option>';
                             $selected = '';
                         }
 
@@ -107,6 +107,57 @@
             </div>
             <div class="both"></div>
 
+
+            <div class="control-group news-select">
+                <label class="control-label" for="inputPassword"><?php if (isset($dataArr['lang']['title_group_default_unauthorized'])) echo $dataArr['lang']['title_group_default_unauthorized']; ?></label>
+                <div class="controls">
+                    <select class="form-control" name="group_default_unauthorized" id="id_module">
+                        <?php
+                        $selected = '';
+                        $options = '';
+                        for ($i = 0; $i < count($dataArr['all_groups']); $i++)
+                        {
+                            $item = $dataArr['all_groups'][$i];
+
+                            if ($item['id'] == $dataArr['group_default_unauthorized'])
+                            {
+                                $selected = 'selected';
+                            }
+                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $selected = '';
+                        }
+
+                        echo $options;
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="both"></div>
+            <div class="control-group news-select">
+                <label class="control-label" for="inputPassword"><?php if (isset($dataArr['lang']['title_group_default_register'])) echo $dataArr['lang']['title_group_default_register']; ?></label>
+                <div class="controls">
+                    <select class="form-control" name="group_default_register" id="id_module">
+                        <?php
+                        $selected = '';
+                        $options = '';
+                        for ($i = 0; $i < count($dataArr['all_groups']); $i++)
+                        {
+                            $item = $dataArr['all_groups'][$i];
+
+                            if ($item['id'] == $dataArr['group_default_register'])
+                            {
+                                $selected = 'selected';
+                            }
+                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $selected = '';
+                        }
+
+                        echo $options;
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="both"></div>
         </div>
     </div>
     <div class="both"></div>

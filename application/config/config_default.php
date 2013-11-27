@@ -58,6 +58,10 @@ $config = array(
             'name' => 'Session',
             'path' => 'application/core'
         ),
+        'event' => array(
+            'name' => 'Event',
+            'path' => 'application/core'
+        ),        
     ),
     'default_groups' => array(
         'guest' => array(//Группа
@@ -80,5 +84,6 @@ $config = array(
         'access' => '',
         'path' => array('*'),
     ),
+    
 );
 ?>

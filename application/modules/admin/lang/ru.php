@@ -11,6 +11,8 @@ $config = array(
     'title_path_to_main' => 'Путь к главной странице',
     'title_lang_site_default' => 'Язык на сайте по умолчанию',    
     'title_lang_admin_default' => 'Язык в админке по умолчанию',   
-    'title_log_email' => 'E-mail для системных сообщений',     
+    'title_log_email' => 'E-mail для системных сообщений',
+    'title_group_default_unauthorized' => 'Группа для неавторизированных пользователей', 
+    'title_group_default_register' => 'Группа после регистрации',    
 );
 ?>

@@ -54,9 +54,8 @@ class C_user_main extends Controller
             $dataArr['name_module'] = $this->getNameModule();
             $dataArr['file_content_view'] = 'mod_user_auth_block.php';
             $dataArr['return'] = false;
-            //$this->echoPre($dataArr);
+
             Core::app()->getTemplate()->moduleContentView($dataArr, false);
-            //$this->echoPre($dataArr);
         }
     }
 
@@ -120,12 +119,14 @@ class C_user_main extends Controller
         if (!$this->isEmpty($get))
         {
             $this->loadModel('register', 'user');
-
+            $userGroupModel = $this->loadModel('groups', 'user', true);
+            
             $dataArr = $this->M_user_register->getUserById($get['id']);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
 
             //$dataArr['root'] = 'Это проект';
             //$dataArr['rootStatus'] = 'Открытая';
+            $dataArr['all_groups'] = $userGroupModel->getAllGroups();
             $dataArr['form_action'] = 'admin/user/update';
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'user';

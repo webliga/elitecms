@@ -54,10 +54,14 @@ class C_user_auth extends Controller
             $this->loadModel('groups');
             
             $dataArr = $this->M_user_auth->getUserByLogin($post['login']);
+            $id_group = $dataArr['id_group'];
             
-            if($dataArr['id_group'] > 0)
+            
+            if($id_group > 0)
             {
-                $dataArr['user_group_access'] = $this->M_user_groups->getGroupAccess($dataArr['id_group']);
+                $user_group = $this->M_user_groups->getGroupById($id_group);
+                $dataArr['group_name'] = $user_group['name'];
+                $dataArr['user_group_access'] = $this->M_user_groups->getGroupAccess($id_group);
             }
             
             //$this->echoPre($dataArr, false, true);

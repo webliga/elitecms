@@ -35,14 +35,16 @@ class C_admin_settings extends Controller
         {
 
 
-            $this->loadModel('settings', $this->getNameModule());
+            $this->loadModel('settings');
+            $userGroupModel = $this->loadModel('groups', 'user', true);
 
             Core::app()->getTemplate()->setVar('title_page', 'Список настроек');
 
             $dataArr = $this->M_admin_settings->getAllSettings();
-
+          
+            $dataArr['all_groups'] = $userGroupModel->getAllGroups();
             $dataArr['form_action'] = 'admin/settings/update/';
-            $dataArr['lang'] = $this->loadLangFile('settings.php');
+            $dataArr['lang'] = $this->loadModuleLang('ru.php');
             $dataArr['path'] = ''; // абсолютный путь к файлу отображения, если пустой, то формируется дальше
             $dataArr['name_module'] = 'admin';
             $dataArr['file_content_view'] = 'mod_admin_settings.php';
@@ -51,6 +53,7 @@ class C_admin_settings extends Controller
 
             $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
 
+            //$this->echoPre($dataArr, false, true);
             $dataArr['content'] = $content;
             // переделать под createForm
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
@@ -58,7 +61,7 @@ class C_admin_settings extends Controller
         }
     }
 
-    public function loadLangFile($fileName, $lang = null)
+    public function loadModuleLang($fileName, $lang = null)
     {
         if ($lang == null)
         {
@@ -73,8 +76,6 @@ class C_admin_settings extends Controller
                 $this->getNameModule() .
                 SD .
                 'lang' .
-                SD .
-                $lang .
                 SD .
                 $fileName;
 
@@ -106,7 +107,7 @@ class C_admin_settings extends Controller
         {
             $dataArr = array();
             $dataArr['form_action'] = 'admin/settings/create/';
-            $dataArr['lang'] = $this->loadLangFile('settings.php');
+            $dataArr['lang'] = $this->loadModuleLang('settings.php');
             $dataArr['path'] = ''; // абсолютный путь к файлу отображения, если пустой, то формируется дальше
             $dataArr['name_module'] = 'admin';
             $dataArr['file_content_view'] = 'mod_admin_settings_create.php';

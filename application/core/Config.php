@@ -15,7 +15,7 @@ class Config extends Base
         
     }
 
-    public function loadConfig($fileName)
+    public function loadSystemConfig($fileName)
     {
         $path_to_config =
                 PATH_SITE_ROOT .
@@ -99,7 +99,7 @@ class Config extends Base
 
         $result = $model->selectConfig();
 
-        
+
         if (!isset($result['settings']['template_main']) || $this->isEmpty($result['settings']['template_main']))
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -132,11 +132,11 @@ class Config extends Base
     {
         $result = null;
 
-        $dir = 
-                PATH_SITE_ROOT . 
-                SD . 
+        $dir =
+                PATH_SITE_ROOT .
+                SD .
                 PATH_TO_MODULES;
-        
+
         $loader = Core::app()->getLoader();
 
         $modulesDirArr = scandir($dir);
@@ -188,7 +188,87 @@ class Config extends Base
 
         return $result;
     }
-    
+
+    public function getAllEventsHooksConfig()
+    {
+        $result = null;
+
+        $dir = PATH_SITE_ROOT . SD . PATH_TO_MODULES;
+        $loader = Core::app()->getLoader();
+
+        $modulesDirArr = scandir($dir);
+
+// Получаем события всех модулей
+        foreach ($modulesDirArr as $key => $moduleName)
+        {
+            if ($moduleName != '..' && $moduleName != '.')
+            {
+                $mConfig = $dir . SD . $moduleName . SD . 'config' . SD . PFX_CONFIG . 'events.php';
+                $module_events = $loader->loadFile($mConfig, true, false);
+                // Если в модуле есть определенные события
+                if (isset($module_events) && is_array($module_events))
+                {
+                    foreach ($module_events as $nameSystem => $eventData)
+                    {
+                        $result[$nameSystem] = $eventData;
+                    }
+                }
+            }
+        }
+
+        
+        
+        $mConfig =
+                PATH_SITE_ROOT .
+                SD .
+                PATH_TO_CONFIG .
+                SD .
+                PFX_CONFIG .
+                'events.php';
+
+        $system_events = $loader->loadFile($mConfig, true, false);
+// Получаем системные события. Если событие модуля совпадает с системным, то системное перезапишет событие модуля
+        if (isset($system_events) && is_array($system_events))
+        {
+            foreach ($system_events as $nameSystem => $eventData)
+            {
+                $result[$nameSystem] = $eventData;
+            }
+        }
+
+
+        
+        // Получаем хуки всех модулей
+        foreach ($modulesDirArr as $key => $moduleName)
+        {
+            if ($moduleName != '..' && $moduleName != '.')
+            {
+                $mConfig = $dir . SD . $moduleName . SD . 'config' . SD . PFX_CONFIG . 'hooks.php';
+                $module_hooks = $loader->loadFile($mConfig, true, false);
+                // Если в модуле есть определенные хуки
+                if (isset($module_hooks) && is_array($module_hooks))
+                {
+                    foreach ($module_hooks as $nameSystem => $eventData)
+                    {
+                        for ($i = 0; $i < count($eventData); $i++)
+                        {
+                            $result[$nameSystem]['all_event_hooks'][] = $eventData[$i];
+                        }
+                    }
+                }
+                
+                //$this->echoPre($module_hooks);
+                        //$this->echoPre($result);
+            }
+        }
+
+
+        
+        
+        
+        return $result;
+    }
+
     public function getAllLang()
     {
         $langArr = array();
@@ -208,7 +288,7 @@ class Config extends Base
                         $arr[$i];
 
                 if (!is_dir($dir) && $arr[$i] != '.' && $arr[$i] != '..')
-                {                   
+                {
                     $langArr[] = substr($arr[$i], 0, strrpos($arr[$i], '.'));
                 }
             }

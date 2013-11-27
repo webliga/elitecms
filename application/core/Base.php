@@ -27,6 +27,92 @@ abstract class Base
         return get_class($this);
     }
 
+    public function loadController($controllerName, $module_name, $returnObjectController = false)
+    {
+        $controller_path = '';
+        $className =
+                PFX_CONTROLLER .
+                $module_name .
+                S_MODULE_NAME .
+                $controllerName;
+
+        $controller_path =
+                PATH_SITE_ROOT .
+                SD .
+                PATH_TO_MODULES .
+                $module_name .
+                SD .
+                NAME_FOLDER_MODULES_CONTROLLERS .
+                SD .
+                $className . '.php';
+
+
+        if (file_exists($controller_path))
+        {
+            require_once $controller_path;
+
+
+            if ($returnObjectController)
+            {
+                return new $className;
+            }
+            else
+            {
+                $this->$className = new $className;
+            }
+        }
+        else
+        {
+            $err['error'] = '!file_exists in Controller =  ' . $model_path;
+            Core::app()->getTemplate()->showDanger($err);
+        }
+    }
+
+    public function loadModel($modelName, $module_name = null, $returnObjectModel = false)
+    {
+        if ($module_name == null)
+        {
+            $module_name = $this->_name_module;
+        }
+
+        $model_path = '';
+        $className =
+                PFX_MODEL .
+                $module_name .
+                S_MODULE_NAME .
+                $modelName;
+
+        $model_path =
+                PATH_SITE_ROOT .
+                SD .
+                PATH_TO_MODULES .
+                SD .
+                $module_name .
+                SD .
+                NAME_FOLDER_MODULES_MODELS .
+                SD .
+                $className . '.php';
+
+        if (file_exists($model_path))
+        {
+            require_once $model_path;
+
+            if ($returnObjectModel)
+            {
+                return new $className;
+            }
+            else
+            {
+                $this->$className = new $className;
+            }
+        }
+        else
+        {
+            $err['error'] = '!file_exists in Controller =  ' . $model_path;
+            Core::app()->getTemplate()->showDanger($err);
+        }
+    }
+
     public function isEmpty($var)
     {
         $empty = true;
@@ -66,7 +152,7 @@ abstract class Base
         if (!$return)
         {
             echo '<pre>';
-                print_r($dataArr, $return);
+            print_r($dataArr, $return);
             echo '</pre>';
         }
         else
@@ -76,8 +162,8 @@ abstract class Base
             $data .= '</pre>';
             return $data;
         }
-        
-        if($exit)
+
+        if ($exit)
         {
             $this->appExit();
         }
@@ -87,6 +173,7 @@ abstract class Base
     {
         die($str);
     }
+
 }
 
 ?>

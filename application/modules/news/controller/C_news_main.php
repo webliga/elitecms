@@ -31,7 +31,7 @@ class C_news_main extends Controller
         // показываем статью по id
         // Если нету GET данных, значит неправильно набран URL или без параметров
 
-        if($paramsArr == null || $this->isEmpty($paramsArr) || !is_array($paramsArr) || count($paramsArr) == 0)
+        if ($paramsArr == null || $this->isEmpty($paramsArr) || !is_array($paramsArr) || count($paramsArr) == 0)
         {
             $paramsArr = Core::app()->getRequest()->getGet();
         }
@@ -183,6 +183,22 @@ class C_news_main extends Controller
         $this->loadModel('main', $this->getNameModule());
 
         $result = $this->M_news_main->deleteNewsSettingsByModuleId($id);
+    }
+
+    public function hookTest($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_news_main - hookTest<br>';
+        }
+    }
+
+    public function hookTest2($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_news_main - hookTest2<br>';
+        }
     }
 
 }

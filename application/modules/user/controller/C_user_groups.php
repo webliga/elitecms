@@ -273,8 +273,8 @@ class C_user_groups extends Controller
             }
 
             $this->accessupdate($post);
-            
-            
+
+
             $url = Core::app()->getHtml()->createUrl('admin/groups');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
@@ -328,8 +328,8 @@ class C_user_groups extends Controller
         $dataArr['content'] = $content;
 
         $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
-        
-        
+
+
         Core::app()->getTemplate()->setVar('title_page', 'Редактирование группы: ' . $dataArr['name']);
         Core::app()->getTemplate()->setVar('content', $content);
     }
@@ -363,7 +363,7 @@ class C_user_groups extends Controller
             $this->loadModel('groups');
             $this->M_user_groups->deleteGroup($get['id']);
             $this->M_user_groups->deleteGroupAccess($get['id']);
-            
+
             $url = Core::app()->getHtml()->createUrl('admin/groups');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
@@ -375,6 +375,7 @@ class C_user_groups extends Controller
 
         $this->loadModel('groups');
 
+        // Получаем дефолтные настройки модулей по умолчанию (из файла конфига модулей)
         $modulesConfig = Core::app()->getConfig()->getAllModulesConfig();
 
 
@@ -489,6 +490,27 @@ class C_user_groups extends Controller
         $this->loadModule('M_crm_main', $this->getNameModule());
 
         $result = $this->M_crm_main->deleteCrmSettingsByModuleId($id);
+    }
+
+    public function hookTest($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_user_groups - hookTest. Здесь мы изменяем число.<br>';
+            
+            $dataArr[1] += 12;
+            $dataArr[2]->_test = 'А тут по ссылке изменили объект';
+
+            //$this->echoPre($dataArr[2]->user_group_access);
+        }
+    }
+
+    public function hookTest2($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_user_groups - hookTest2<br>';
+        }
     }
 
 }

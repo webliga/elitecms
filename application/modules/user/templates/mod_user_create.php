@@ -48,7 +48,31 @@
         </div>
     </div>
     <div class="both"></div>     
-    <div class="both"></div>
+                <div class="control-group news-select">
+                <label class="control-label" for="inputPassword">Группа пользователя</label>
+                <div class="controls">
+                    <select class="form-control" name="id_group" id="id_module">
+                        <?php
+                        $selected = '';
+                        $options = '';
+                        for ($i = 0; $i < count($dataArr['all_groups']); $i++)
+                        {
+                            $item = $dataArr['all_groups'][$i];
+
+                            if ($item['id'] == $dataArr['id_group'])
+                            {
+                                $selected = 'selected';
+                            }
+                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $selected = '';
+                        }
+
+                        echo $options;
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="both"></div>
 
 </div>
 <div class="both"></div>
