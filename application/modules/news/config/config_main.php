@@ -22,7 +22,7 @@ $config = array(
         'newsitems' => array(
             'action' => array(
                 'index' => array(
-                    'desc' => 'Просмотр списка новостей',
+                    'desc' => 'Просмотр списка новостей, которые относятся к этому модулю через url',
                     'access_type' => 'r',
                     'call_from_admin' => true,
                 ),

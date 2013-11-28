@@ -99,7 +99,7 @@ class Config extends Base
 
         $result = $model->selectConfig();
 
-
+        
         if (!isset($result['settings']['template_main']) || $this->isEmpty($result['settings']['template_main']))
         {
             $template = Core::app()->getConfig()->getConfigItem('default_template');
@@ -208,16 +208,16 @@ class Config extends Base
                 // Если в модуле есть определенные события
                 if (isset($module_events) && is_array($module_events))
                 {
-                    foreach ($module_events as $nameSystem => $eventData)
+                    foreach ($module_events as $nameSystemEvent => $eventData)
                     {
-                        $result[$nameSystem] = $eventData;
+                        $result[$nameSystemEvent] = $eventData;
                     }
                 }
             }
         }
 
-        
-        
+
+
         $mConfig =
                 PATH_SITE_ROOT .
                 SD .
@@ -230,14 +230,14 @@ class Config extends Base
 // Получаем системные события. Если событие модуля совпадает с системным, то системное перезапишет событие модуля
         if (isset($system_events) && is_array($system_events))
         {
-            foreach ($system_events as $nameSystem => $eventData)
+            foreach ($system_events as $nameSystemEvent => $eventData)
             {
-                $result[$nameSystem] = $eventData;
+                $result[$nameSystemEvent] = $eventData;
             }
         }
 
 
-        
+
         // Получаем хуки всех модулей
         foreach ($modulesDirArr as $key => $moduleName)
         {
@@ -248,24 +248,24 @@ class Config extends Base
                 // Если в модуле есть определенные хуки
                 if (isset($module_hooks) && is_array($module_hooks))
                 {
-                    foreach ($module_hooks as $nameSystem => $eventData)
+                    foreach ($module_hooks as $nameSystemEvent => $eventData)
                     {
                         for ($i = 0; $i < count($eventData); $i++)
                         {
-                            $result[$nameSystem]['all_event_hooks'][] = $eventData[$i];
+                            $result[$nameSystemEvent]['all_event_hooks'][] = $eventData[$i];
                         }
                     }
                 }
-                
+
                 //$this->echoPre($module_hooks);
-                        //$this->echoPre($result);
+                //$this->echoPre($result);
             }
         }
 
 
-        
-        
-        
+
+
+
         return $result;
     }
 

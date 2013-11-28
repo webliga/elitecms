@@ -36,7 +36,10 @@ class C_menu_main extends Controller
             $this->loadModel('main', $this->getNameModule());
 
             $dataArr['menu_items'] = $this->M_menu_main->getMenuItemsByModuleId($dataArr['id_module']);
-//$this->echoPre($dataArr['menu_items']);
+            
+            Core::app()->getEvent()->startEvent('news_select_menuitems', array(&$dataArr['menu_items']));
+            
+            
             $settings = $this->M_menu_main->getMenuSettingsByModuleId($dataArr['id_module']);
 
             // Сделать сортировку масива пунктов меню по дочерним элементам (priority)

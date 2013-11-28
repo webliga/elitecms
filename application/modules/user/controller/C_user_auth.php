@@ -47,47 +47,55 @@ class C_user_auth extends Controller
         $post = Core::app()->getRequest()->getPost();
         $secure = Core::app()->getSecure();
         $user = Core::app()->getUser();
+        $boolIsAuth = false;
 
         if ($secure->checkPassword($post['password']) && $secure->checkString($post['login']))
         {
             $this->loadModel('auth');
             $this->loadModel('groups');
-            
+
             $dataArr = $this->M_user_auth->getUserByLogin($post['login']);
             $id_group = $dataArr['id_group'];
-            
-            
-            if($id_group > 0)
+
+
+            if ($id_group > 0)
             {
                 $user_group = $this->M_user_groups->getGroupById($id_group);
                 $dataArr['group_name'] = $user_group['name'];
                 $dataArr['user_group_access'] = $this->M_user_groups->getGroupAccess($id_group);
             }
-            
+
             //$this->echoPre($dataArr, false, true);
-            
-            
+
+
             if ($dataArr != null)
             {
                 if (!$user->isAuth())
                 {
                     $user->login($dataArr);
+                    $boolIsAuth = $user->isAuth();
                 }
             }
             else
             {
                 $content = 'Секури прошли и логин не верен';
             }
-            
-            
         }
         else
         {
             $content .= 'Пароль не подошел';
         }
 
-        Core::app()->getTemplate()->setVar('title_page', 'Авторизация пользователя');
-        Core::app()->getTemplate()->setVar('content', $content);
+        if ($boolIsAuth)
+        {
+            $url = Core::app()->getHtml()->createUrl('');
+            Core::app()->getRequest()->redirect($url, true, 302);
+        }
+        else
+        {
+            Core::app()->getTemplate()->setVar('title_page', 'Авторизация пользователя');
+            Core::app()->getTemplate()->setVar('content', $content);
+        }
     }
 
     public function logout()

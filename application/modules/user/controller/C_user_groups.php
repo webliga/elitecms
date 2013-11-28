@@ -492,24 +492,328 @@ class C_user_groups extends Controller
         $result = $this->M_crm_main->deleteCrmSettingsByModuleId($id);
     }
 
-    public function hookTest($dataArr = null)
+    public function hookUpdateUserGroupAccess($dataArr = null)
     {
-        if ($dataArr != null)
+        if ($dataArr != null && isset($dataArr[0]))
         {
-            $dataArr[0] .= ' C_user_groups - hookTest. Здесь мы изменяем число.<br>';
-            
-            $dataArr[1] += 12;
-            $dataArr[2]->_test = 'А тут по ссылке изменили объект';
+            $userObject = $dataArr[0];
 
-            //$this->echoPre($dataArr[2]->user_group_access);
+            $user = array();
+
+            $userGroupModel = $this->loadModel('groups', 'user', true);
+
+
+
+            if (!$userObject->isAuth())
+            {
+                $user = $this->getDefaultGroup($userGroupModel);
+
+                //$this->echoPre($user, false, true);
+
+                $userObject->createUserVars($user);
+            }
+            else
+            {
+                $userAuthModel = $this->loadModel('auth', 'user', true);
+                $id_user = $userObject->getField('id');
+                $user = $userAuthModel->getUserById($id_user);
+
+                $id_group = $user['id_group'];
+
+                if ($id_group != null && $id_group > 0)
+                {
+                    $user_group = $userGroupModel->getGroupById($id_group);
+                    $user_group_access = $userGroupModel->getGroupAccess($id_group);
+                    $user['group_name'] = $user_group['name'];
+                    $user['user_group_access'] = $user_group_access;
+                }
+                else
+                {
+                    $userDef = $this->getDefaultGroup($userGroupModel);
+                    $user['id_group'] = $userDef['id_group'];
+                    $user['group_name'] = $userDef['group_name'];
+                    $user['user_group_access'] = $userDef['user_group_access'];
+                }
+                $userObject->login($user); //Обновляем данные в сессиии
+            }
         }
     }
 
-    public function hookTest2($dataArr = null)
+    private function getDefaultGroup($userGroupModel)
+    {
+        $user = array();
+        $fromFile = false;
+        $congig = Core::app()->getConfig();
+
+        $setting = $congig->getConfigItem('settings');
+        $id_group_default_unauthorized = $setting['group_default_unauthorized'];
+
+        if ($userGroupModel != null && !$this->isEmpty($id_group_default_unauthorized) && $id_group_default_unauthorized > 0)
+        {
+            $user_group = $userGroupModel->getGroupById($id_group_default_unauthorized);
+            $user_group_access = $userGroupModel->getGroupAccess($id_group_default_unauthorized);
+
+            // Если прав доступа у группы нету или это id несуществующей группы
+            // тогда будем брать из файла права доступа
+            if ($user_group_access != null)
+            {
+                $user['id_group'] = $id_group_default_unauthorized;
+                $user['group_name'] = $user_group['name'];
+                $user['user_group_access'] = $user_group_access;
+            }
+            else
+            {
+                $fromFile = true;
+            }
+        }
+        else
+        {
+            $fromFile = true;
+        }
+
+        if ($fromFile)
+        {
+            $default_groups = $congig->getConfigItem('default_groups');
+            $default_role = $congig->getConfigItem('default_role');
+            $default_user_group_access[] = $default_groups[$default_role['user_group']];
+
+
+            $user['id_group'] = 0;
+            $user['group_name'] = $default_role['user_group'];
+            $user['user_group_access'] = $default_user_group_access;
+        }
+
+
+        return $user;
+    }
+
+    public function hookModuleGroupAccess($dataArr = null)
     {
         if ($dataArr != null)
         {
-            $dataArr[0] .= ' C_user_groups - hookTest2<br>';
+            $modulesNewArr = array();
+
+
+            $config = $dataArr[0];
+            $user = Core::app()->getUser();
+
+            $userGroupAccess = $user->user_group_access;
+
+
+            $modulesArr = $config->getConfigItem('modules');
+            $modulesCount = count($modulesArr);
+            $userGroupAccessCount = count($userGroupAccess);
+
+            for ($i = 0; $i < $modulesCount; $i++)
+            {
+                $module = $modulesArr[$i];
+                $validate = true;
+
+                for ($y = 0; $y < $userGroupAccessCount; $y++)
+                {
+                    $groupModuleAccess = $userGroupAccess[$y];
+
+                    if ($module['id_module'] == $groupModuleAccess['id_module'] && $groupModuleAccess['action'] == 'showDataByPosition' && $groupModuleAccess['access_type_value'] == 0)
+                    {
+                        $validate = false;
+                    }
+                }
+
+                if ($validate)
+                {
+                    $modulesNewArr[] = $module;
+                }
+            }
+
+
+
+            $config->setConfigItem('modules', $modulesNewArr);
+
+            //$this->echoPre($modulesArr);
+            //$this->echoPre($modulesNewArr);            
+        }
+    }
+
+    public function hookMenuitemsGroupAccess($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            
+            $menuitems = $dataArr[0];
+            $menuitemsNewArr = array();
+            $user = Core::app()->getUser();
+            $id_user_group = $user->getField('id_group');
+            
+            $userGroupModel = $this->loadModel('groups', 'user', true);
+            // все доступы к пунктам меню для группы пользователя
+            $allGroupMenuitemAccess = $userGroupModel->getGroupMenuitemAccess('id_group', $id_user_group);
+
+            // пробегаемся по всем пунктам меню
+            for ($i = 0; $i < count($menuitems); $i++)
+            {
+                $validate = true;
+                $menuitem = $menuitems[$i];
+                // пробегаемся по всем доступам группы для пункта меню из БД
+                for ($y = 0; $y < count($allGroupMenuitemAccess); $y++)
+                {
+                    // если текущий пункт меню
+                    if(($menuitem['id'] == $allGroupMenuitemAccess[$y]['id_menuitem']) && ($allGroupMenuitemAccess[$y]['is_active'] == 0))
+                    {
+                        $validate = false;
+                        break;
+                    }
+                }
+                
+                if ($validate)
+                {
+                    $menuitemsNewArr[] = $menuitem;
+                }
+            }
+            
+            $dataArr[0] = $menuitemsNewArr;
+            //$this->echoPre($menuitemsNewArr);
+            //$this->echoPre($allGroupMenuitemAccess);            
+        }
+    }
+
+    public function hookMenuitemsCreateGroupAccess($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $userGroupModel = $this->loadModel('groups', 'user', true);
+            $allGroups = $userGroupModel->getAllGroups();
+
+            $action = $dataArr[0];
+            $idMenuitem = $dataArr[1];
+
+
+            switch ($action)
+            {
+                case 'create':
+
+                    $content = &$dataArr[2];
+                    // Устанавливаем включеный чекбокс при создании нового пункта меню
+                    for ($i = 0; $i < count($allGroups); $i++)
+                    {
+                        $allGroups[$i]['is_active'] = 1;
+                    }
+
+                    $dataArrGroup['all_groups'] = $allGroups;
+                    $dataArrGroup['path'] = '';
+                    $dataArrGroup['name_module'] = 'user';
+                    $dataArrGroup['file_content_view'] = 'mod_group_menuitem_create.php';
+                    $dataArrGroup['return'] = true;
+
+                    $content .= Core::app()->getTemplate()->moduleContentView($dataArrGroup);
+
+                    break;
+
+                case 'set':
+
+                    $post = $dataArr[2];
+
+                    for ($i = 0; $i < count($allGroups); $i++)
+                    {
+                        $dataArrGroup['id_group'] = $allGroups[$i]['id'];
+                        $dataArrGroup['id_menuitem'] = $idMenuitem;
+                        $dataArrGroup['is_active'] = 0;
+
+                        foreach ($post['groups'] as $idGroup => $value)
+                        {
+                            if ($allGroups[$i]['id'] == $idGroup)
+                            {
+                                $dataArrGroup['is_active'] = 1;
+                                break;
+                            }
+                        }
+
+                        $userGroupModel->setMenuitemGroupAccess($dataArrGroup);
+                    }
+
+                    break;
+
+                case 'edite':
+
+                    $content = &$dataArr[2];
+                    $allMenuitemsGroupsAccess = $userGroupModel->getGroupMenuitemAccess('id_menuitem', $idMenuitem);
+
+                    // пробегаемся по всем группам
+                    for ($i = 0; $i < count($allGroups); $i++)
+                    {
+                        // Ставим чекбокс активным, если в БД есть настройка, то она перезапишет данную
+                        $allGroups[$i]['is_active'] = 1;
+                        // пробегаемся по всем группам связаных с пунктом меню
+                        for ($y = 0; $y < count($allMenuitemsGroupsAccess); $y++)
+                        {
+                            
+                            // если текущая группа совпадает с группой связанной с пунктом меню
+                            // то ставим установленную активность
+                            if ($allGroups[$i]['id'] == $allMenuitemsGroupsAccess[$y]['id_group'])
+                            {
+                                $allGroups[$i]['is_active'] = $allMenuitemsGroupsAccess[$y]['is_active'];
+                            }
+                        }
+                    }
+
+                    $dataArrGroup['all_groups'] = $allGroups;
+                    $dataArrGroup['path'] = '';
+                    $dataArrGroup['name_module'] = 'user';
+                    $dataArrGroup['file_content_view'] = 'mod_group_menuitem_create.php';
+                    $dataArrGroup['return'] = true;
+
+                    $content .= Core::app()->getTemplate()->moduleContentView($dataArrGroup);
+
+                    break;
+
+                case 'update':
+
+                    $post = $dataArr[2];
+                    $allMenuitemsGroupsAccess = $userGroupModel->getGroupMenuitemAccess('id_menuitem', $idMenuitem);
+
+                    for ($i = 0; $i < count($allGroups); $i++)
+                    {
+                        $dataArrGroup['id_group'] = $allGroups[$i]['id'];
+                        $dataArrGroup['id_menuitem'] = $idMenuitem;
+                        $dataArrGroup['is_active'] = 0;
+                        $id = 0;
+                        // ищем id для обновления. Если нету, значит вносим новые данные 
+                        //(походу новая группа появилась)
+                        for ($y = 0; $y < count($allMenuitemsGroupsAccess); $y++)
+                        {
+                            if ($allGroups[$i]['id'] == $allMenuitemsGroupsAccess[$y]['id_group'])
+                            {
+                                $id = $allMenuitemsGroupsAccess[$y]['id'];
+                                break;
+                            }
+                        }
+                        // ищем в новых данных нашу группу
+                        foreach ($post['groups'] as $idGroup => $value)
+                        {
+                            if ($allGroups[$i]['id'] == $idGroup)
+                            {
+                                $dataArrGroup['is_active'] = 1;
+                                break;
+                            }
+                        }
+
+                        if ($id == 0)
+                        {
+                            $userGroupModel->setMenuitemGroupAccess($dataArrGroup);
+                        }
+                        else
+                        {
+                            $userGroupModel->updateMenuitemGroupAccessById($id, $dataArrGroup);
+                        }
+                    }
+
+                    break;
+
+                case 'delete':
+
+                    $userGroupModel->deleteMenuitemGroupAccess($idMenuitem);
+
+                    break;
+            }
         }
     }
 

@@ -30,17 +30,25 @@ class Route extends Base
 
         $this->_started = true;
 
+        $config = Core::app()->getConfig();
+        
+        
 // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
         // под вопросом
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
 
-        Core::app()->getConfig()->selectSystemConfig($url);
+        $config->selectSystemConfig($url);
 
+                
+                
+        Core::app()->getEvent()->startEvent('route_select_system_config', array(&$config));
+        //$this->echoPre($result, false, true);
+        
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
 
 // Масив с правилами роутинга, будет создаваться из файлов модулей    
-        $routeRuleArr = Core::app()->getConfig()->getAllModulesRouteRule();
+        $routeRuleArr = $config->getAllModulesRouteRule();
 
         $request->setRouteRule($routeRuleArr);
         $request->setGlobalVars(); // Получаем get post данные (глобальные обнулятся)
@@ -131,11 +139,13 @@ class Route extends Base
 
                     $lang = Core::app()->getLoader()->loadFile($path_lang, true);
 
-                    Core::app()->getConfig()->setConfigItem('lang', $lang);
+                    $config->setConfigItem('lang', $lang);
 
                     $action = $request->getAction();
-// Отрабатываем модуль, который выводит главное содержание страницы
-// и получаем страницу отображения контента
+                    
+                    
+                    // Отрабатываем модуль, который выводит главное содержание страницы
+                    // и получаем страницу отображения контента
                     $page = $module_controller->$action($request->getParams());
 /*
                     $this->echoPre(Core::app()->getConfig()->getDataArrayConfig());

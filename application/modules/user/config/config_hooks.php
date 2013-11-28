@@ -1,17 +1,41 @@
 <?php
 
 $config = array(
-    'before_start' => array(// имя события
+    'user_construct' => array(// имя события
         array(
+            'title' => '',
+            'description' => '',
             'module' => 'user',
             'controller' => 'groups',
-            'action' => 'hookTest',
-        ),
-        array(
-            'module' => 'user',
-            'controller' => 'groups',
-            'action' => 'hookTest2',
+            'action' => 'hookUpdateUserGroupAccess',
         ),
     ),
+    'route_select_system_config' => array(// имя события
+        array(
+            'title' => '',
+            'description' => '',
+            'module' => 'user',
+            'controller' => 'groups',
+            'action' => 'hookModuleGroupAccess',
+        ),
+    ), 
+    'news_select_menuitems' => array(// имя события
+        array(
+            'title' => '',
+            'description' => '',
+            'module' => 'user',
+            'controller' => 'groups',
+            'action' => 'hookMenuitemsGroupAccess',
+        ),
+    ),
+    'menu_create_menuitem' => array(// имя события
+        array(
+            'title' => '',
+            'description' => '',
+            'module' => 'user',
+            'controller' => 'groups',
+            'action' => 'hookMenuitemsCreateGroupAccess',
+        ),
+    ),    
 );
 ?>

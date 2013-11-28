@@ -64,7 +64,9 @@ class M_menu_menuitems extends Model
          
     function setMenuItem($dataArr)
     {
-        $this->insertTableRow('menu_items', $dataArr);
+        $id = $this->insertTableRow('menu_items', $dataArr);
+
+        return (isset($id['last_insert_id()'])) ? $id['last_insert_id()'] : 0 ;
     }     
     
 }

@@ -33,6 +33,11 @@ class M_user_groups extends Model
         $this->insertTableRow('users_groups_access', $dataArr);
     }
     
+    public function setMenuitemGroupAccess($dataArr)
+    {
+        $this->insertTableRow('users_groups_menuitems_access', $dataArr);
+    }    
+    
     function getAllGroups($limit = null)
     {
         $data = $this->selectAllFromTable('users_groups', null, null);
@@ -62,7 +67,28 @@ class M_user_groups extends Model
 
         return $data;
     }    
+    
+    function getGroupMenuitemAccess($tableName, $id)
+    {
+        $id = (int)$id;
+        
+        $join = $this->_db->parse('
+            WHERE ?n = ?i
+            ',$tableName ,$id);
+        
+        $data = $this->selectAllFromTable('users_groups_menuitems_access', null, $join);
 
+        return $data;
+    }
+    
+     
+    function getAllGroupMenuitemAccess()
+    {
+       
+        $data = $this->selectAllFromTable('users_groups_menuitems_access', null, null);
+
+        return $data;
+    }   
     public function updateGroupById($id, $dataArr)
     {
         $this->updateTableRowById('users_groups', $id, $dataArr);
@@ -72,6 +98,11 @@ class M_user_groups extends Model
     {
         $this->updateTableRowById('users_groups_access', $id, $dataArr);
     }
+
+    public function updateMenuitemGroupAccessById($id, $dataArr)
+    {
+        $this->updateTableRowById('users_groups_menuitems_access', $id, $dataArr);
+    }    
     
     public function deleteGroup($id)
     {
@@ -83,6 +114,13 @@ class M_user_groups extends Model
         $condition = $this->_db->parse('?n = ?i', 'id_group', $id) ;
         
         $this->deleteTableRowByCondition('users_groups_access', $condition);
+    }
+            
+    public function deleteMenuitemGroupAccess($id)
+    {
+        $condition = $this->_db->parse('?n = ?i', 'id_menuitem', $id) ;
+        
+        $this->deleteTableRowByCondition('users_groups_menuitems_access', $condition);
     }
 }
 

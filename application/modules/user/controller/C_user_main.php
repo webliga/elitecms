@@ -82,6 +82,9 @@ class C_user_main extends Controller
         {
             $dataArr = array();
 
+            $userGroupModel = $this->loadModel('groups', 'user', true);
+            
+            $dataArr['all_groups'] = $userGroupModel->getAllGroups();
             $dataArr['id'] = 0;
             $dataArr['form_action'] = 'admin/user/create';
             $dataArr['path'] = '';

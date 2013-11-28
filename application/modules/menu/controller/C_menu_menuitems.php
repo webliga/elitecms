@@ -75,19 +75,28 @@ class C_menu_menuitems extends Controller
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
             $this->loadModel('menuitems', 'menu');
+            $menuItemData = array();
 
-            unset($post['id']);
+            $menuItemData['id_parent'] = $post['id_parent'];
+            $menuItemData['name'] = $post['name'];
+            $menuItemData['link'] = $post['link'];
+            $menuItemData['id_module'] = $post['id_module'];
+            $menuItemData['title'] = $post['title'];
+            $menuItemData['priority'] = $post['priority'];
+            $menuItemData['class_li'] = $post['class_li'];
 
             if (isset($post['is_active']))
             {
-                $post['is_active'] = true;
+                $menuItemData['is_active'] = true;
             }
             else
             {
-                $post['is_active'] = false;
+                $menuItemData['is_active'] = false;
             }
 
-            $this->M_menu_menuitems->setMenuItem($post);
+            $idMenuItem = $this->M_menu_menuitems->setMenuItem($menuItemData);
+
+            Core::app()->getEvent()->startEvent('menu_create_menuitem', array('set', $idMenuItem, $post));
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -111,8 +120,9 @@ class C_menu_menuitems extends Controller
             $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
             $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
 
-            $dataArr['content'] = $content;
+            Core::app()->getEvent()->startEvent('menu_create_menuitem', array('create', 0, &$content));
 
+            $dataArr['content'] = $content;
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
 
             Core::app()->getTemplate()->setVar('title_page', 'Создание пункта меню');
@@ -130,25 +140,36 @@ class C_menu_menuitems extends Controller
 
             $id = $post['id'];
 
+            $menuItemData['id_parent'] = $post['id_parent'];
+            $menuItemData['name'] = $post['name'];
+            $menuItemData['link'] = $post['link'];
+            $menuItemData['id_module'] = $post['id_module'];
+            $menuItemData['title'] = $post['title'];
+            $menuItemData['priority'] = $post['priority'];
+            $menuItemData['class_li'] = $post['class_li'];
+
             if (isset($post['is_active']))
             {
-                $post['is_active'] = true;
+                $menuItemData['is_active'] = true;
             }
             else
             {
-                $post['is_active'] = false;
+                $menuItemData['is_active'] = false;
             }
 
             // На всяк случай проверяем, а не является ли родителем сам пункт меню
             // Если да, то не меняем родителя
-            if ($id == $post['id_parent'])
+            if ($id == $menuItemData['id_parent'])
             {
-                unset($post['id_parent']);
+                unset($menuItemData['id_parent']);
             }
             //Core::app()->echoPre($post); 
             //Core::app()->echoPre($dataArr);
 
-            $this->M_menu_menuitems->updateMenuitemById($id, $post);
+            $this->M_menu_menuitems->updateMenuitemById($id, $menuItemData);
+
+            Core::app()->getEvent()->startEvent('menu_create_menuitem', array('update', $id, $post));
+
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
@@ -161,10 +182,13 @@ class C_menu_menuitems extends Controller
 
         if (!$this->isEmpty($get))
         {
+            $id = $get['id'];
+
+
             $this->loadModel('menuitems', 'menu');
             $this->loadModel('modules', 'admin');
 
-            $dataArr = $this->M_menu_menuitems->getMenuItemById($get['id']);
+            $dataArr = $this->M_menu_menuitems->getMenuItemById($id);
 
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
 
@@ -181,6 +205,7 @@ class C_menu_menuitems extends Controller
             $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
             $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
 
+            Core::app()->getEvent()->startEvent('menu_create_menuitem', array('edite', $id, &$content));
 
             $dataArr['content'] = $content;
 
@@ -198,6 +223,8 @@ class C_menu_menuitems extends Controller
             $this->loadModel('menuitems', 'menu');
 
             $this->M_menu_menuitems->deleteMenuItemById($get['id']);
+
+            Core::app()->getEvent()->startEvent('menu_create_menuitem', array('delete', $get['id'], ''));
 
             $url = Core::app()->getHtml()->createUrl('admin/menuitems');
             Core::app()->getRequest()->redirect($url, true, 302);
