@@ -7,7 +7,7 @@
         ?>
 
         <div class="news_item">
-            <a href="/ru/news/id/<?php echo $item['id']; ?>"><?php echo $item['name']; ?></a>
+            <a href="/ru/news/?id=<?php echo $item['id']; ?>"><?php echo $item['name']; ?></a>
 
             <div class="preview">
                 <?php echo $item['preview']; ?>

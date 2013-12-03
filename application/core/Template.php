@@ -181,8 +181,14 @@ class Template extends Base
         }
     }
 
-    public function moduleContentView($dataArr, $fromAction = false)
+    public function moduleContentView($dataArr, $fromAction = false, $d = null)
     {
+        if($d != null)
+        {
+            $this->echoPre($d, false, true);
+        }
+        
+        
         //Реализовать возможность вызова модуля из другого домена, по типу hmvc
         // также можно предварительно обработать входящие данные, например через систему хуков (еще не реализовано)
         // Отработать екш

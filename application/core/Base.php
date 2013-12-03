@@ -27,8 +27,13 @@ abstract class Base
         return get_class($this);
     }
 
-    public function loadController($controllerName, $module_name, $returnObjectController = false)
+    public function loadController($controllerName, $module_name = null, $returnObjectController = false)
     {
+        if ($module_name == null)
+        {
+            $module_name = $this->_name_module;
+        }
+
         $controller_path = '';
         $className =
                 PFX_CONTROLLER .
@@ -40,6 +45,7 @@ abstract class Base
                 PATH_SITE_ROOT .
                 SD .
                 PATH_TO_MODULES .
+                SD .
                 $module_name .
                 SD .
                 NAME_FOLDER_MODULES_CONTROLLERS .
@@ -63,7 +69,7 @@ abstract class Base
         }
         else
         {
-            $err['error'] = '!file_exists in Controller =  ' . $model_path;
+            $err['error'] = '!file_exists in Controller =  ' . $controller_path;
             Core::app()->getTemplate()->showDanger($err);
         }
     }

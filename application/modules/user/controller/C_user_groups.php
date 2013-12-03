@@ -384,7 +384,7 @@ class C_user_groups extends Controller
         // список доступов к екшенам  модулей из БД
         $group_access = $this->M_user_groups->getGroupAccess($id);
         $dataArr['modules'] = Core::app()->getConfig()->getConfigItem('modules');
-
+//$this->echoPre($dataArr, false, true);
         // пробегаемся по установленным модулям в системе
         for ($i = 0; $i < count($dataArr['modules']); $i++)
         {

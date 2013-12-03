@@ -24,17 +24,40 @@ class C_category_main extends Controller
      */
     public function index($dataArr = null)
     {
-        Core::app()->getTemplate()->setVar('content', 'Выводим данные связанные с этой категорией. Сейчас находимся в category/main');
-    
+        $content = '';      
+        $cat_id = 0;
+        $limit = 20;
+
+        if (isset($dataArr['id']) && !$this->isEmpty($dataArr['id']))
+        {
+            $cat_id = $dataArr['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $secure = Core::app()->getSecure();
+            
+            if (isset($get['id']) && !$this->isEmpty($get['id']) && $secure->checkInt($get['id']))
+            {
+                $cat_id = $dataArr['id'];
+            }
+        }
+
+
+        $content .= $cat_id;
+        Core::app()->getEvent()->startEvent('category_index', array($cat_id, $limit, &$content ));
+
+        Core::app()->getTemplate()->setVar('content', $content);
+
         $this->echoPre(Core::app()->getRequest()->getGet());
     }
-    
+
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
-    
+
     function buildTree($array_items)
     {
         if (is_array($array_items))
@@ -43,7 +66,7 @@ class C_category_main extends Controller
             for ($i = 0; $i < $items_count; $i++)
             {
                 $item = $array_items[$i];
-                if ($item['id_parent'] == 0)
+                if ($item['id_parent'] == -1)
                 { //верхний уровень
                     $children = $this->getChildNode($array_items, $item['id']);
                     $item['children'] = $children;

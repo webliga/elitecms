@@ -5,7 +5,7 @@ $config = array(
         array(
             'title' => '',
             'description' => '',
-            'module' => 'news',
+            'module' => 'shop',
             'controller' => 'hooks',
             'action' => 'hook_category_index',
         ),

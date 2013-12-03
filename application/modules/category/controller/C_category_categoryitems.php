@@ -16,7 +16,7 @@ class C_category_categoryitems extends Controller
         $this->init();
 
         Core::app()->getTemplate()->setVar('createPath', 'categoryitems/create');
-        Core::app()->getTemplate()->setVar('createTitle', 'Создать категорию');        
+        Core::app()->getTemplate()->setVar('createTitle', 'Создать категорию');
     }
 
     function __destruct()
@@ -39,7 +39,7 @@ class C_category_categoryitems extends Controller
 
             $dataArr = $this->M_category_categoryitems->getAllCategoryItems();
 
-
+//$this->echoPre($dataArr, false, true);
             for ($i = 0; $i < count($dataArr); $i++)
             {
                 unset($dataArr[$i]['img']);
@@ -60,13 +60,13 @@ class C_category_categoryitems extends Controller
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
-    
+
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
-    
+
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
@@ -74,7 +74,7 @@ class C_category_categoryitems extends Controller
         if (!$this->isEmpty($post))
         {// Сделать проверку на валидность и пустоту
             $this->loadModel('categoryitems', 'category');
-            
+
             unset($post['id']);
 
             if (isset($post['is_active']))
@@ -96,20 +96,35 @@ class C_category_categoryitems extends Controller
             $this->loadModel('modules', 'admin');
 
             $dataArr = array();
+            $dataArr['id'] = -1;
             $dataArr['form_action'] = 'admin/categoryitems/create/';
             $dataArr['all_category_modules'] = $this->M_admin_modules->getAllModules('category');
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'admin';
+            $dataArr['name_module'] = 'category';
             $dataArr['file_content_view'] = 'mod_admin_categoryitem_create.php';
             $dataArr['return'] = true;
 
+            $this->loadModel('categoryitems', $this->getNameModule());
+            $dataOptionArr = $this->M_category_categoryitems->getAllCategoryItems();
+
+            $root['id'] = 0;
+            $root['id_parent'] = -1;            
+            $root['name'] = 'Корень';
+            $dataOptionArr[] = $root;
+            $categoryMain = $this->loadController('main', 'category', true);
+            $dataOptionArr = $categoryMain->buildTree($dataOptionArr);
+
+            //$this->echoPre($dataOptionArr, false, true);
+            $dataArr = $this->getDefaultCategoryItemData($dataArr);
+            $dataArr['select_all_items'] = $dataOptionArr;
+
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
-
-            $dataArr['name_system'] = 'category';
-            $dataArr['name_controller'] = 'categoryitems';
-            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-
+            /*
+              $dataArr['name_system'] = 'category';
+              $dataArr['name_controller'] = 'categoryitems';
+              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+             */
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
@@ -165,25 +180,39 @@ class C_category_categoryitems extends Controller
 
             $dataArr = $this->M_category_categoryitems->getCategoryItemById($get['id']);
 
-            Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
-
             $dataArr['form_action'] = 'admin/categoryitems/update/';
             $dataArr['all_category_modules'] = $this->M_admin_modules->getAllModules('category');
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'admin';
+            $dataArr['name_module'] = 'category';
             $dataArr['file_content_view'] = 'mod_admin_categoryitem_create.php';
             $dataArr['return'] = true;
 
+            $this->loadModel('categoryitems', $this->getNameModule());
+            $dataOptionArr = $this->M_category_categoryitems->getAllCategoryItems();
+            
+            $root['id'] = 0;
+            $root['id_parent'] = -1;            
+            $root['name'] = 'Корень';
+            $dataOptionArr[] = $root;
+            
+            $categoryMain = $this->loadController('main', 'category', true);
+            $dataOptionArr = $categoryMain->buildTree($dataOptionArr);
+            //$this->echoPre($dataOptionArr, false, true);
+            $dataArr = $this->getDefaultCategoryItemData($dataArr);
+            $dataArr['select_all_items'] = $dataOptionArr;
+
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
-
-            $dataArr['name_controller'] = 'categoryitems';
-            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-
+            /*
+              $dataArr['name_controller'] = 'categoryitems';
+              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
+              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
+             */
 
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
+
+            Core::app()->getTemplate()->setVar('title_page', 'Редактирование пункта меню');
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
@@ -210,11 +239,11 @@ class C_category_categoryitems extends Controller
         if ($dataArr != null)
         {
             $dataArr['root'] = 'Корень модуля категории';
-            
+
             $this->loadModel('categoryitems', $this->getNameModule());
 
             $dataOptionArr = $this->M_category_categoryitems->getAllCategoryItems();
-            
+
             $dataArr = $this->getDefaultCategoryItemData($dataArr);
 
             $dataArr['select_all_items'] = $dataOptionArr;
@@ -228,23 +257,28 @@ class C_category_categoryitems extends Controller
             $dataArr['select_data'][$y]['option_value'] = 0;
             $dataArr['select_data'][$y]['option_text'] = $dataArr['root'];
             $y++;
-            
+
             // Формируем текущий список родительских пунктов меню
             for ($i = 0; $i < count($dataOptionArr); $i++)
             {
-                if ($dataArr['id_module'] == $dataOptionArr[$i]['id_module'] && $dataArr['id'] != $dataOptionArr[$i]['id'])
-                {
-                    $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
-                    $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
-                    $y++;
-                }
+                /*
+                  if ($dataArr['id_module'] == $dataOptionArr[$i]['id_module'] && $dataArr['id'] != $dataOptionArr[$i]['id'])
+                  {
+                  $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
+                  $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
+                  $y++;
+                  }
+                 */
+                $dataArr['select_data'][$y]['option_value'] = $dataOptionArr[$i]['id'];
+                $dataArr['select_data'][$y]['option_text'] = $dataOptionArr[$i]['name'];
+                $y++;
             }
             //$this->echoPre($dataArr);
             $content .= Core::app()->getHtml()->createSelect($dataArr);
 
-            
+
             // Третий параметр указывает, что виджет нужно искать в папке с шаблоном    
-            $content .= Core::app()->getTemplate()->getWidget('menuitems_js', $dataArr, true);
+            //$content .= Core::app()->getTemplate()->getWidget('menuitems_js', $dataArr);
         }
 
         return $content;
@@ -256,7 +290,7 @@ class C_category_categoryitems extends Controller
         {
             if (!isset($dataArr['id_module']) || $this->isEmpty($dataArr['id_module']))
             {
-                if(isset($dataArr['all_category_modules']))
+                if (isset($dataArr['all_category_modules']))
                 {
                     $dataArr['id_module'] = $dataArr['all_category_modules'][0]['id'];
                 }
@@ -264,7 +298,6 @@ class C_category_categoryitems extends Controller
                 {
                     $dataArr['id_module'] = 0;
                 }
-                
             }
 
             if (!isset($dataArr['id_parent']) || $this->isEmpty($dataArr['id_parent']))
@@ -275,7 +308,7 @@ class C_category_categoryitems extends Controller
             if (!isset($dataArr['id']) || $this->isEmpty($dataArr['id']))
             {
                 $dataArr['id'] = 0;
-            }                        
+            }
         }
 
         return $dataArr;

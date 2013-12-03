@@ -6,7 +6,7 @@
  * @version 1.0
  * @updated 17-Вер-2013 20:15:13
  */
-class C_news_main extends Controller
+class C_shop_main extends Controller
 {
 
     function __construct()
@@ -126,43 +126,43 @@ class C_news_main extends Controller
         {
             $content = '';
 
-            $this->loadModel('main', $this->getNameModule());
+            $modelShop = $this->loadModel('main', null, true);
 
-            $dataArr = $this->M_news_main->getNewsSettingsByModuleId($dataArr['id']);
+            $dataArr = $modelShop->getShopSettingsByModuleId($dataArr['id']);
             //$this->echoPre($dataArr);
 
-            $dataArr = $this->getDefaultNewsData($dataArr);
+            $dataArr = $this->getDefaultShopData($dataArr);
 
 
             $dataArr['input'] = 'form_input';
 
 
-            $dataArr['input_name'] = 'template_file';
-            $dataArr['input_value'] = $dataArr['template_file'];
-            $dataArr['input_lable'] = 'Файл отображения списка новостей';
+            $dataArr['input_name'] = 'template_product_list';
+            $dataArr['input_value'] = $dataArr['template_product_list'];
+            $dataArr['input_lable'] = 'Файл отображения списка товаров';
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
-            $dataArr['input_name'] = 'count_elements';
-            $dataArr['input_value'] = $dataArr['count_elements'];
-            $dataArr['input_lable'] = 'К-ство элементов';
+            $dataArr['input_name'] = 'template_product_detail';
+            $dataArr['input_value'] = $dataArr['template_product_detail'];
+            $dataArr['input_lable'] = 'Файл отображения товара';
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
             return $content;
         }
     }
 
-    private function getDefaultNewsData($dataArr)
+    private function getDefaultShopData($dataArr)
     {
         if (is_array($dataArr))
         {
-            if (!isset($dataArr['count_elements']) || $this->isEmpty($dataArr['template_file']))
+            if (!isset($dataArr['template_product_list']) || $this->isEmpty($dataArr['template_product_list']))
             {
-                $dataArr['template_file'] = '';
+                $dataArr['template_product_list'] = 'mod_products_list.php';
             }
 
-            if (!isset($dataArr['count_elements']) || $this->isEmpty($dataArr['count_elements']))
+            if (!isset($dataArr['template_product_detail']) || $this->isEmpty($dataArr['template_product_detail']))
             {
-                $dataArr['count_elements'] = 20;
+                $dataArr['template_product_detail'] = 'mod_products_detail.php';
             }
         }
 
@@ -172,9 +172,9 @@ class C_news_main extends Controller
 
     public function updateModuleFormFildsConfig($dataArr = null)
     {
-        $this->loadModel('main', $this->getNameModule());
+        $modelShop = $this->loadModel('main', null, true);
 
-        $result = $this->M_news_main->updateNewsSettingsByModuleId($dataArr);
+        $result = $modelShop->updateShopSettingsByModuleId($dataArr);
     }
 
     public function deleteModuleDataById($dataArr)
@@ -183,6 +183,22 @@ class C_news_main extends Controller
         $this->loadModel('main', $this->getNameModule());
 
         $result = $this->M_news_main->deleteNewsSettingsByModuleId($id);
+    }
+
+    public function hookTest($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_news_main - hookTest<br>';
+        }
+    }
+
+    public function hookTest2($dataArr = null)
+    {
+        if ($dataArr != null)
+        {
+            $dataArr[0] .= ' C_news_main - hookTest2<br>';
+        }
     }
 
 }

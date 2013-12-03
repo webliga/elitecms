@@ -30,10 +30,11 @@
  * 
  */
 //Права доступа к модулю main
+//
 $config = array(
-    '/category\/([0-9]+)/' => 'category/main/index/id/$1',
-    '/category\/([a-z]+)\/([0-9]+)/' => 'category/main/index/$1/$2',
-    '/category\/create/' => 'category/categoryitems/create',
-    '/categoryitems/' => 'category/categoryitems',
+    '/shop\/?$/' => 'shop/main/index/',    
+    '/shop\/([0-9]+)/' => 'shop/main/index/id/$1',
+    '/shop\/([a-z]+)\/([0-9]+)/' => 'shop/main/index/$1/$2',    
+    '/shop\/create/' => 'shop/newsitems/create',  
 );
 ?>

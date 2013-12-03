@@ -37,6 +37,21 @@ class M_news_newsitems extends Model
         return $this->selectAllFromTable('news_items', $fildsSelect, $leftJoin);
     }
 
+    function getAllNewsItemsByCategory($cat_id, $limit = 1000)
+    {
+        $leftJoin = $this->_db->parse('LEFT JOIN  category_items  ON 
+                                       news_items.id_category_items = category_items.id 
+                                       WHERE ?n = ?i LIMIT ?i', 'id_category_items', $cat_id, $limit
+                                      );
+
+        $fildsSelect = 'news_items.*, 
+                        category_items.id as id_category_items, 
+                        category_items.name as name_category_items';
+
+
+        return $this->selectAllFromTable('news_items', $fildsSelect, $leftJoin);
+    }
+    
     function getNewsItemById($id)
     {
 
