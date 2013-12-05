@@ -15,7 +15,8 @@ class Core extends Base
     private $_template;
     private $_html;
     private $_session;
-    private $_event;    
+    private $_event; 
+    private $_image;    
 
     public function __construct()
     {
@@ -170,6 +171,18 @@ class Core extends Base
 
         return self::app()->_event;
     }         
+ 
+    public function getImage()
+    {
+        if (is_null(self::app()->_image))
+        {
+            $class = self::app()->getClassNameForCreate('image');
+
+            self::app()->_image = new $class;
+        }
+
+        return self::app()->_image;
+    }     
     
     
 // Вытягиваем класс из дефолтных настроек 

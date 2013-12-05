@@ -55,12 +55,12 @@ class Request extends Base
 
     public function getFile($key = null)
     {
-        if ($key != null && is_array($this->_file))
+        if ($key != null && is_array($this->_file) && isset($this->_file[$key]))
         {
             return $this->_file[$key];
         }
 
-        return $this->_get;
+        return $this->_file;
     }
 
     public function setGlobalVars()
@@ -78,10 +78,10 @@ class Request extends Base
             $_GET = null;
         }
 
-        if (isset($_FILE))
+        if (isset($_FILES))
         {// Можно проверку сделать
-            $this->_file = $_FILE;
-            $_FILE = null;
+            $this->_file = $_FILES;
+            $_FILES = null;
         }
     }
 

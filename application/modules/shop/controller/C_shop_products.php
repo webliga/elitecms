@@ -9,6 +9,8 @@
 class C_shop_products extends Controller
 {
 
+    private $_pathToProductsImg = '';
+
     function __construct()
     {
         parent::__construct();
@@ -17,6 +19,16 @@ class C_shop_products extends Controller
 
         Core::app()->getTemplate()->setVar('createPath', 'newsitems/create');
         Core::app()->getTemplate()->setVar('createTitle', 'Создать новость/статью');
+        
+        $this->_pathToProductsImg  =
+                    PATH_SITE_ROOT .
+                    SD .
+                    'img' .
+                    SD .
+                    'shop' .
+                    SD .
+                    'products' .
+                    SD; 
     }
 
     function __destruct()
@@ -82,13 +94,67 @@ class C_shop_products extends Controller
     public function create()
     {
         $post = Core::app()->getRequest()->getPost();
+        $files = Core::app()->getRequest()->getFile();
+        $img = Core::app()->getImage();
+
 
         $this->loadModel('categoryitems', 'category');
 
         if (!$this->isEmpty($post))
         {
-          $this->echoPre($post, false, true);
+            $modelProduct = $this->loadModel('main', 'shop', true);
+            $imagesData = $files['images'];
+
             
+            $safeImgArr = $img->getSafeImagesArr($imagesData);
+            $this->echoPre($imagesData);
+            $this->echoPre($safeImgArr);
+            
+            
+            
+            $productData = $post['shop_products'];
+            $id_product = $modelProduct->insertProduct($productData);
+            $id_main_img = 0;
+            
+            for ($i = 0; $i < count($safeImgArr); $i++)
+            {
+                $file = $safeImgArr[$i];
+                $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
+                $img->saveImg($file);
+                
+                $imgDataArr['id_product'] = $id_product;
+                $imgDataArr['name'] = $file['name'];
+                $id_main_img = $modelProduct->insertProductImg($imgDataArr);
+            }           
+            
+            $arr['id_main_img'] = $id_main_img;
+            $modelProduct->updateProductById($id_product, $arr);
+            $arr = null;
+            
+            $productData = $post['shop_products_content'];
+            
+            for ($i = 0; $i < count($productData); $i++)
+            {
+                $productData[$i]['id_product'] = $id_product;
+                
+                $modelProduct->insertProductContent($productData[$i]);
+            }
+            
+            
+            $productData = $post['id_categories'];
+            
+            for ($i = 0; $i < count($productData); $i++)
+            {
+                $arr['id_product'] = $id_product;
+                $arr['id_category'] = $productData[$i];
+                $modelProduct->insertProductCategory($arr);
+            }            
+            
+            $this->echoPre($id_product);
+            $this->echoPre($post, false, true);
+            
+            
+/*
 
 //// Сделать проверку на валидность и пустоту
             // http://spuzom.ru/detail.php?id=249
@@ -101,33 +167,35 @@ class C_shop_products extends Controller
 
             Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$dataArr));
             $this->M_news_newsitems->setNewsItem($post);
+*/
 
-            $url = Core::app()->getHtml()->createUrl('admin/newsitems');
-            Core::app()->getRequest()->redirect($url, true, 302);
+            
+            //$url = Core::app()->getHtml()->createUrl('admin/newsitems');
+            //Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
         {
             $modelShop = $this->loadModel('main', 'shop', true);
 
             $settings = Core::app()->getConfig()->getConfigItem('settings');
-            
+
             $dataArr = array();
 
             $dataArr['id'] = 0;
             $dataArr['all_langs'] = Core::app()->getConfig()->getConfigItem('all_langs');
-            $dataArr['lang_site_default'] = $settings['lang_site_default'];            
+            $dataArr['lang_site_default'] = $settings['lang_site_default'];
             $dataArr['root'] = 'Без категории';
             $dataArr['form_action'] = '/admin/shop/create/';
-            
+
             $dataArr['path'] = '';
             $dataArr['name_module'] = 'shop';
             $dataArr['file_content_view'] = 'admin_product_create.php';
             $dataArr['return'] = true;
 
             Core::app()->getEvent()->startEvent('shop_before_product_create_empty', array(&$dataArr));
-            
+
             //$this->echoPre($dataArr, false, true);
-            
+
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
             Core::app()->getTemplate()->setVar('title_page', 'Создание товара');
@@ -144,7 +212,7 @@ class C_shop_products extends Controller
             $this->loadModel('newsitems', 'news');
 
             $id = $post['id'];
-            
+
             $post = $this->getDefaultNewsItemData($post);
 
             Core::app()->getEvent()->startEvent('shop_before_product_update', array(&$post));

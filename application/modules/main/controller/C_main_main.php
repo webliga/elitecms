@@ -24,19 +24,19 @@ class C_main_main extends Controller
      */
     public function index($dataArr = null)
     {
+        $content = '';
         $this->loadModel('main', $this->getNameModule());
         $this->loadModel('shop', $this->getNameModule());
 
         //Core::app()->echoPre($this->M_main_main->insert('test insert M_main_main'));
         //Core::app()->echoPre($this->M_main_main->getAllUsersArr());
 
-
-
+        $img = Core::app()->getImage();
+        $content .= $this->echoPre($img->checkGD(), true);
 
         Core::app()->getTemplate()->setVar('title_page', 'Главная страница');
 
-        Core::app()->getTemplate()->setVar('content', 'Это контент, который обрабатывается 
-            контроллером с адресной строки. Сейчас находимся в main/main');
+        Core::app()->getTemplate()->setVar('content', $content);
     }
     
     // Загружаем этот метод только для вывода в позиции модуля

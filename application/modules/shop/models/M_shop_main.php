@@ -23,6 +23,34 @@ class M_shop_main extends Model
         
     }
 
+    public function insertProduct($dataArr)
+    {
+        $last_insert_id = $this->insertTableRow('shop_products', $dataArr);
+        
+        return $last_insert_id['last_insert_id()'];
+    }
+
+    public function insertProductContent($dataArr)
+    {
+        $last_insert_id = $this->insertTableRow('shop_products_content', $dataArr);
+        
+        return $last_insert_id['last_insert_id()'];
+    }
+    
+    public function insertProductImg($dataArr)
+    {
+        $last_insert_id = $this->insertTableRow('shop_products_img', $dataArr);
+        
+        return $last_insert_id['last_insert_id()'];
+    }            
+    
+    public function insertProductCategory($dataArr)
+    {
+        $last_insert_id = $this->insertTableRow('shop_products_category', $dataArr);
+        
+        return $last_insert_id['last_insert_id()'];
+    }     
+    
     function getProductById($id)
     {
         $sql = $this->_db->parse("
@@ -56,6 +84,11 @@ class M_shop_main extends Model
         unset($dataArr['id_module']);
         
         $result = $this->updateTableRowByCondition('shop_module_settings', 'id_module', $id_module, $dataArr);        
+    }
+    
+    function updateProductById($id, $dataArr)
+    {
+        $this->updateTableRowById('shop_products', $id, $dataArr);        
     }
     
     function deleteNewsSettingsByModuleId($id)

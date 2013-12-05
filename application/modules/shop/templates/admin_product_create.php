@@ -9,8 +9,11 @@
                 <li>
                     <a href="#tab2" data-toggle="tab"><i class="black-icons key"></i>Права доступа</a>
                 </li>
+                <li>
+                    <a href="#tab3" data-toggle="tab"><i class="black-icons key"></i>Изображения</a>
+                </li>                
             </ul>
-            <form class="form-horizontal well white-box" action="<?= $dataArr['form_action']; ?>" method="post">
+            <form class="form-horizontal well white-box" action="<?= $dataArr['form_action']; ?>"  enctype="multipart/form-data" method="post">
                 <input name="id" type="hidden" value="<?= $dataArr['id']; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара">
 
                 <div class="tab-content">
@@ -169,12 +172,7 @@
                                 </div>
                             </div>
 
-                            <div class="control-group">
-                                <label class="control-label">File input</label>
-                                <div class="controls">
-                                    <div class="uni-uploader" id="uniform-undefined"><input class="input-file" type="file" size="19" style="opacity: 0;"><span class="filename">No file selected</span><span class="action">Choose File</span></div>
-                                </div>
-                            </div>
+
                             <div class="control-group">
                                 <label class="control-label">Textarea</label>
                                 <div class="controls">
@@ -189,13 +187,90 @@
                     <div class="tab-pane" id="tab2">
                         <?= $dataArr['access']; ?>
                     </div>
+                    <div class="tab-pane" id="tab3">
+                        <div class="span9 ">
+                            <div class="nonboxy-widget">
+                                <div class="widget-head">
+
+                                    <h5>Изображения товара</h5>
+                                </div>
+                                <div class="widget-content">
+                                    <div class="widget-box">
+                                        <ul class="thumbnails">
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/260x200">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                            <li class="span4">
+                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
+                                                    <img alt="" src="http://placehold.it/109x82">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
+                                    <div class="control-group">
+                                        <label class="control-label">Загрузка изображений</label>
+
+                                        <div class="uni-uploader" id="uniform-undefined">
+                                            <input name="images[]" class="input-file" type="file" size="19" style="opacity: 0;" multiple>
+                                            <span class="filename">Не выбрано</span>
+                                            <span class="action">Выберите файл</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>                    
+
+
                 </div>
 
 
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button class="btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button class="btn">Отмена</button>
                 </div>
             </form>    
         </div>

@@ -61,6 +61,10 @@ $config = array(
         'event' => array(
             'name' => 'Event',
             'path' => 'application/core'
+        ),  
+        'image' => array(
+            'name' => 'Image',
+            'path' => 'application/core'
         ),        
     ),
     'default_groups' => array(
