@@ -10,6 +10,7 @@
                     <a href="#tab2" data-toggle="tab"><i class="black-icons key"></i>Права доступа</a>
                 </li>
             </ul>
+            
             <div class="tab-content">
                 <div class="tab-pane active" id="tab1">
                     <div class="control-group">

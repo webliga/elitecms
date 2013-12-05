@@ -35,6 +35,6 @@ $config = array(
     '/shop\/?$/' => 'shop/main/index/',    
     '/shop\/([0-9]+)/' => 'shop/main/index/id/$1',
     '/shop\/([a-z]+)\/([0-9]+)/' => 'shop/main/index/$1/$2',    
-    '/shop\/create/' => 'shop/newsitems/create',  
+    '/shop\/create/' => 'shop/products/create',  
 );
 ?>

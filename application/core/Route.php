@@ -31,19 +31,17 @@ class Route extends Base
         $this->_started = true;
 
         $config = Core::app()->getConfig();
-        
-        
+
+
 // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
         // под вопросом
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
 
         $config->selectSystemConfig($url);
 
-                
-                
+
         Core::app()->getEvent()->startEvent('route_select_system_config', array(&$config));
         //$this->echoPre($result, false, true);
-        
 // Для удобства получаем ссылку на обработчик запроса
         $request = Core::app()->getRequest();
 
@@ -123,7 +121,7 @@ class Route extends Base
                 $accessModuleCurrent['access'] = $accessModuleDefault['controller'][$request->getController()]['action'][$request->getAction()];
 
 //Сначала проверяем доступен ли данный экшн только из админки? А потом уже груповой доступ
-                if ($accessModuleCurrent['access']['call_from_admin'] == $request->getCallFromAdmin() &&  Core::app()->getUser()->checkUserAccess($accessModuleCurrent))
+                if ($accessModuleCurrent['access']['call_from_admin'] == $request->getCallFromAdmin() && Core::app()->getUser()->checkUserAccess($accessModuleCurrent))
                 {
                     if (!file_exists($path_lang))
                     {
@@ -142,17 +140,17 @@ class Route extends Base
                     $config->setConfigItem('lang', $lang);
 
                     $action = $request->getAction();
-                    
-                    
+
+
                     // Отрабатываем модуль, который выводит главное содержание страницы
                     // и получаем страницу отображения контента
                     $page = $module_controller->$action($request->getParams());
-/*
-                    $this->echoPre(Core::app()->getConfig()->getDataArrayConfig());
-                    
-                    $this->appExit();
-                    
-                    */
+                    /*
+                      $this->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+
+                      $this->appExit();
+
+                     */
                     Core::app()->getTemplate()->show($page);
                 }
                 else

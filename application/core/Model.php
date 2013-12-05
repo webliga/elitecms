@@ -193,6 +193,14 @@ class Model extends Base
         
         $result['modules'] = $this->_db->getAll($query);
 
+         $query = "SELECT 
+                  *
+            FROM langs 
+                ";
+        
+        $result['all_langs'] = $this->_db->getAll($query);       
+        
+        
         return $result;
         
     }

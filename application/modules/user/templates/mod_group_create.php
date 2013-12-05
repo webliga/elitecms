@@ -52,4 +52,4 @@
     </div>
 </div>
 <div class="both"></div>
-
+<?= $dataArr['access']; ?>

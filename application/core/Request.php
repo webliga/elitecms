@@ -169,7 +169,7 @@ class Request extends Base
 
             $routes[0] = preg_replace($patternArr, $replacementArr, $routes[0]);
         }
-
+        
         $this->parse($routes[0]);
     }
 

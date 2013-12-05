@@ -86,15 +86,20 @@ class C_shop_products extends Controller
         $this->loadModel('categoryitems', 'category');
 
         if (!$this->isEmpty($post))
-        {// Сделать проверку на валидность и пустоту
+        {
+          $this->echoPre($post, false, true);
+            
+
+//// Сделать проверку на валидность и пустоту
             // http://spuzom.ru/detail.php?id=249
             // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
-            $this->loadModel('newsitems', 'news');
+            $this->loadModel('main', 'shop');
 
             unset($post['id']);
 
             $post = $this->getDefaultNewsItemData($post);
 
+            Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$dataArr));
             $this->M_news_newsitems->setNewsItem($post);
 
             $url = Core::app()->getHtml()->createUrl('admin/newsitems');
@@ -102,30 +107,30 @@ class C_shop_products extends Controller
         }
         else
         {
-            $this->loadModel('modules', 'admin');
+            $modelShop = $this->loadModel('main', 'shop', true);
 
+            $settings = Core::app()->getConfig()->getConfigItem('settings');
+            
             $dataArr = array();
 
+            $dataArr['id'] = 0;
+            $dataArr['all_langs'] = Core::app()->getConfig()->getConfigItem('all_langs');
+            $dataArr['lang_site_default'] = $settings['lang_site_default'];            
             $dataArr['root'] = 'Без категории';
-            $dataArr['form_action'] = 'admin/newsitems/create/';
-            $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
+            $dataArr['form_action'] = '/admin/shop/create/';
+            
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'news';
-            $dataArr['file_content_view'] = 'admin_newsitem_create.php';
+            $dataArr['name_module'] = 'shop';
+            $dataArr['file_content_view'] = 'admin_product_create.php';
             $dataArr['return'] = true;
 
+            Core::app()->getEvent()->startEvent('shop_before_product_create_empty', array(&$dataArr));
+            
+            //$this->echoPre($dataArr, false, true);
+            
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
-            $dataArr['name_system'] = 'news';
-            $dataArr['name_controller'] = 'newsitems';
-            $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-
-            $dataArr['content'] = $content;
-
-            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
-
-            Core::app()->getTemplate()->setVar('title_page', 'Создание пункта меню');
+            Core::app()->getTemplate()->setVar('title_page', 'Создание товара');
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
@@ -139,12 +144,11 @@ class C_shop_products extends Controller
             $this->loadModel('newsitems', 'news');
 
             $id = $post['id'];
-            unset($post['id']);
+            
             $post = $this->getDefaultNewsItemData($post);
 
-            //Core::app()->echoPre($post); 
-            //Core::app()->echoPre($dataArr);
-
+            Core::app()->getEvent()->startEvent('shop_before_product_update', array(&$post));
+            unset($post['id']);
             $this->M_news_newsitems->updateNewsitemById($id, $post);
 
             $url = Core::app()->getHtml()->createUrl('admin/newsitems');
@@ -173,6 +177,7 @@ class C_shop_products extends Controller
             $dataArr['file_content_view'] = 'admin_newsitem_create.php';
             $dataArr['return'] = true;
 
+            Core::app()->getEvent()->startEvent('shop_before_product_edite', array(&$dataArr));
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
             /*

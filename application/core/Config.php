@@ -124,7 +124,7 @@ class Config extends Base
 
         $this->setConfigItem('modules', $result['modules']);
         $this->setConfigItem('settings', $result['settings']);
-
+        $this->setConfigItem('all_langs', $result['all_langs']);
         //$this->echoPre($this->_data);
     }
 
