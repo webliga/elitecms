@@ -26,77 +26,189 @@ class M_shop_main extends Model
     public function insertProduct($dataArr)
     {
         $last_insert_id = $this->insertTableRow('shop_products', $dataArr);
-        
+
         return $last_insert_id['last_insert_id()'];
     }
 
     public function insertProductContent($dataArr)
     {
         $last_insert_id = $this->insertTableRow('shop_products_content', $dataArr);
-        
+
         return $last_insert_id['last_insert_id()'];
     }
-    
+
     public function insertProductImg($dataArr)
     {
         $last_insert_id = $this->insertTableRow('shop_products_img', $dataArr);
-        
+
         return $last_insert_id['last_insert_id()'];
-    }            
-    
+    }
+
     public function insertProductCategory($dataArr)
     {
         $last_insert_id = $this->insertTableRow('shop_products_category', $dataArr);
-        
+
         return $last_insert_id['last_insert_id()'];
-    }     
-    
-    function getProductById($id)
+    }
+
+    function getProductById($id, $is_active = null)
     {
-        $sql = $this->_db->parse("
+        if ($is_active != null)
+        {
+            $is_active = $this->_db->parse('AND is_active = ?i', $is_active);
+        }
+        else
+        {
+            $is_active = '';
+        }
+
+
+        $sql = $this->_db->parse('
             SELECT *
             FROM shop_products 
             WHERE id = ?i 
-            AND is_active = 1", $id);
+            ?p
+            ', $id, $is_active);
 
-        $data = $this->_db->getRow($sql);
+        $dataArrProduct = $this->_db->getRow($sql);
 
-        return $data;
+        $join = $this->_db->parse(' 
+            WHERE ?n = ?i ',
+            'id_product' , $id);
+        $fildsSelect = '
+            shop_products_img.id,
+            shop_products_img.name 
+            ';
+        $dataArrProduct['images'] = $this->selectAllFromTable('shop_products_img', $fildsSelect, $join);
+
+        $join = $this->_db->parse(' 
+            WHERE ?n = ?i ',
+            'id_product' , $id);
+        $fildsSelect = '
+            shop_products_category.id_category
+            ';
+        $dataArrProduct['selected_category'] = $this->selectAllFromTable('shop_products_category', $fildsSelect, $join);
+
+        $join = $this->_db->parse(' 
+            WHERE ?n = ?i ',
+            'id_product' , $id);
+        $fildsSelect = '
+            shop_products_content.*
+            ';
+        $dataArrProduct['product_content'] = $this->selectAllFromTable('shop_products_content', $fildsSelect, $join);        
+
+        $join = $this->_db->parse(' 
+            WHERE ?n = ?i ',
+            'id_product' , $id);
+        $fildsSelect = '
+            shop_products_price.*
+            ';
+        $dataArrProduct['product_price'] = $this->selectAllFromTable('shop_products_price', $fildsSelect, $join);        
+
+        $join = $this->_db->parse(' 
+            WHERE ?n = ?i ',
+            'id_product' , $id);
+        $fildsSelect = '
+            shop_products_brand.*
+            ';
+        $dataArrProduct['product_brand'] = $this->selectAllFromTable('shop_products_brand', $fildsSelect, $join);        
+
+        return $dataArrProduct;
     }
 
-    function getNews($limit)
+    function getAllProducts($id_curr_lang, $limit = null)
     {
-        $join = $this->_db->parse('WHERE ?n = 1  ORDER BY date_create ASC LIMIT ?i', 'is_active', $limit );
-        $data = $this->selectAllFromTable('news_items', null, $join);
-        
+
+        $limit = '';
+        if ($limit != null)
+        {
+            $limit = $this->_db->parse('LIMIT ?i', $limit);
+        }
+
+        $join = $this->_db->parse(' 
+            LEFT JOIN shop_products_img ON shop_products_img.id = shop_products.id_main_img
+            LEFT JOIN shop_products_content ON shop_products_content.id_product = shop_products.id 
+            WHERE shop_products_content.id_lang = ?i
+            ', $id_curr_lang);
+
+        $fildsSelect = '
+            shop_products.*,
+            shop_products_content.title, 
+            shop_products_content.preview, 
+            
+            shop_products_img.name as name_img,
+            shop_products_content.id_lang
+           
+            ';
+        $data = $this->selectAllFromTable('shop_products', $fildsSelect, $join);
+
         return $data;
     }
-    
+
     function getShopSettingsByModuleId($id)
     {
-        $data = $this->selectAllByIdFromTable('shop_module_settings',$id , null, null, 'id_module');
+        $data = $this->selectAllByIdFromTable('shop_module_settings', $id, null, null, 'id_module');
         return $data;
     }
-    
+
     function updateShopSettingsByModuleId($dataArr)
     {
         $id_module = $dataArr['id_module'];
         unset($dataArr['id_module']);
-        
-        $result = $this->updateTableRowByCondition('shop_module_settings', 'id_module', $id_module, $dataArr);        
+
+        $result = $this->updateTableRowByCondition('shop_module_settings', 'id_module', $id_module, $dataArr);
     }
-    
+
     function updateProductById($id, $dataArr)
     {
-        $this->updateTableRowById('shop_products', $id, $dataArr);        
+        $this->updateTableRowById('shop_products', $id, $dataArr);
+    }
+
+    function updateProductContentById($id_product, $id_lang, $dataArr)
+    {
+        $id_lang = (int)$id_lang;
+        
+        $and = $this->_db->parse(' AND ?n = ?i', 'id_product', $id_product);
+        
+        $this->updateTableRowByCondition('shop_products_content', 'id_lang', $id_lang, $dataArr, $and);
     }
     
     function deleteNewsSettingsByModuleId($id)
-    {       
-        $condition = $this->_db->parse('?n.?n = ?i','news','id_module' ,$id);
-         
-        $result = $this->deleteTableRowByCondition('news', $condition);        
-    }   
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'news', 'id_module', $id);
+
+        $result = $this->deleteTableRowByCondition('news', $condition);
+    }
+     
+    function deleteProductImageById($id_image_delete)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'shop_products_img', 'id', $id_image_delete);
+
+        $result = $this->deleteTableRowByCondition('shop_products_img', $condition);
+    }
+    
+    function deleteAllCategoriesByProductId($id_product)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'shop_products_category', 'id_product', $id_product);
+
+        $result = $this->deleteTableRowByCondition('shop_products_category', $condition);
+    }
+    
+    function checkProductContentByLangId($id_lang)
+    {
+        $join = $this->_db->parse('
+            WHERE shop_products_content.id_lang = ?i
+            ', $id_lang);
+
+        $fildsSelect = '
+            COUNT(*)
+            ';
+        $data = $this->selectAllFromTable('shop_products_content', $fildsSelect, $join);
+
+        return $data[0]['COUNT(*)'];
+    }
+
+    
 }
 
 ?>

@@ -2,16 +2,34 @@
 
 $selected = '';
 
-
 for ($i = 0; $i < count($dataArr['options']); $i++)
 {
     $item = $dataArr['options'][$i];
     $space = $dataArr['space'];
-
-    if ($item['id'] == $dataArr['id_parent'])
+    
+    // Если есть список выбранных категорий 
+    if(isset($dataArr['selected_category']) && is_array($dataArr['selected_category']) && count($dataArr['selected_category']) > 0 )
     {
-        $selected = 'selected';
+        // пробегаемся по списку выбранных категорий и ставим для них selected
+        for ($y = 0; $y < count($dataArr['selected_category']); $y++)
+        {
+            $selectItem = $dataArr['selected_category'][$y];
+            
+            if($item['id'] == $selectItem['id_category'])
+            {
+                $selected = 'selected';
+                break;
+            }
+        }
     }
+    else
+    {
+        if ($item['id'] == $dataArr['id_parent'])
+        {// ставим родителем корень
+            $selected = 'selected';
+        }
+    }
+    
     echo '<option ' . $selected . ' value="' . $item['id'] . '">' . $space . $item['name'] . '</option>';
     $selected = '';
 

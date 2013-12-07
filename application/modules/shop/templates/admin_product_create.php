@@ -13,7 +13,7 @@
                     <a href="#tab3" data-toggle="tab"><i class="black-icons key"></i>Изображения</a>
                 </li>                
             </ul>
-            <form class="form-horizontal well white-box" action="<?= $dataArr['form_action']; ?>"  enctype="multipart/form-data" method="post">
+            <form class="form-horizontal well white-box" action="<?= $dataArr['form_action']; ?>"  enctype="multipart/form-data" method="post" id="product_form">
                 <input name="id" type="hidden" value="<?= $dataArr['id']; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара">
 
                 <div class="tab-content">
@@ -60,19 +60,41 @@
                                                                 <p class="help-block">
                                                                     Название
                                                                 </p>
+                                                                <?php
+                                                                $contentTitle = '';
+                                                                $contentPreview = '';
+                                                                $contentDescription = '';
+
+                                                                if (isset($dataArr['product_content']))
+                                                                {
+                                                                    for ($y = 0; $y < count($dataArr['product_content']); $y++)
+                                                                    {
+                                                                        $productContent = $dataArr['product_content'][$y];
+
+                                                                        if ($item['id'] == $productContent['id_lang'])
+                                                                        {
+                                                                            $contentTitle = $productContent['title'];
+                                                                            $contentPreview = $productContent['preview'];
+                                                                            $contentDescription = $productContent['description'];
+                                                                        }
+                                                                    }
+                                                                }
+                                                                ?>
+
+
                                                                 <input name="shop_products_content[<?= $i; ?>][id_lang]" type="hidden"  value="<?= $item['id']; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара">
-                                                                <input name="shop_products_content[<?= $i; ?>][title]" type="text" class="input-xlarge text-tip" id="input501" data-original-title="Название товара (<?= $item['title']; ?>)">
+                                                                <input name="shop_products_content[<?= $i; ?>][title]" type="text" value="<?= $contentTitle; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара (<?= $item['title']; ?>)">
 
                                                             </div>
                                                             <p class="help-block">
                                                                 Краткое описание
                                                             </p>
-                                                            <textarea name="shop_products_content[<?= $i; ?>][preview]" class="input-xlarge" rows="3"></textarea>
+                                                            <textarea name="shop_products_content[<?= $i; ?>][preview]" class="input-xlarge" rows="3"><?= $contentPreview; ?></textarea>
                                                             <p></p>
                                                             <p class="help-block">
                                                                 Полное описание
                                                             </p>
-                                                            <textarea name="shop_products_content[<?= $i; ?>][description]"  class="input-xlarge" rows="7"></textarea>
+                                                            <textarea name="shop_products_content[<?= $i; ?>][description]"  class="input-xlarge" rows="7"><?= $contentDescription; ?></textarea>
 
                                                         </div>
 
@@ -90,13 +112,37 @@
                                         <label class="control-label">Показывать в модулях:</label>
                                         <div class="controls">
                                             <label class="checkbox ">
-                                                <input name="shop_products[hit]" type="checkbox" value="1">
+
+                                                <?php
+                                                $hitChecked = '';
+                                                $is_activeChecked = '';
+                                                $on_orderChecked = '';
+
+                                                if (isset($dataArr['hit']) && $dataArr['hit'] == 1)
+                                                {
+                                                    $hitChecked = 'checked';
+                                                }
+
+                                                if (isset($dataArr['is_active']) && $dataArr['is_active'] == 1)
+                                                {
+                                                    $is_activeChecked = 'checked';
+                                                }
+
+                                                if (isset($dataArr['on_order']) && $dataArr['on_order'] == 1)
+                                                {
+                                                    $on_orderChecked = 'checked';
+                                                }
+                                                ?>
+
+
+
+                                                <input name="shop_products[hit]" type="checkbox" value="1" <?= $hitChecked; ?>>
                                                 хит продаж </label>
                                             <label class="checkbox ">
-                                                <input name="shop_products[is_active]" type="checkbox" value="1">
+                                                <input name="shop_products[is_active]" type="checkbox" value="1" <?= $is_activeChecked; ?>>
                                                 активный </label>
                                             <label class="checkbox ">
-                                                <input name="shop_products[on_order]" type="checkbox" value="1">
+                                                <input name="shop_products[on_order]" type="checkbox" value="1" <?= $on_orderChecked; ?>>
                                                 под заказ </label>
                                         </div>
                                     </div>
@@ -188,7 +234,7 @@
                         <?= $dataArr['access']; ?>
                     </div>
                     <div class="tab-pane" id="tab3">
-                        <div class="span9 ">
+                        <div class="span8 ">
                             <div class="nonboxy-widget">
                                 <div class="widget-head">
 
@@ -197,52 +243,26 @@
                                 <div class="widget-content">
                                     <div class="widget-box">
                                         <ul class="thumbnails">
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/260x200">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
-                                            <li class="span4">
-                                                <a class="thumbnail group1 cboxElement" href="data/ohoopee3.jpg">
-                                                    <img alt="" src="http://placehold.it/109x82">
-                                                </a>
-                                            </li>
+                                            <?php
+                                            if (isset($dataArr['images']))
+                                            {
+                                                for ($i = 0; $i < count($dataArr['images']); $i++)
+                                                {
+                                                    $productImg = $dataArr['images'][$i];
+                                                    
+                                                    $url_to_products_img = $dataArr['url_to_products_img'] . $productImg['name'];
+                                                    ?>
+                                                    <li class="span4">
+                                                        <a class="thumbnail group1 cboxElement" href="<?= $url_to_products_img; ?>">
+                                                            <img alt="" src="<?= $url_to_products_img; ?>" width="370">
+                                                            <input name="images[]" class="input-file" type="hidden" value="<?= $productImg['id']; ?>">
+                                                        </a>
+                                                        <a href="#" class="delete" id_img="<?= $productImg['id']; ?>">удалить</a>
+                                                    </li>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
 
@@ -277,4 +297,15 @@
     </div>
 </div>
 
+<script type="text/javascript">
+$("a.delete").click(function() 
+{
+    $id_img = $(this).attr('id_img');
+    $input = '<input name="images_delete[]" type="hidden" value="' + $id_img + '" />';
 
+    
+    
+    $('#product_form').prepend($input);
+    $(this).parent().remove();
+});
+</script>

@@ -51,8 +51,8 @@ unset($dataArr['btn_title']);
                     
                     
                     echo Core::app()->getTemplate()->getWidget('link_btn', array(
-                        'edite' => $link_edite.'?id='.$dataArr[$i]['id'],
-                        'delete' => $link_delete.'?id='.$dataArr[$i]['id'],
+                        'edite' => $link_edite.'id/'.$dataArr[$i]['id'],
+                        'delete' => $link_delete.'id/'.$dataArr[$i]['id'],
                     ) );
 
                     echo '</td></tr>';

@@ -31,8 +31,6 @@ Core::app()->getTemplate()->showBlock('head');
     <![endif]-->
     /*--- Accordion ---*/
 
-<script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/jquery.js"></script> 
-<script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/jquery-ui-1.8.16.custom.min.js"></script> 
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/bootstrap.js"></script> 
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/prettify.js"></script> 
 <script src="/<?php echo Core::app()->getTemplate()->getCurrentTemplatePath(); ?>/lib/js/jquery.sparkline.min.js"></script> 

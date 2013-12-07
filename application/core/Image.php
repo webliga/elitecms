@@ -115,6 +115,25 @@ class Image extends Base
         return false;
     }
 
+    public function deleteImg($file)
+    {
+        if (is_uploaded_file($file['tmp_name']))
+        {
+            $pathToSave = $file['path_to_save'] . $file['name'];
+
+            if (!is_dir($file['path_to_save']))
+            {
+                mkdir($file['path_to_save'], 0777, true);
+            }
+
+            if (move_uploaded_file($file['tmp_name'], $pathToSave))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>

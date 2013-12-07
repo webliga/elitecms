@@ -303,13 +303,23 @@ class C_user_groups extends Controller
         
     }
 
-    public function edite()
+    public function edite($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
+        $id = 0;
+        if ($params != null && is_array($params))
+        {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
+
 
         $this->loadModel('groups');
-        $dataArr = $this->M_user_groups->getGroupById($get['id']);
-        $dataArr['access'] = $this->access($get['id']);
+        $dataArr = $this->M_user_groups->getGroupById($id);
+        $dataArr['access'] = $this->access($id);
 
         $dataArr['form_action'] = 'admin/groups/update/';
         $dataArr['path'] = '';
@@ -354,11 +364,20 @@ class C_user_groups extends Controller
         }
     }
 
-    public function delete()
+    public function delete($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
-
-        if (!$this->isEmpty($get))
+        $id = 0;
+        if ($params != null && is_array($params))
+        {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
+        
+        if ($id > 0)
         {
             $this->loadModel('groups');
             $this->M_user_groups->deleteGroup($get['id']);
@@ -638,12 +657,12 @@ class C_user_groups extends Controller
     {
         if ($dataArr != null)
         {
-            
+
             $menuitems = $dataArr[0];
             $menuitemsNewArr = array();
             $user = Core::app()->getUser();
             $id_user_group = $user->getField('id_group');
-            
+
             $userGroupModel = $this->loadModel('groups', 'user', true);
             // все доступы к пунктам меню для группы пользователя
             $allGroupMenuitemAccess = $userGroupModel->getGroupMenuitemAccess('id_group', $id_user_group);
@@ -657,19 +676,19 @@ class C_user_groups extends Controller
                 for ($y = 0; $y < count($allGroupMenuitemAccess); $y++)
                 {
                     // если текущий пункт меню
-                    if(($menuitem['id'] == $allGroupMenuitemAccess[$y]['id_menuitem']) && ($allGroupMenuitemAccess[$y]['is_active'] == 0))
+                    if (($menuitem['id'] == $allGroupMenuitemAccess[$y]['id_menuitem']) && ($allGroupMenuitemAccess[$y]['is_active'] == 0))
                     {
                         $validate = false;
                         break;
                     }
                 }
-                
+
                 if ($validate)
                 {
                     $menuitemsNewArr[] = $menuitem;
                 }
             }
-            
+
             $dataArr[0] = $menuitemsNewArr;
             //$this->echoPre($menuitemsNewArr);
             //$this->echoPre($allGroupMenuitemAccess);            
@@ -745,7 +764,7 @@ class C_user_groups extends Controller
                         // пробегаемся по всем группам связаных с пунктом меню
                         for ($y = 0; $y < count($allMenuitemsGroupsAccess); $y++)
                         {
-                            
+
                             // если текущая группа совпадает с группой связанной с пунктом меню
                             // то ставим установленную активность
                             if ($allGroups[$i]['id'] == $allMenuitemsGroupsAccess[$y]['id_group'])

@@ -10,6 +10,7 @@ class C_shop_products extends Controller
 {
 
     private $_pathToProductsImg = '';
+    private $_urlToProductsImg = '';
 
     function __construct()
     {
@@ -19,16 +20,26 @@ class C_shop_products extends Controller
 
         Core::app()->getTemplate()->setVar('createPath', 'newsitems/create');
         Core::app()->getTemplate()->setVar('createTitle', 'Создать новость/статью');
-        
-        $this->_pathToProductsImg  =
-                    PATH_SITE_ROOT .
-                    SD .
-                    'img' .
-                    SD .
-                    'shop' .
-                    SD .
-                    'products' .
-                    SD; 
+
+        $this->_pathToProductsImg =
+                PATH_SITE_ROOT .
+                SD .
+                'img' .
+                SD .
+                'shop' .
+                SD .
+                'products' .
+                SD;
+
+
+        $this->_urlToProductsImg =
+                SD .
+                'img' .
+                SD .
+                'shop' .
+                SD .
+                'products' .
+                SD;
     }
 
     function __destruct()
@@ -45,40 +56,31 @@ class C_shop_products extends Controller
 
         if ($this->isEmpty($post))
         {
-            $this->loadModel('newsitems', 'news');
+            $modelProduct = $this->loadModel('main', 'shop', true);
+            $settings = Core::app()->getConfig()->getConfigItem('settings');
+            $id_curr_lang = $settings['lang_site_default'];
 
-            Core::app()->getTemplate()->setVar('title_page', 'Новости / статьи');
+            $dataArr = $modelProduct->getAllProducts($id_curr_lang);
 
-            $dataArr = $this->M_news_newsitems->getAllNewsItems();
-
+            //$this->echoPre($dataArr, false, true);
 
             for ($i = 0; $i < count($dataArr); $i++)
             {
                 unset($dataArr[$i]['preview']);
-                unset($dataArr[$i]['text']);
-                unset($dataArr[$i]['img']);
-
-                unset($dataArr[$i]['id_category_items']);
-                unset($dataArr[$i]['id_author']);
-                unset($dataArr[$i]['date_create']);
-
-                unset($dataArr[$i]['from_source']);
+                unset($dataArr[$i]['id_main_img']);
+                unset($dataArr[$i]['hit']);
                 unset($dataArr[$i]['is_active']);
-                unset($dataArr[$i]['show_title']);
-
-                unset($dataArr[$i]['show_preview']);
-                unset($dataArr[$i]['show_img']);
-                unset($dataArr[$i]['show_date']);
-
-                unset($dataArr[$i]['show_author']);
+                unset($dataArr[$i]['on_order']);
+                unset($dataArr[$i]['id_lang']);
             }
 
 
-            $dataArr['link_edite'] = 'newsitems/edite/';
-            $dataArr['link_delete'] = 'newsitems/delete/';
+            $dataArr['link_edite'] = '/admin/shop/products/edite/';
+            $dataArr['link_delete'] = '/admin/shop/products/delete/';
             //$this->echoPre($dataArr['link_edite']);
             $content = Core::app()->getTemplate()->getWidget('data_table', $dataArr);
 
+            Core::app()->getTemplate()->setVar('title_page', 'Все товары');
             Core::app()->getTemplate()->setVar('content', $content);
 
             return 'index.tpl.php';
@@ -97,79 +99,76 @@ class C_shop_products extends Controller
         $files = Core::app()->getRequest()->getFile();
         $img = Core::app()->getImage();
 
-
-        $this->loadModel('categoryitems', 'category');
-
         if (!$this->isEmpty($post))
         {
             $modelProduct = $this->loadModel('main', 'shop', true);
             $imagesData = $files['images'];
 
-            
+
             $safeImgArr = $img->getSafeImagesArr($imagesData);
             $this->echoPre($imagesData);
             $this->echoPre($safeImgArr);
-            
-            
-            
+
+
+
             $productData = $post['shop_products'];
             $id_product = $modelProduct->insertProduct($productData);
             $id_main_img = 0;
-            
+
             for ($i = 0; $i < count($safeImgArr); $i++)
             {
                 $file = $safeImgArr[$i];
                 $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
                 $img->saveImg($file);
-                
+
                 $imgDataArr['id_product'] = $id_product;
                 $imgDataArr['name'] = $file['name'];
                 $id_main_img = $modelProduct->insertProductImg($imgDataArr);
-            }           
-            
+            }
+
             $arr['id_main_img'] = $id_main_img;
             $modelProduct->updateProductById($id_product, $arr);
             $arr = null;
-            
+
             $productData = $post['shop_products_content'];
-            
+
             for ($i = 0; $i < count($productData); $i++)
             {
                 $productData[$i]['id_product'] = $id_product;
-                
+
                 $modelProduct->insertProductContent($productData[$i]);
             }
-            
-            
+
+
             $productData = $post['id_categories'];
-            
+
             for ($i = 0; $i < count($productData); $i++)
             {
                 $arr['id_product'] = $id_product;
                 $arr['id_category'] = $productData[$i];
                 $modelProduct->insertProductCategory($arr);
-            }            
-            
-            $this->echoPre($id_product);
-            $this->echoPre($post, false, true);
-            
-            
-/*
+            }
+            /*
+              $this->echoPre($id_product);
+              $this->echoPre($post, false, true);
+             */
 
-//// Сделать проверку на валидность и пустоту
-            // http://spuzom.ru/detail.php?id=249
-            // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
-            $this->loadModel('main', 'shop');
+            /*
 
-            unset($post['id']);
+              //// Сделать проверку на валидность и пустоту
+              // http://spuzom.ru/detail.php?id=249
+              // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
+              $this->loadModel('main', 'shop');
 
-            $post = $this->getDefaultNewsItemData($post);
+              unset($post['id']);
 
-            Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$dataArr));
-            $this->M_news_newsitems->setNewsItem($post);
-*/
+              $post = $this->getDefaultNewsItemData($post);
 
-            
+              Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$dataArr));
+              $this->M_news_newsitems->setNewsItem($post);
+             */
+
+
             //$url = Core::app()->getHtml()->createUrl('admin/newsitems');
             //Core::app()->getRequest()->redirect($url, true, 302);
         }
@@ -206,57 +205,141 @@ class C_shop_products extends Controller
     public function update()
     {
         $post = Core::app()->getRequest()->getPost();
+        $files = Core::app()->getRequest()->getFile();
+        $img = Core::app()->getImage();
+
+
 
         if (!$this->isEmpty($post))
         {
-            $this->loadModel('newsitems', 'news');
+            $id_product = (int) $post['id'];
+            $modelProduct = $this->loadModel('main', 'shop', true);
 
-            $id = $post['id'];
+            //$this->echoPre($post, false, true);
+            $imagesData = $files['images']; // Новые изображения
+            // Масив с безопасными картинками
+            $safeImgArr = $img->getSafeImagesArr($imagesData);
 
-            $post = $this->getDefaultNewsItemData($post);
+            // Подготавливаем основные данные товара
+            if (isset($post['shop_products']))
+            {
+                $productData = $this->getDefaultProductData($post['shop_products']);
+            }
+            else
+            {
+                $productData = $this->getDefaultProductData(array());
+            }
 
-            Core::app()->getEvent()->startEvent('shop_before_product_update', array(&$post));
-            unset($post['id']);
-            $this->M_news_newsitems->updateNewsitemById($id, $post);
+            // Обновляем основные данные товара
+            $modelProduct->updateProductById($id_product, $productData);
+            $id_main_img = 0;
 
-            $url = Core::app()->getHtml()->createUrl('admin/newsitems');
+            // Удаляем картинки если такие есть
+            if (isset($post['images_delete']))
+            {
+                for ($i = 0; $i < count($post['images_delete']); $i++)
+                {
+                    $id_image_delete = $post['images_delete'][$i];
+
+                    //$img->deleteImg($file);
+
+                    $modelProduct->deleteProductImageById($id_image_delete);
+                }
+            }
+
+            // Вносим новые картинки
+            for ($i = 0; $i < count($safeImgArr); $i++)
+            {
+                $file = $safeImgArr[$i];
+                $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
+                $img->saveImg($file);
+
+                $imgDataArr['id_product'] = $id_product;
+                $imgDataArr['name'] = $file['name'];
+                $id_main_img = $modelProduct->insertProductImg($imgDataArr);
+            }
+            // устанавливаем главную картинку
+            $arr['id_main_img'] = $id_main_img;
+            $modelProduct->updateProductById($id_product, $arr);
+            $arr = null;
+
+            $productData = $post['shop_products_content'];
+            // Обновляем или вносим новые данные контента по языкам товара
+            for ($i = 0; $i < count($productData); $i++)
+            {
+                $id_lang = (int) $productData[$i]['id_lang'];
+                $content_isset = $modelProduct->checkProductContentByLangId($id_lang);
+
+                //проверяем, существует ли контент для данного языка, если нет то создаем, если да то обновляем
+                if ($content_isset > 0)
+                {
+                    $modelProduct->updateProductContentById($id_product, $id_lang, $productData[$i]);
+                }
+                else
+                {
+                    $productData[$i]['id_product'] = $id_product;
+                    $modelProduct->insertProductContent($productData[$i]);
+                }
+            }
+
+            $productData = $post['id_categories'];
+            // удаляем все категории
+            $modelProduct->deleteAllCategoriesByProductId($id_product);
+
+            // вносим новые категории товара
+            for ($i = 0; $i < count($productData); $i++)
+            {
+                $arr['id_product'] = $id_product;
+                $arr['id_category'] = $productData[$i];
+                $modelProduct->insertProductCategory($arr);
+            }
+
+            $url = Core::app()->getHtml()->createUrl('admin/shop/products');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }
 
-    public function edite()
+    public function edite($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
-
-        if (!$this->isEmpty($get))
+        $id = 0;
+        if ($params != null && is_array($params))
         {
-            $this->loadModel('newsitems', 'news');
-            $this->loadModel('categoryitems', 'category');
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
 
-            $dataArr = $this->M_news_newsitems->getNewsItemById($get['id']);
-            Core::app()->getTemplate()->setVar('title_page', 'Редактирование статьи / новости');
+        if ($id > 0)
+        {
+            $modelShop = $this->loadModel('main', 'shop', true);
 
 
+
+            $settings = Core::app()->getConfig()->getConfigItem('settings');
+
+            $dataArr = $modelShop->getProductById($id);
+
+            $dataArr['url_to_products_img'] = $this->_urlToProductsImg . $id . SD;
+            $dataArr['all_langs'] = Core::app()->getConfig()->getConfigItem('all_langs');
+            $dataArr['lang_site_default'] = $settings['lang_site_default'];
             $dataArr['root'] = 'Без категории';
-            $dataArr['form_action'] = 'admin/newsitems/update/';
-            $dataArr['all_categories'] = $this->M_category_categoryitems->getAllCategoryItems();
+            $dataArr['form_action'] = '/admin/shop/products/update/';
+
             $dataArr['path'] = '';
-            $dataArr['name_module'] = 'news';
-            $dataArr['file_content_view'] = 'admin_newsitem_create.php';
+            $dataArr['name_module'] = 'shop';
+            $dataArr['file_content_view'] = 'admin_product_create.php';
             $dataArr['return'] = true;
 
             Core::app()->getEvent()->startEvent('shop_before_product_edite', array(&$dataArr));
+
+            //$this->echoPre($dataArr, false, true);
+
             $content = Core::app()->getTemplate()->moduleContentView($dataArr);
 
-            /*
-              $dataArr['name_controller'] = 'newsitems';
-              $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-              $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-             */
-            //$this->echoPre($dataArr);
-            $dataArr['content'] = $content;
-
-            $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
+            Core::app()->getTemplate()->setVar('title_page', 'Создание товара');
             Core::app()->getTemplate()->setVar('content', $content);
         }
     }
@@ -283,73 +366,37 @@ class C_shop_products extends Controller
         return $content;
     }
 
-    private function getDefaultNewsItemData($dataArr)
+    private function getDefaultProductData($dataArr)
     {
         if (is_array($dataArr))
         {
             $date = Date('H:i:s d-m-Y');
 
+            if (isset($dataArr['hit']))
+            {
+                $dataArr['hit'] = 1;
+            }
+            else
+            {
+                $dataArr['hit'] = 0;
+            }
+
             if (isset($dataArr['is_active']))
             {
-                $dataArr['is_active'] = true;
+                $dataArr['is_active'] = 1;
             }
             else
             {
-                $dataArr['is_active'] = false;
+                $dataArr['is_active'] = 0;
             }
 
-            if (isset($dataArr['show_title']))
+            if (isset($dataArr['on_order']))
             {
-                $dataArr['show_title'] = true;
+                $dataArr['on_order'] = 1;
             }
             else
             {
-                $dataArr['show_title'] = false;
-            }
-
-            if (isset($dataArr['show_preview']))
-            {
-                $dataArr['show_preview'] = true;
-            }
-            else
-            {
-                $dataArr['show_preview'] = false;
-            }
-
-            if (isset($dataArr['show_img']))
-            {
-                $dataArr['show_img'] = true;
-            }
-            else
-            {
-                $dataArr['show_img'] = false;
-            }
-
-            if (isset($dataArr['show_date']))
-            {
-                $dataArr['show_date'] = true;
-            }
-            else
-            {
-                $dataArr['show_date'] = false;
-            }
-
-            if (isset($dataArr['show_author']))
-            {
-                $dataArr['show_author'] = true;
-            }
-            else
-            {
-                $dataArr['show_author'] = false;
-            }
-
-            if (isset($dataArr['date_create']) && $this->isEmpty($dataArr['date_create']))
-            {
-                $dataArr['date_create'] = $date;
-            }
-            else
-            {
-                $dataArr['date_create'] = $date;
+                $dataArr['on_order'] = 0;
             }
         }
 

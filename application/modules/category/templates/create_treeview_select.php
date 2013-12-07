@@ -11,6 +11,7 @@ if (isset($dataArr['multiple']) && $dataArr['multiple'])
 
 <select class="form-control" name="<?= $dataArr['name_select'] ?>[]" id="id_module" <?= $multiple; ?>>
     <?php
+    
     $dataArr['path'] = '';
     $dataArr['return'] = false;
     $dataArr['file_content_view'] = 'create_treeview_options.php';

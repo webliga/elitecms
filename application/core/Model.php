@@ -96,14 +96,14 @@ class Model extends Base
         $this->_db->query($sql);
     }    
 
-    public function updateTableRowByCondition($nameTable, $fildTableNameCondition = null, $fildTableValueCondition, $dataArr)
+    public function updateTableRowByCondition($nameTable, $fildTableNameCondition = null, $fildTableValueCondition, $dataArr, $and = null)
     {        
         if($fildTableNameCondition == null)
         {
             $fildTableNameCondition = 'id';
         }
         
-        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE ?n = ?s"  , $nameTable, $dataArr, $fildTableNameCondition, $fildTableValueCondition);
+        $sql = $this->_db->parse("UPDATE ?n SET ?u WHERE ?n = ?s ?p"  , $nameTable, $dataArr, $fildTableNameCondition, $fildTableValueCondition, $and);
         
         $this->_db->query($sql);
     }     

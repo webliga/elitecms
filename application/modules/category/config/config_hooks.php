@@ -10,5 +10,14 @@ $config = array(
             'action' => 'hook_get_all_category',
         ),
     ),
+    'shop_before_product_edite' => array(// имя события
+        array(
+            'title' => '',
+            'description' => '',
+            'module' => 'category',
+            'controller' => 'hooks',
+            'action' => 'hook_get_all_category',
+        ),
+    ),    
 );
 ?>
