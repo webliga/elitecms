@@ -114,7 +114,7 @@ class Image extends Base
 
         return false;
     }
-
+    
     public function deleteImg($file)
     {
         if (is_uploaded_file($file['tmp_name']))

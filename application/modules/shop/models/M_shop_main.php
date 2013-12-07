@@ -151,6 +151,12 @@ class M_shop_main extends Model
         return $data;
     }
 
+    function getAllShopSettings()
+    {
+        $data = $this->selectAllFromTable('shop_module_settings');
+        return $data;
+    }
+    
     function updateShopSettingsByModuleId($dataArr)
     {
         $id_module = $dataArr['id_module'];

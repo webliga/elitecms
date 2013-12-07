@@ -181,16 +181,25 @@ class C_admin_modules extends Controller
         }
     }
 
-    public function edite()
+    public function edite($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
-
-        if (!$this->isEmpty($get))
+        $id = 0;
+        if ($params != null && is_array($params))
+        {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
+        
+        if ($id > 0)
         {
             $this->loadModel('modules', $this->getNameModule());
             $this->loadModel('position', $this->getNameModule());
 
-            $dataArr = $this->M_admin_modules->getModuleById($get['id']);
+            $dataArr = $this->M_admin_modules->getModuleById($id);
             //Core::app()->echoPre($dataArr);
             $dataArr['form_action'] = 'admin/modules/update/';
             $dataArr['all_positions'] = $this->M_admin_position->getAllPositions();

@@ -99,18 +99,18 @@ class C_shop_products extends Controller
         $files = Core::app()->getRequest()->getFile();
         $img = Core::app()->getImage();
 
+
         if (!$this->isEmpty($post))
         {
+            Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$post, &$files));
+
+
             $modelProduct = $this->loadModel('main', 'shop', true);
             $imagesData = $files['images'];
 
 
             $safeImgArr = $img->getSafeImagesArr($imagesData);
-            $this->echoPre($imagesData);
-            $this->echoPre($safeImgArr);
-
-
-
+$this->echoPre($safeImgArr, false, true);
             $productData = $post['shop_products'];
             $id_product = $modelProduct->insertProduct($productData);
             $id_main_img = 0;
@@ -119,7 +119,8 @@ class C_shop_products extends Controller
             {
                 $file = $safeImgArr[$i];
                 $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
-                $img->saveImg($file);
+
+                $this->createProductImg($file);
 
                 $imgDataArr['id_product'] = $id_product;
                 $imgDataArr['name'] = $file['name'];
@@ -148,29 +149,9 @@ class C_shop_products extends Controller
                 $arr['id_category'] = $productData[$i];
                 $modelProduct->insertProductCategory($arr);
             }
-            /*
-              $this->echoPre($id_product);
-              $this->echoPre($post, false, true);
-             */
 
-            /*
-
-              //// Сделать проверку на валидность и пустоту
-              // http://spuzom.ru/detail.php?id=249
-              // Добавление в источник выдает ошибка ?i воспринимает как нашу инструкцию, переделать
-              $this->loadModel('main', 'shop');
-
-              unset($post['id']);
-
-              $post = $this->getDefaultNewsItemData($post);
-
-              Core::app()->getEvent()->startEvent('shop_before_product_create', array(&$dataArr));
-              $this->M_news_newsitems->setNewsItem($post);
-             */
-
-
-            //$url = Core::app()->getHtml()->createUrl('admin/newsitems');
-            //Core::app()->getRequest()->redirect($url, true, 302);
+            $url = Core::app()->getHtml()->createUrl('admin/shop/products');
+            Core::app()->getRequest()->redirect($url, true, 302);
         }
         else
         {
@@ -200,6 +181,20 @@ class C_shop_products extends Controller
             Core::app()->getTemplate()->setVar('title_page', 'Создание товара');
             Core::app()->getTemplate()->setVar('content', $content);
         }
+    }
+
+    private function createProductImg($imgData)
+    {
+        $img = Core::app()->getImage();
+
+        $modelShop = $this->loadModel('main', 'shop', true);
+
+        $moduleSettings = $modelShop->getAllShopSettings();
+        $moduleSettings = $moduleSettings[0];
+        $this->echoPre($moduleSettings, false, true);
+
+        $img->saveImg($file);
+        //$img->createDublicateImg($file);
     }
 
     public function update()

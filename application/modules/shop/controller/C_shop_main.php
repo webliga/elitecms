@@ -25,99 +25,25 @@ class C_shop_main extends Controller
      */
     // Загружаем этот метод только из строки браузера
     // $dataArr - get параметры, передаваемые в строке браузера
-    public function index($paramsArr = null)
+    public function index($params = null)
     {
-        // Если существуют GET данные - $dataArr
-        // показываем статью по id
-        // Если нету GET данных, значит неправильно набран URL или без параметров
 
-        if ($paramsArr == null || $this->isEmpty($paramsArr) || !is_array($paramsArr) || count($paramsArr) == 0)
-        {
-            $paramsArr = Core::app()->getRequest()->getGet();
-        }
-
-        if ($paramsArr != null || !$this->isEmpty($paramsArr) || (is_array($paramsArr) && count($paramsArr) > 0))
-        {
-            $id_news = $paramsArr['id'];
-
-            $this->loadModel('main', 'news');
-
-            $dataArr = $this->M_news_main->getNewsById($id_news);
-
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = $this->getNameModule();
-            $dataArr['file_content_view'] = 'mod_news_detail.php';
-            $dataArr['return'] = true; //возвратить результат как текст (что б занести в переменную)
-
-            $content = Core::app()->getTemplate()->moduleContentView($dataArr, false);
-
-            //$this->echoPre($news);
-            Core::app()->getTemplate()->setVar('title_page', $dataArr['name']);
-
-            Core::app()->getTemplate()->setVar('content', $content . 'Главный контент. Сейчас находимся в news/main');
-
-            return 'index.tpl.php'; // Тут нужно возвратить шаблон страницы отображения
-        }
-        else
-        {
-            Core::app()->getTemplate()->setVar('title_page', 'Не хватает данных');
-            Core::app()->getTemplate()->setVar('content', 'Не хватает данных');
-        }
     }
 
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-        // $dataArr - данные для вызова модуля в позиции
 
-        if ($dataArr != null)
-        {
-            // Если есть данные $dataArr модуля
-            // Выводим модуль в его позиции, согласно данным $dataArr
-            // Если данных нету, значит мы вызвали этот экшн через строку в браузере
-            $this->loadModel('main', $this->getNameModule());
-
-            $settings = $this->M_news_main->getNewsSettingsByModuleId($dataArr['id_module']);
-
-            //Формируем HTML структуру списка новостей
-            $dataArr['news_items'] = $this->M_news_main->getNews($settings['count_elements']);
-
-            $dataArr['path'] = '';
-            $dataArr['name_module'] = $this->getNameModule();
-            $dataArr['file_content_view'] = $settings['template_file'];
-            $dataArr['return'] = false;
-            //$this->echoPre($dataArr);
-            Core::app()->getTemplate()->moduleContentView($dataArr, false);
-            //$this->echoPre($dataArr);
-        }
     }
 
     public function create()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
-
-        Core::app()->getTemplate()->setVar('title_page', 'Страница создания новости. Отображается форма редактирования');
-    }
-
-    public function write()
-    {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
-
-        Core::app()->echoEcho('Страница записи новости. Отображается форма записи');
-        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
-        //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+        
     }
 
     public function edite()
     {
-        $this->loadModel('M_main', $this->getNameModule());
-        $this->loadModel('M_shop', $this->getNameModule());
-
-        Core::app()->echoEcho('Страница редактирования новости. Отображается форма редактирования');
-        //Core::app()->echoEcho('_name_model = ' . $this->mainM_shop->_name_model);
-        //Core::app()->echoPre(Core::app()->getConfig()->getDataArrayConfig());
+        
     }
 
     public function getModuleFormFildsConfig($dataArr = null)
@@ -147,6 +73,38 @@ class C_shop_main extends Controller
             $dataArr['input_lable'] = 'Файл отображения товара';
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
+            $dataArr['input_name'] = 'img_width_big';
+            $dataArr['input_value'] = $dataArr['img_width_big'];
+            $dataArr['input_lable'] = 'Ширина большой картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'img_height_big';
+            $dataArr['input_value'] = $dataArr['img_height_big'];
+            $dataArr['input_lable'] = 'Высота большой картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'img_width_medium';
+            $dataArr['input_value'] = $dataArr['img_width_medium'];
+            $dataArr['input_lable'] = 'Ширина средней картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'img_height_medium';
+            $dataArr['input_value'] = $dataArr['img_height_medium'];
+            $dataArr['input_lable'] = 'Высота средней картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'img_width_small';
+            $dataArr['input_value'] = $dataArr['img_width_small'];
+            $dataArr['input_lable'] = 'Ширина Маленькой картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+            $dataArr['input_name'] = 'img_height_small';
+            $dataArr['input_value'] = $dataArr['img_height_small'];
+            $dataArr['input_lable'] = 'Высота маленькой картинки товара';
+            $content .= Core::app()->getHtml()->createInput($dataArr);
+
+
+
             return $content;
         }
     }
@@ -163,6 +121,36 @@ class C_shop_main extends Controller
             if (!isset($dataArr['template_product_detail']) || $this->isEmpty($dataArr['template_product_detail']))
             {
                 $dataArr['template_product_detail'] = 'mod_products_detail.php';
+            }
+
+            if (!isset($dataArr['img_width_big']) || $this->isEmpty($dataArr['img_width_big']))
+            {
+                $dataArr['img_width_big'] = '580';
+            }
+
+            if (!isset($dataArr['img_height_big']) || $this->isEmpty($dataArr['img_height_big']))
+            {
+                $dataArr['img_height_big'] = '580';
+            }
+
+            if (!isset($dataArr['img_width_medium']) || $this->isEmpty($dataArr['img_width_medium']))
+            {
+                $dataArr['img_width_medium'] = '280';
+            }
+
+            if (!isset($dataArr['img_height_medium']) || $this->isEmpty($dataArr['img_height_medium']))
+            {
+                $dataArr['img_height_medium'] = '280';
+            }
+
+            if (!isset($dataArr['img_width_small']) || $this->isEmpty($dataArr['img_width_small']))
+            {
+                $dataArr['img_width_small'] = '80';
+            }
+
+            if (!isset($dataArr['img_height_small']) || $this->isEmpty($dataArr['img_height_small']))
+            {
+                $dataArr['img_height_small'] = '80';
             }
         }
 
@@ -183,22 +171,6 @@ class C_shop_main extends Controller
         $this->loadModel('main', $this->getNameModule());
 
         $result = $this->M_news_main->deleteNewsSettingsByModuleId($id);
-    }
-
-    public function hookTest($dataArr = null)
-    {
-        if ($dataArr != null)
-        {
-            $dataArr[0] .= ' C_news_main - hookTest<br>';
-        }
-    }
-
-    public function hookTest2($dataArr = null)
-    {
-        if ($dataArr != null)
-        {
-            $dataArr[0] .= ' C_news_main - hookTest2<br>';
-        }
     }
 
 }
