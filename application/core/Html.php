@@ -40,7 +40,7 @@ class Html extends Base
         }
         
         
-        $content = Core::app()->getTemplate()->getWidget($dataArr['input'],$dataArr, null);
+        $content = Core::app()->getTemplate()->getWidget($dataArr['input'],$dataArr);
         
         return $content;
     }

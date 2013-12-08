@@ -249,12 +249,14 @@
                                                 for ($i = 0; $i < count($dataArr['images']); $i++)
                                                 {
                                                     $productImg = $dataArr['images'][$i];
-                                                    
-                                                    $url_to_products_img = $dataArr['url_to_products_img'] . $productImg['name'];
+
+                                                    $bigImg = $dataArr['url_to_products_img'] . 'big_' . $productImg['name'];
+                                                    $mediumImg = $dataArr['url_to_products_img'] . 'medium_' . $productImg['name'];
+                                                    $smallImg = $dataArr['url_to_products_img'] . 'small_' . $productImg['name'];
                                                     ?>
-                                                    <li class="span4">
-                                                        <a class="thumbnail group1 cboxElement" href="<?= $url_to_products_img; ?>">
-                                                            <img alt="" src="<?= $url_to_products_img; ?>" width="370">
+                                                    <li class="span2 ">
+                                                        <a class="thumbnail group1 cboxElement" href="<?= $bigImg; ?>">
+                                                            <img alt="" src="<?= $mediumImg; ?>">
                                                             <input name="images[]" class="input-file" type="hidden" value="<?= $productImg['id']; ?>">
                                                         </a>
                                                         <a href="#" class="delete" id_img="<?= $productImg['id']; ?>">удалить</a>
@@ -271,7 +273,7 @@
                                         <label class="control-label">Загрузка изображений</label>
 
                                         <div class="uni-uploader" id="uniform-undefined">
-                                            <input name="images[]" class="input-file" type="file" size="19" style="opacity: 0;" multiple>
+                                            <input name="images[]" class="input-file" type="file" size="19" style="opacity: 0;" >
                                             <span class="filename">Не выбрано</span>
                                             <span class="action">Выберите файл</span>
                                         </div>
@@ -298,14 +300,14 @@
 </div>
 
 <script type="text/javascript">
-$("a.delete").click(function() 
-{
-    $id_img = $(this).attr('id_img');
-    $input = '<input name="images_delete[]" type="hidden" value="' + $id_img + '" />';
+    $("a.delete").click(function()
+    {
+        $id_img = $(this).attr('id_img');
+        $input = '<input name="images_delete[]" type="hidden" value="' + $id_img + '" />';
 
-    
-    
-    $('#product_form').prepend($input);
-    $(this).parent().remove();
-});
+
+
+        $('#product_form').prepend($input);
+        $(this).parent().remove();
+    });
 </script>

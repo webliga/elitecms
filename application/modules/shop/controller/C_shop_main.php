@@ -27,13 +27,13 @@ class C_shop_main extends Controller
     // $dataArr - get параметры, передаваемые в строке браузера
     public function index($params = null)
     {
-
+        
     }
 
     // Загружаем этот метод только для вывода в позиции модуля
     public function showDataByPosition($dataArr = null)
     {
-
+        
     }
 
     public function create()
@@ -103,6 +103,13 @@ class C_shop_main extends Controller
             $dataArr['input_lable'] = 'Высота маленькой картинки товара';
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
+            $dataArr['input_name'] = 'create_canvas';
+            $dataArr['input_value'] = 1;
+            $dataArr['input_type'] = 'checkbox';
+            $dataArr['input_checked'] = $dataArr['create_canvas'] ? 'checked' : '';
+            $dataArr['input_lable'] = 'Создавать белую подложку при маленьком изображении?';
+
+            $content .= Core::app()->getHtml()->createInput($dataArr);
 
 
             return $content;
@@ -152,6 +159,11 @@ class C_shop_main extends Controller
             {
                 $dataArr['img_height_small'] = '80';
             }
+
+            if (!isset($dataArr['create_canvas']) || $this->isEmpty($dataArr['create_canvas']))
+            {
+                $dataArr['create_canvas'] = '0';
+            }
         }
 
 
@@ -161,7 +173,12 @@ class C_shop_main extends Controller
     public function updateModuleFormFildsConfig($dataArr = null)
     {
         $modelShop = $this->loadModel('main', null, true);
+        if (!isset($dataArr['create_canvas']) || $this->isEmpty($dataArr['create_canvas']))
+        {
+            $dataArr['create_canvas'] = '0';
+        }
 
+        //$this->echoPre($dataArr, false, true);
         $result = $modelShop->updateShopSettingsByModuleId($dataArr);
     }
 

@@ -72,6 +72,15 @@ class Model extends Base
         return $result;
     }
 
+    public function selectRowFromTableById($nameTable, $id)
+    {        
+        $sql = $this->_db->parse('SELECT *  FROM ?n WHERE ?n = ?i', $nameTable, 'id', $id);
+        
+        $result = $this->_db->getRow($sql);
+        
+        return $result;
+    }
+    
     public function selectAllByIdFromTable($nameTable, $id, $fildsSelect = null, $join = null, $fildWhere = null)
     {
         if($this->isEmpty($fildsSelect) || is_null($fildsSelect))

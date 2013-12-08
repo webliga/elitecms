@@ -116,6 +116,16 @@ class M_shop_main extends Model
         return $dataArrProduct;
     }
 
+    public function getProductImgByid($id)
+    {
+        return $this->selectRowFromTableById('shop_products_img', $id);
+    }
+
+    public function getAllProductImgByProductId($id_product)
+    {
+        return $this->selectAllByIdFromTable('shop_products_img', $id_product, null, null, 'id_product');
+    }            
+    
     function getAllProducts($id_curr_lang, $limit = null)
     {
 
@@ -185,7 +195,28 @@ class M_shop_main extends Model
 
         $result = $this->deleteTableRowByCondition('news', $condition);
     }
-     
+      
+    function deleteProductById($id_product)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'shop_products', 'id', $id_product);
+
+        $result = $this->deleteTableRowByCondition('shop_products', $condition);
+    }
+      
+    function deleteProductContentByProductId($id_product)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'shop_products_content', 'id_product', $id_product);
+
+        $result = $this->deleteTableRowByCondition('shop_products_content', $condition);
+    }
+    
+    function deleteAllProductImageByProductId($id_product)
+    {
+        $condition = $this->_db->parse('?n.?n = ?i', 'shop_products_img', 'id_product', $id_product);
+
+        $result = $this->deleteTableRowByCondition('shop_products_img', $condition);
+    }
+    
     function deleteProductImageById($id_image_delete)
     {
         $condition = $this->_db->parse('?n.?n = ?i', 'shop_products_img', 'id', $id_image_delete);

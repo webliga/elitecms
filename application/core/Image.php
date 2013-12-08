@@ -14,6 +14,7 @@ class Image extends Base
 {
 
     private $_whiteList;
+    private $_img = null;
 
     //put your code here
 
@@ -22,11 +23,33 @@ class Image extends Base
         $this->_whiteList['image/jpeg'] = array('jpg', 'jpeg', 'JPG', 'JPEG');
         $this->_whiteList['image/gif'] = array('gif', 'GIF');
         $this->_whiteList['image/png'] = array('png', 'PNG');
+
+        $this->initImage();
     }
 
     function __destruct()
     {
         
+    }
+
+    private function initImage()
+    {
+        if ($this->_img == null)
+        {
+            $nameClass = 'WideImage';
+            $path =
+                    PATH_SITE_ROOT .
+                    SD .
+                    PATH_TO_LIB .
+                    SD .
+                    'wideimage' .
+                    SD .
+                    $nameClass .
+                    '.php';
+
+            Core::app()->getLoader()->loadFile($path, false, true);
+            $this->_img = new $nameClass();
+        }
     }
 
     public function checkGD()
@@ -99,41 +122,63 @@ class Image extends Base
     {
         if (is_uploaded_file($file['tmp_name']))
         {
-            $pathToSave = $file['path_to_save'] . $file['name'];
+            $pathFileNameToSave = $file['path_to_dir_save'] . $file['name'];
 
-            if (!is_dir($file['path_to_save']))
+            if (!is_dir($file['path_to_dir_save']))
             {
-                mkdir($file['path_to_save'], 0777, true);
+                mkdir($file['path_to_dir_save'], 0777, true);
             }
 
-            if (move_uploaded_file($file['tmp_name'], $pathToSave))
+            if (move_uploaded_file($file['tmp_name'], $pathFileNameToSave))
             {
+                $image = $this->_img->load($pathFileNameToSave);
+                $image->saveToFile($pathFileNameToSave);
+                $white = $image->allocateColor(255, 255, 255);
+
+                for ($i = 0; $i < count($file['new_sizes']); $i++)
+                {
+                    $newSize = $file['new_sizes'][$i];
+
+                    if ($file['create_canvas'] == 1)
+                    {
+                        $resized = $image->resize($newSize['width'], $newSize['height'])
+                                ->resizeCanvas($newSize['width'], $newSize['height'], 0, 0, $white);
+                    }
+                    else
+                    {
+                        $resized = $image->resize($newSize['width'], $newSize['height']);
+                    }
+
+
+                    $pathToNewImgSave = $file['path_to_dir_save'] . $newSize['prefix'] . $file['name'];
+                    $resized->saveToFile($pathToNewImgSave);
+                }
+
                 return true;
             }
         }
 
         return false;
     }
-    
+
     public function deleteImg($file)
     {
-        if (is_uploaded_file($file['tmp_name']))
+        for ($i = 0; $i < count($file['prefix']); $i++)
         {
-            $pathToSave = $file['path_to_save'] . $file['name'];
+            $prefix = $file['prefix'][$i];
 
-            if (!is_dir($file['path_to_save']))
-            {
-                mkdir($file['path_to_save'], 0777, true);
-            }
 
-            if (move_uploaded_file($file['tmp_name'], $pathToSave))
+            $pathToFileDelete = $file['path_to_dir_delete'] . SD . $prefix . $file['name'];
+
+            if (file_exists($pathToFileDelete))
             {
-                return true;
+                unlink($pathToFileDelete);
             }
         }
 
-        return false;
+        return true;
     }
+
 }
 
 ?>

@@ -9,8 +9,8 @@
 class C_shop_products extends Controller
 {
 
-    private $_pathToProductsImg = '';
-    private $_urlToProductsImg = '';
+    private $_pathToProductsDirImg = '';
+    private $_urlToProductsDirImg = '';
 
     function __construct()
     {
@@ -21,7 +21,7 @@ class C_shop_products extends Controller
         Core::app()->getTemplate()->setVar('createPath', 'newsitems/create');
         Core::app()->getTemplate()->setVar('createTitle', 'Создать новость/статью');
 
-        $this->_pathToProductsImg =
+        $this->_pathToProductsDirImg =
                 PATH_SITE_ROOT .
                 SD .
                 'img' .
@@ -32,7 +32,7 @@ class C_shop_products extends Controller
                 SD;
 
 
-        $this->_urlToProductsImg =
+        $this->_urlToProductsDirImg =
                 SD .
                 'img' .
                 SD .
@@ -110,7 +110,7 @@ class C_shop_products extends Controller
 
 
             $safeImgArr = $img->getSafeImagesArr($imagesData);
-$this->echoPre($safeImgArr, false, true);
+//$this->echoPre($safeImgArr, false, true);
             $productData = $post['shop_products'];
             $id_product = $modelProduct->insertProduct($productData);
             $id_main_img = 0;
@@ -118,7 +118,7 @@ $this->echoPre($safeImgArr, false, true);
             for ($i = 0; $i < count($safeImgArr); $i++)
             {
                 $file = $safeImgArr[$i];
-                $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
+                $file['path_to_dir_save'] = $this->_pathToProductsDirImg . $id_product . SD;
 
                 $this->createProductImg($file);
 
@@ -191,9 +191,39 @@ $this->echoPre($safeImgArr, false, true);
 
         $moduleSettings = $modelShop->getAllShopSettings();
         $moduleSettings = $moduleSettings[0];
-        $this->echoPre($moduleSettings, false, true);
+        //$this->echoPre($moduleSettings, false, true);
+        $imgWidthBig = $moduleSettings['img_width_big'];
+        $imgHeightBig = $moduleSettings['img_height_big'];
+        $imgWidthMedium = $moduleSettings['img_width_medium'];
+        $imgHeightMedium = $moduleSettings['img_height_medium'];
+        $imgWidthSmall = $moduleSettings['img_width_small'];
+        $imgHeightSmall = $moduleSettings['img_height_small'];
 
-        $img->saveImg($file);
+        $imgData['create_canvas'] = $moduleSettings['create_canvas'];
+        // Возможны манипуляции с новыми размерами картинок
+
+        $imgSize['prefix'] = 'big_';
+        $imgSize['width'] = $imgWidthBig;
+        $imgSize['height'] = $imgHeightBig;
+
+        $imgData['new_sizes'][] = $imgSize;
+
+
+        $imgSize['prefix'] = 'medium_';
+        $imgSize['width'] = $imgWidthMedium;
+        $imgSize['height'] = $imgHeightMedium;
+
+        $imgData['new_sizes'][] = $imgSize;
+
+
+        $imgSize['prefix'] = 'small_';
+        $imgSize['width'] = $imgWidthSmall;
+        $imgSize['height'] = $imgHeightSmall;
+
+        $imgData['new_sizes'][] = $imgSize;
+
+
+        $img->saveImg($imgData);
         //$img->createDublicateImg($file);
     }
 
@@ -202,8 +232,6 @@ $this->echoPre($safeImgArr, false, true);
         $post = Core::app()->getRequest()->getPost();
         $files = Core::app()->getRequest()->getFile();
         $img = Core::app()->getImage();
-
-
 
         if (!$this->isEmpty($post))
         {
@@ -235,24 +263,33 @@ $this->echoPre($safeImgArr, false, true);
                 for ($i = 0; $i < count($post['images_delete']); $i++)
                 {
                     $id_image_delete = $post['images_delete'][$i];
+                    $file = $modelProduct->getProductImgByid($id_image_delete);
 
-                    //$img->deleteImg($file);
+                    //$this->echoPre($file, false, true);
+
+                    $file['path_to_dir_delete'] = $this->_pathToProductsDirImg . $id_product;
+
+                    $file['prefix'] = array('', 'big_', 'medium_', 'small_');
+
+                    $img->deleteImg($file);
 
                     $modelProduct->deleteProductImageById($id_image_delete);
                 }
             }
 
-            // Вносим новые картинки
+            // Вносим новые картинки   
             for ($i = 0; $i < count($safeImgArr); $i++)
             {
                 $file = $safeImgArr[$i];
-                $file['path_to_save'] = $this->_pathToProductsImg . $id_product . SD;
-                $img->saveImg($file);
+                $file['path_to_dir_save'] = $this->_pathToProductsDirImg . $id_product . SD;
+
+                $this->createProductImg($file);
 
                 $imgDataArr['id_product'] = $id_product;
                 $imgDataArr['name'] = $file['name'];
                 $id_main_img = $modelProduct->insertProductImg($imgDataArr);
             }
+
             // устанавливаем главную картинку
             $arr['id_main_img'] = $id_main_img;
             $modelProduct->updateProductById($id_product, $arr);
@@ -317,7 +354,7 @@ $this->echoPre($safeImgArr, false, true);
 
             $dataArr = $modelShop->getProductById($id);
 
-            $dataArr['url_to_products_img'] = $this->_urlToProductsImg . $id . SD;
+            $dataArr['url_to_products_img'] = $this->_urlToProductsDirImg . $id . SD;
             $dataArr['all_langs'] = Core::app()->getConfig()->getConfigItem('all_langs');
             $dataArr['lang_site_default'] = $settings['lang_site_default'];
             $dataArr['root'] = 'Без категории';
@@ -339,19 +376,47 @@ $this->echoPre($safeImgArr, false, true);
         }
     }
 
-    public function delete()
+    public function delete($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
-
-        if (!$this->isEmpty($get))
+        $id_product = 0;
+        if ($params != null && is_array($params))
         {
-            $this->loadModel('newsitems', 'news');
+            $id_product = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id_product = $get['id'];
+        }
 
-            $this->M_news_newsitems->deleteNewsItemById($get['id']);
+        if ($id_product > 0)
+        {
+            $modelShop = $this->loadModel('main', 'shop', true);
+            $modelShop->deleteProductById($id_product);
+            $modelShop->deleteAllCategoriesByProductId($id_product);
+            $modelShop->deleteProductContentByProductId($id_product);
+            
+            $path_to_dir_delete = $this->_pathToProductsDirImg . $id_product;
 
-            $url = Core::app()->getHtml()->createUrl('admin/newsitems');
+            $this->removeDirectory($path_to_dir_delete);
+            
+            $modelShop->deleteAllProductImageByProductId($id_product);
+
+            $url = Core::app()->getHtml()->createUrl('admin/shop/products');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
+    }
+
+    private function removeDirectory($dir)
+    {
+        if ($objs = glob($dir . "/*"))
+        {
+            foreach ($objs as $obj)
+            {
+                is_dir($obj) ? removeDirectory($obj) : unlink($obj);
+            }
+        }
+        rmdir($dir);
     }
 
     public function getModuleFormFildsConfig($dataArr = null)

@@ -176,14 +176,21 @@ class C_menu_menuitems extends Controller
         }
     }
 
-    public function edite()
+    public function edite($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
-
-        if (!$this->isEmpty($get))
+        $id = 0;
+        if ($params != null && is_array($params))
         {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
             $id = $get['id'];
+        }
 
+        if ($id > 0)
+        {
 
             $this->loadModel('menuitems', 'menu');
             $this->loadModel('modules', 'admin');
