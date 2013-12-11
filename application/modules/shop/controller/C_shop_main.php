@@ -50,6 +50,9 @@ class C_shop_main extends Controller
     {
         if ($dataArr != null)
         {
+            $tabContent = array();
+            
+            
             $content = '';
 
             $modelShop = $this->loadModel('main', null, true);
@@ -62,7 +65,7 @@ class C_shop_main extends Controller
 
             $dataArr['input'] = 'form_input';
 
-
+//////////////////////////////////////
             $dataArr['input_name'] = 'template_product_list';
             $dataArr['input_value'] = $dataArr['template_product_list'];
             $dataArr['input_lable'] = 'Файл отображения списка товаров';
@@ -73,6 +76,11 @@ class C_shop_main extends Controller
             $dataArr['input_lable'] = 'Файл отображения товара';
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
+            $arrTab['tab_title'] = 'Файлы отображения';
+            $arrTab['tab_content'] = $content;
+            $tabContent[] = $arrTab;
+            $content = '';
+//////////////////////////////////////
             $dataArr['input_name'] = 'img_width_big';
             $dataArr['input_value'] = $dataArr['img_width_big'];
             $dataArr['input_lable'] = 'Ширина большой картинки товара';
@@ -111,8 +119,20 @@ class C_shop_main extends Controller
 
             $content .= Core::app()->getHtml()->createInput($dataArr);
 
-
-            return $content;
+            $arrTab['tab_title'] = 'Настройки картинки товара';
+            $arrTab['tab_content'] = $content;
+            $tabContent[] = $arrTab;
+            $content = '';
+//////////////////////////////////////
+            
+            
+            
+            $arrTab['tab_title'] = 'Настройки картинки товара';
+            $arrTab['tab_content'] = $content;
+            $tabContent[] = $arrTab;
+            $content = '';
+            
+            return $tabContent;
         }
     }
 

@@ -1,17 +1,20 @@
-<div class="admin_form">
-    <form class="form-horizontal" action="<?php echo Core::app()->getHtml()->createUrl($dataArr['form_action']); ?>" method="post">
+<div class="row-fluid">
+    <div class="span12">
 
-        <?php
-        echo $dataArr['content'];
-        ?>   
+        <form class="form-horizontal" action="<?php echo Core::app()->getHtml()->createUrl($dataArr['form_action']); ?>" method="post">
+            <div class="box-tab">
 
-        <div class="control-group">
-            <div class="controls">
-                <button type="submit" class="btn btn-default">Обновить</button>
+
+                <?php
+                echo $dataArr['content'];
+                ?>   
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button class="btn">Отмена</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-
 
 

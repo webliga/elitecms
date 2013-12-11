@@ -100,31 +100,49 @@ class C_user_main extends Controller
         }
     }
 
-    public function delete()
+    public function delete($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
+        $id = 0;
+        if ($params != null && is_array($params))
+        {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
 
-        if (!$this->isEmpty($get))
+        if ($id > 0)
         {
             $this->loadModel('register', 'user');
 
-            $this->M_user_register->deleteUserById($get['id']);
+            $this->M_user_register->deleteUserById($id);
 
             $url = Core::app()->getHtml()->createUrl('admin/user');
             Core::app()->getRequest()->redirect($url, true, 302);
         }
     }
 
-    public function edite()
+    public function edite($params = null)
     {
-        $get = Core::app()->getRequest()->getGet();
+        $id = 0;
+        if ($params != null && is_array($params))
+        {
+            $id = $params['id'];
+        }
+        else
+        {
+            $get = Core::app()->getRequest()->getGet();
+            $id = $get['id'];
+        }
 
-        if (!$this->isEmpty($get))
+        if ($id > 0)
         {
             $this->loadModel('register', 'user');
             $userGroupModel = $this->loadModel('groups', 'user', true);
             
-            $dataArr = $this->M_user_register->getUserById($get['id']);
+            $dataArr = $this->M_user_register->getUserById($id);
             Core::app()->getTemplate()->setVar('title_page', 'Редактирование задачи');
 
             //$dataArr['root'] = 'Это проект';

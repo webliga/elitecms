@@ -210,14 +210,31 @@ class C_admin_modules extends Controller
             $dataArr['file_content_view'] = 'mod_admin_module_create.php';
             $dataArr['return'] = true;
 
-            // Получение стандартных для всех модулей  полей формы редактирования
-            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
             
+            // Получение стандартных для всех модулей  полей формы редактирования
+            $tabContent['tab_title'] = 'Общие настройки';
+            $tabContent['tab_content'] = Core::app()->getTemplate()->moduleContentView($dataArr);
+            
+            $dataArr['tabs'][] = $tabContent;
             // Получаем индивидуальные поля настройки модуля. За эти поля отвечает определенный (обязательный) в константе DEFAULT_ACTION_MODULE_FORM
             // метод главного контроллера в каждом модуле. Таким образом мы на автомате можем формировать индивидуальные настройки каждого модуля
             $dataArr['action'] = DEFAULT_ACTION_MODULE_FORM;
-            $content .= Core::app()->getTemplate()->moduleContentView($dataArr, true);
-
+            
+            
+            $moduleTabArr = Core::app()->getTemplate()->moduleContentView($dataArr, true);
+            
+            for ($i = 0; $i < count($moduleTabArr); $i++)
+            {
+                $dataArr['tabs'][] = $moduleTabArr[$i];
+            }
+            
+//$this->echoPre($dataArr, false, true);
+            // Формируем табы с настройками модуля            
+            $dataArr['name_module'] = 'admin'; //Понадобится в модуле moduleFileContentView для отображения mod_admin_module_create.php
+            $dataArr['file_content_view'] = 'mod_admin_module_tabs.php';
+            $dataArr['return'] = true;
+            $content = Core::app()->getTemplate()->moduleContentView($dataArr);
+            
             $dataArr['content'] = $content;
 
             $content = Core::app()->getTemplate()->getWidget('form', $dataArr, null);
