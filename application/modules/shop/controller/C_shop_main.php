@@ -62,7 +62,6 @@ class C_shop_main extends Controller
 
             $dataArr = $this->getDefaultShopData($dataArr);
 
-
             $dataArr['input'] = 'form_input';
 
 //////////////////////////////////////
@@ -127,11 +126,11 @@ class C_shop_main extends Controller
             
             
             
-            $arrTab['tab_title'] = 'Настройки картинки товара';
+            $arrTab['tab_title'] = 'Управление ценами';
             $arrTab['tab_content'] = $content;
             $tabContent[] = $arrTab;
             $content = '';
-            
+
             return $tabContent;
         }
     }
