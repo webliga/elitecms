@@ -38,6 +38,6 @@ $config = array(
     '/shop\/products\/?$/' => 'shop/products/index', 
     '/shop\/create/' => 'shop/products/create',
     '/shop\/products\/edite/' => 'shop/products/edite', 
-    
+    '/shop\/price\/?$/' => 'shop/price/index',        
 );
 ?>

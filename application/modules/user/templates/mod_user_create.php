@@ -57,13 +57,13 @@
                         $options = '';
                         for ($i = 0; $i < count($dataArr['all_groups']); $i++)
                         {
-                            $item = $dataArr['all_groups'][$i];
+                            $lang = $dataArr['all_groups'][$i];
 
-                            if ($item['id'] == $dataArr['id_group'])
+                            if ($lang['id'] == $dataArr['id_group'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                             $selected = '';
                         }
 

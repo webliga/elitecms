@@ -31,10 +31,18 @@ unset($dataArr['btn_title']);
 
                         foreach ($dataArr[$i] as $key => $value)
                         {
-                            echo '<th>' . $key . '</th>';
+                            if($key == 'id')
+                            {
+                                echo '<th width="30">' . $key . '</th>';
+                            }
+                            else
+                            {
+                                echo '<th>' . $key . '</th>';    
+                            }
+                            
                         }
 
-                        echo '<th>actions</th>';
+                        echo '<th width="50">actions</th>';
 
                         echo '</tr></thead>';
                     }

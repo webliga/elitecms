@@ -56,13 +56,13 @@
 
                         for ($i = 0; $i < count($dataArr['langs_all']); $i++)
                         {
-                            $item = $dataArr['langs_all'][$i];
+                            $lang = $dataArr['langs_all'][$i];
 
-                            if ($item['id'] == $dataArr['lang_site_default'])
+                            if ($lang['id'] == $dataArr['lang_site_default'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['title'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['title'] . '</option>';
                             $selected = '';
                         }
 
@@ -82,13 +82,13 @@
                         $options = '';
                         for ($i = 0; $i < count($dataArr['langs_all']); $i++)
                         {
-                            $item = $dataArr['langs_all'][$i];
+                            $lang = $dataArr['langs_all'][$i];
 
-                            if ($item['id'] == $dataArr['lang_admin_default'])
+                            if ($lang['id'] == $dataArr['lang_admin_default'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['title'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['title'] . '</option>';
                             $selected = '';
                         }
 
@@ -117,13 +117,13 @@
                         $options = '';
                         for ($i = 0; $i < count($dataArr['all_groups']); $i++)
                         {
-                            $item = $dataArr['all_groups'][$i];
+                            $lang = $dataArr['all_groups'][$i];
 
-                            if ($item['id'] == $dataArr['group_default_unauthorized'])
+                            if ($lang['id'] == $dataArr['group_default_unauthorized'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                             $selected = '';
                         }
 
@@ -142,13 +142,13 @@
                         $options = '';
                         for ($i = 0; $i < count($dataArr['all_groups']); $i++)
                         {
-                            $item = $dataArr['all_groups'][$i];
+                            $lang = $dataArr['all_groups'][$i];
 
-                            if ($item['id'] == $dataArr['group_default_register'])
+                            if ($lang['id'] == $dataArr['group_default_register'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                             $selected = '';
                         }
 

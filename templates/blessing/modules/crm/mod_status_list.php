@@ -5,10 +5,10 @@
 
 for ($i = 0; $i < count($dataArr['statuses']); $i++)
 {
-    $item = $dataArr['statuses'][$i];
+    $lang = $dataArr['statuses'][$i];
     ?> 
         <div class="news_item">    
-            <a href="/ru/crm/status/?id=<?php echo $item['id'];  ?>"><?php echo $item['name'];  ?></a>
+            <a href="/ru/crm/status/?id=<?php echo $lang['id'];  ?>"><?php echo $lang['name'];  ?></a>
         </div>    
     <?php 
 }

@@ -122,13 +122,13 @@
 
                         for ($i = 0; $i < count($dataArr['all_categories']); $i++)
                         {
-                            $item = $dataArr['all_categories'][$i];
+                            $lang = $dataArr['all_categories'][$i];
 
-                            if ($item['id'] == $dataArr['id_category_items'])
+                            if ($lang['id'] == $dataArr['id_category_items'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                             $selected = '';
                         }
 

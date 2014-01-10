@@ -6,14 +6,14 @@
             <?php
             for ($i = 0; $i < count($dataArr['all_groups']); $i++)
             {
-                $item = $dataArr['all_groups'][$i];
+                $lang = $dataArr['all_groups'][$i];
                 $checked = '';
                 
-                if(isset($item['is_active']) && $item['is_active'] == 1)
+                if(isset($lang['is_active']) && $lang['is_active'] == 1)
                 {
                     $checked = 'checked';
                 }
-                echo '<input name="groups[' . $item['id'] . ']" type="checkbox" ' . $checked . ' />' . $item['name'] . ' <br>';
+                echo '<input name="groups[' . $lang['id'] . ']" type="checkbox" ' . $checked . ' />' . $lang['name'] . ' <br>';
             }
             ?>
         </div>

@@ -36,15 +36,15 @@
 
                         for ($i = 0; $i < count($dataArr['all_tasks']); $i++)
                         {
-                            $item = $dataArr['all_tasks'][$i];
+                            $lang = $dataArr['all_tasks'][$i];
 
-                            if ($dataArr['id'] != $item['id'])
+                            if ($dataArr['id'] != $lang['id'])
                             {
-                                if ($item['id'] == $dataArr['id_parent'])
+                                if ($lang['id'] == $dataArr['id_parent'])
                                 {
                                     $selected = 'selected';
                                 }
-                                $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                                $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                                 $selected = '';
                             }
                         }
@@ -73,13 +73,13 @@
 
                         for ($i = 0; $i < count($dataArr['all_statuses']); $i++)
                         {
-                            $item = $dataArr['all_statuses'][$i];
+                            $lang = $dataArr['all_statuses'][$i];
 
-                            if ($item['id'] == $dataArr['id_status'])
+                            if ($lang['id'] == $dataArr['id_status'])
                             {
                                 $selected = 'selected';
                             }
-                            $options .= '<option ' . $selected . ' value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                            $options .= '<option ' . $selected . ' value="' . $lang['id'] . '">' . $lang['name'] . '</option>';
                             $selected = '';
                         }
 

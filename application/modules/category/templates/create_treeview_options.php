@@ -4,7 +4,7 @@ $selected = '';
 
 for ($i = 0; $i < count($dataArr['options']); $i++)
 {
-    $item = $dataArr['options'][$i];
+    $lang = $dataArr['options'][$i];
     $space = $dataArr['space'];
     
     // Если есть список выбранных категорий 
@@ -15,7 +15,7 @@ for ($i = 0; $i < count($dataArr['options']); $i++)
         {
             $selectItem = $dataArr['selected_category'][$y];
             
-            if($item['id'] == $selectItem['id_category'])
+            if($lang['id'] == $selectItem['id_category'])
             {
                 $selected = 'selected';
                 break;
@@ -24,22 +24,22 @@ for ($i = 0; $i < count($dataArr['options']); $i++)
     }
     else
     {
-        if ($item['id'] == $dataArr['id_parent'])
+        if ($lang['id'] == $dataArr['id_parent'])
         {// ставим родителем корень
             $selected = 'selected';
         }
     }
     
-    echo '<option ' . $selected . ' value="' . $item['id'] . '">' . $space . $item['name'] . '</option>';
+    echo '<option ' . $selected . ' value="' . $lang['id'] . '">' . $space . $lang['name'] . '</option>';
     $selected = '';
 
 
     // если есть подкатегории, то выводи их
-    if ($item['children'] != null && is_array($item['children']))
+    if ($lang['children'] != null && is_array($lang['children']))
     {
         $optionArr = $dataArr;
         $optionArr['space'] .= "-";
-        $optionArr['options'] = $item['children'];
+        $optionArr['options'] = $lang['children'];
         Core::app()->getTemplate()->moduleContentView($optionArr);
     }
 }

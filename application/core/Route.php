@@ -29,16 +29,11 @@ class Route extends Base
         }
 
         $this->_started = true;
-
         $config = Core::app()->getConfig();
-
-
 // Проверяем урл на валидность (возвратит урл лишенный спецсимволов и других вредных инструкций))
         // под вопросом
         $url = Core::app()->getSecure()->validate_url($_SERVER['REQUEST_URI']);
-
         $config->selectSystemConfig($url);
-
 
         Core::app()->getEvent()->startEvent('route_select_system_config', array(&$config));
         //$this->echoPre($result, false, true);

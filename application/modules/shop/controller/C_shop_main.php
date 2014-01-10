@@ -64,7 +64,7 @@ class C_shop_main extends Controller
 
             $dataArr['input'] = 'form_input';
 
-//////////////////////////////////////
+///////////////////// Таб настройки файлов для отображения /////////////////
             $dataArr['input_name'] = 'template_product_list';
             $dataArr['input_value'] = $dataArr['template_product_list'];
             $dataArr['input_lable'] = 'Файл отображения списка товаров';
@@ -79,7 +79,7 @@ class C_shop_main extends Controller
             $arrTab['tab_content'] = $content;
             $tabContent[] = $arrTab;
             $content = '';
-//////////////////////////////////////
+///////////////////// Таб фнастройки картинки  /////////////////
             $dataArr['input_name'] = 'img_width_big';
             $dataArr['input_value'] = $dataArr['img_width_big'];
             $dataArr['input_lable'] = 'Ширина большой картинки товара';
@@ -121,15 +121,7 @@ class C_shop_main extends Controller
             $arrTab['tab_title'] = 'Настройки картинки товара';
             $arrTab['tab_content'] = $content;
             $tabContent[] = $arrTab;
-            $content = '';
-//////////////////////////////////////
-            
-            
-            
-            $arrTab['tab_title'] = 'Управление ценами';
-            $arrTab['tab_content'] = $content;
-            $tabContent[] = $arrTab;
-            $content = '';
+
 
             return $tabContent;
         }

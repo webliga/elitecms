@@ -5,11 +5,11 @@
         <?php
         for ($i = 0; $i < count($dataArr['news_items']); $i++)
         {
-            $item = $dataArr['news_items'][$i];
+            $lang = $dataArr['news_items'][$i];
             ?>
             <li>
                 <?php
-                if ($item['show_img'] == 1)
+                if ($lang['show_img'] == 1)
                 {
                     ?>
                     <div class="bordered alignleft">
@@ -25,12 +25,12 @@
 
 
                 <h6>
-                    <a href="/ru/news/id/<?php echo $item['id']; ?>">
-                        <?php echo $item['name']; ?>
+                    <a href="/ru/news/id/<?php echo $lang['id']; ?>">
+                        <?php echo $lang['name']; ?>
                     </a>
                 </h6>
                 <div class="entry-meta">
-                    <?php echo $item['preview']; ?>
+                    <?php echo $lang['preview']; ?>
                 </div>
             </li>
             <?php

@@ -20,7 +20,6 @@
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
-
                         <fieldset>
                             <!-- langs --->
                             <div class="row-fluid">
@@ -32,14 +31,14 @@
                                                 <?php
                                                 for ($i = 0; $i < count($dataArr['all_langs']); $i++)
                                                 {
-                                                    $item = $dataArr['all_langs'][$i];
+                                                    $lang = $dataArr['all_langs'][$i];
                                                     $active = '';
-                                                    if ($item['id'] == $dataArr['lang_site_default'])
+                                                    if ($lang['id'] == $dataArr['lang_site_default'])
                                                     {
                                                         $active = ' class="active"';
                                                     }
 
-                                                    echo '<li ' . $active . '><a href="#' . $i . '" data-toggle="tab">' . $item['title'] . '</a></li>';
+                                                    echo '<li ' . $active . '><a href="#' . $i . '" data-toggle="tab">' . $lang['title'] . '</a></li>';
                                                 }
                                                 ?>
 
@@ -48,15 +47,14 @@
                                                 <?php
                                                 for ($i = 0; $i < count($dataArr['all_langs']); $i++)
                                                 {
-                                                    $item = $dataArr['all_langs'][$i];
+                                                    $lang = $dataArr['all_langs'][$i];
                                                     $active = '';
-                                                    if ($item['id'] == $dataArr['lang_site_default'])
+                                                    if ($lang['id'] == $dataArr['lang_site_default'])
                                                     {
                                                         $active = ' active';
                                                     }
                                                     ?>
                                                     <div class="tab-pane <?= $active; ?>" id="<?= $i; ?>">
-
                                                         <div>
                                                             <div class="control-group">
                                                                 <p class="help-block">
@@ -71,21 +69,20 @@
                                                                 {
                                                                     for ($y = 0; $y < count($dataArr['product_content']); $y++)
                                                                     {
-                                                                        $productContent = $dataArr['product_content'][$y];
+                                                                        $priceContent = $dataArr['product_content'][$y];
 
-                                                                        if ($item['id'] == $productContent['id_lang'])
+                                                                        if ($lang['id'] == $priceContent['id_lang'])
                                                                         {
-                                                                            $contentTitle = $productContent['title'];
-                                                                            $contentPreview = $productContent['preview'];
-                                                                            $contentDescription = $productContent['description'];
+                                                                            $contentTitle = $priceContent['title'];
+                                                                            $contentPreview = $priceContent['preview'];
+                                                                            $contentDescription = $priceContent['description'];
                                                                         }
                                                                     }
                                                                 }
                                                                 ?>
 
-
-                                                                <input name="shop_products_content[<?= $i; ?>][id_lang]" type="hidden"  value="<?= $item['id']; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара">
-                                                                <input name="shop_products_content[<?= $i; ?>][title]" type="text" value="<?= $contentTitle; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара (<?= $item['title']; ?>)">
+                                                                <input name="shop_products_content[<?= $i; ?>][id_lang]" type="hidden"  value="<?= $lang['id']; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара">
+                                                                <input name="shop_products_content[<?= $i; ?>][title]" type="text" value="<?= $contentTitle; ?>" class="input-xlarge text-tip" id="input501" data-original-title="Название товара (<?= $lang['title']; ?>)">
 
                                                             </div>
                                                             <p class="help-block">
@@ -135,8 +132,6 @@
                                                     $on_orderChecked = 'checked';
                                                 }
                                                 ?>
-
-
 
                                                 <input name="shop_products[hit]" type="checkbox" value="1" <?= $hitChecked; ?>>
                                                 хит продаж </label>
